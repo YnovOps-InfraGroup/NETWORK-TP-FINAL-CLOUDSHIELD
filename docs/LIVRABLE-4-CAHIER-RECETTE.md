@@ -46,9 +46,10 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 
 ```bash
 # 1. Connexion via Bastion à vm-web
+VM_WEB_ID=$(az vm show -g rg-cloudshield-prod -n vm-web-cloudshield --query id -o tsv)
 az network bastion ssh --name bastion-cloudshield \
   --resource-group rg-cloudshield-prod \
-  --target-resource-id <vm-web-id> \
+  --target-resource-id $VM_WEB_ID \
   --auth-type ssh-key --username azureuser --ssh-key ~/.ssh/id_ed25519
 
 # 2. Test accès Internet direct (DOIT ÉCHOUER)
@@ -161,7 +162,7 @@ AzureDiagnostics
 | --------------- | -------------------------------------------------------------- |
 | **Règle ANSSI** | R19 — Segmentation + Zero Trust : mouvement latéral impossible |
 
-| **Configuration Azure** | NSG nsg-data-db : autoriser uniquement asg-app → asg-db (TCP/5432). Deny-all inbound (prio 4096). vm-web n'est PAS dans asg-app → ne peut pas atteindre vm-db. |
+| **Configuration Azure** | NSG nsg-data-db : autoriser uniquement asg-app → asg-db (TCP/5432). Deny-all inbound (prio 4000). vm-web n'est PAS dans asg-app → ne peut pas atteindre vm-db. |
 | **Méthode de preuve** | **Test de connectivité** depuis vm-web vers vm-db (doit échouer) |
 | **Résultat attendu** | ping vm-db → timeout. SSH vm-db → connection refused. Mouvement latéral impossible. |
 
@@ -169,9 +170,10 @@ AzureDiagnostics
 
 ```bash
 # Connexion via Bastion à vm-web
+VM_WEB_ID=$(az vm show -g rg-cloudshield-prod -n vm-web-cloudshield --query id -o tsv)
 az network bastion ssh --name bastion-cloudshield \
   --resource-group rg-cloudshield-prod \
-  --target-resource-id <vm-web-id> \
+  --target-resource-id $VM_WEB_ID \
   --auth-type ssh-key --username azureuser --ssh-key ~/.ssh/id_ed25519
 
 # Test 1 : Ping vm-db (DOIT ÉCHOUER)
@@ -245,10 +247,10 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 ```bash
 # Connexion Bastion CLI (preuve que SSH fonctionne via Bastion)
+VM_WEB_ID=$(az vm show -g rg-cloudshield-prod -n vm-web-cloudshield --query id -o tsv)
 az network bastion ssh --name bastion-cloudshield \
   --resource-group rg-cloudshield-prod \
-
-  --target-resource-id <vm-web-id> \
+  --target-resource-id $VM_WEB_ID \
   --auth-type ssh-key --username azureuser --ssh-key ~/.ssh/id_ed25519
 
 # Résultat : connexion SSH réussie (sans IP publique, sans port 22 exposé)

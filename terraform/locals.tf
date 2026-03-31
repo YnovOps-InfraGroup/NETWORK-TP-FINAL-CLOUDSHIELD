@@ -24,5 +24,4 @@ locals {
 # Subscription courante (pour RBAC, alertes)
 data "azurerm_subscription" "current" {}
 
-# Client courant (pour Key Vault policies si besoin)
-data "azurerm_client_config" "current" {}
+# data "azurerm_client_config" "current" {} # Réservé pour Key Vault RBAC futur

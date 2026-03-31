@@ -35,6 +35,22 @@ resource "azurerm_storage_account" "logs" {
   https_traffic_only_enabled      = true
   allow_nested_items_to_be_public = false
   min_tls_version                 = "TLS1_2"
+  public_network_access_enabled   = false
+
+  # Checkov CKV2_AZURE_38 : soft-delete pour protection des logs
+  blob_properties {
+    delete_retention_policy {
+      days = 30
+    }
+    container_delete_retention_policy {
+      days = 30
+    }
+  }
+
+  # Checkov CKV2_AZURE_41 : politique d'expiration SAS
+  sas_policy {
+    expiration_period = "00.02:00:00"
+  }
 
   tags = var.tags
 }

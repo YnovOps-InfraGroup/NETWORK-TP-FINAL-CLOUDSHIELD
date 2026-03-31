@@ -52,6 +52,18 @@ resource "azurerm_mssql_server" "sql" {
   tags = var.tags
 }
 
+# Checkov CKV_AZURE_23/24 : Auditing SQL Server → Log Analytics
+resource "azurerm_mssql_server_extended_auditing_policy" "sql_audit" {
+  count = var.deploy_paas && var.deploy_observability ? 1 : 0
+
+  server_id                               = azurerm_mssql_server.sql[0].id
+  log_monitoring_enabled                  = true
+  storage_endpoint                        = azurerm_storage_account.backup[0].primary_blob_endpoint
+  storage_account_access_key              = azurerm_storage_account.backup[0].primary_access_key
+  storage_account_access_key_is_secondary = false
+  retention_in_days                       = 90
+}
+
 resource "azurerm_mssql_database" "fintechdb" {
   count = var.deploy_paas ? 1 : 0
 

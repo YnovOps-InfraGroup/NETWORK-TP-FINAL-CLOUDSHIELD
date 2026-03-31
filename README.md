@@ -30,7 +30,7 @@ Internet
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
 │  │  WAF v2      │  │ Azure        │  │  VPN Gateway │              │
 │  │  (AppGW)     │  │ Firewall     │  │  (IPsec/BGP) │              │
-│  │  OWASP 3.2   │  │  Premium     │  │  ← OnPrem    │              │
+│  │  OWASP 3.2   │  │  Standard    │  │  ← OnPrem    │              │
 │  │  Prévention  │  │  UDR 0/0     │  └──────────────┘              │
 │  └──────┬───────┘  └──────┬───────┘                                │
 │         │ (inspection)    │ (egress forcé)  ┌─────────────────┐    │
@@ -59,7 +59,7 @@ Internet
           │
 ┌─────────▼────────────────┐
 │  vnet-onprem-sim         │
-│  (192.168.0.0/24)        │
+│  (10.10.0.0/16)         │
 │  Simulation On-Premises  │
 │  VPN IKEv2 + BGP         │
 └──────────────────────────┘
@@ -135,20 +135,22 @@ Internet
 
 ## Plan d'adressage IP (IPAM)
 
-| VNet / Subnet         | CIDR             | Rôle                    |
-| --------------------- | ---------------- | ----------------------- |
-| `vnet-hub`            | `10.0.0.0/16`    | Hub central             |
-| `AzureFirewallSubnet` | `10.0.1.0/26`    | Azure Firewall          |
-| `GatewaySubnet`       | `10.0.2.0/27`    | VPN Gateway             |
-| `AzureBastionSubnet`  | `10.0.3.0/26`    | Azure Bastion           |
-| `snet-waf`            | `10.0.4.0/24`    | Application Gateway WAF |
-| `vnet-spoke-prod`     | `10.1.0.0/16`    | Spoke Production        |
-| `snet-web`            | `10.1.1.0/24`    | VMs Web                 |
-| `snet-app`            | `10.1.2.0/24`    | VMs App                 |
-| `vnet-spoke-data`     | `10.2.0.0/16`    | Spoke Data              |
-| `snet-db`             | `10.2.1.0/24`    | VMs DB                  |
-| `snet-pe`             | `10.2.2.0/24`    | Private Endpoints       |
-| `vnet-onprem-sim`     | `192.168.0.0/24` | Simulation OnPrem       |
+| VNet / Subnet         | CIDR           | Rôle                           |
+| --------------------- | -------------- | ------------------------------ |
+| `vnet-hub`            | `10.0.0.0/16`  | Hub central                    |
+| `AzureFirewallSubnet` | `10.0.1.0/26`  | Azure Firewall (nom imposé)    |
+| `AzureBastionSubnet`  | `10.0.2.0/26`  | Azure Bastion (nom imposé)     |
+| `GatewaySubnet`       | `10.0.3.0/27`  | VPN Gateway (nom imposé)       |
+| `vnet-spoke-prod`     | `10.1.0.0/16`  | Spoke Production               |
+| `snet-prod-web`       | `10.1.1.0/24`  | Tier 1 — Web (Flask)           |
+| `snet-prod-app`       | `10.1.2.0/24`  | Tier 2 — App (logique métier)  |
+| `snet-prod-waf`       | `10.1.3.0/24`  | Application Gateway WAF v2     |
+| `vnet-spoke-data`     | `10.2.0.0/16`  | Spoke Data (CDE PCI-DSS)       |
+| `snet-data-db`        | `10.2.1.0/24`  | Tier 3 — Database (PostgreSQL) |
+| `snet-data-pe`        | `10.2.2.0/24`  | Private Endpoints (Blob, SQL)  |
+| `vnet-onprem-sim`     | `10.10.0.0/16` | Simulation On-Premises (Lyon)  |
+| `GatewaySubnet`       | `10.10.0.0/27` | VPN Gateway OnPrem             |
+| `snet-onprem-srv`     | `10.10.1.0/24` | Serveurs simulés On-Prem       |
 
 ---
 
