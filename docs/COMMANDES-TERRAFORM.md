@@ -1,4 +1,9 @@
-# Commandes Terraform
+# <i class="fa-brands fa-hashicorp"></i> Commandes Terraform
+
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/Terraform-%3E%3D1.5-844FBA?style=flat-square&logo=terraform&logoColor=white" alt="Terraform" />
+  <img src="https://img.shields.io/badge/Provider-azurerm_4.x-0078D4?style=flat-square" alt="AzureRM" />
+</div>
 
 ## Déploiement complet
 

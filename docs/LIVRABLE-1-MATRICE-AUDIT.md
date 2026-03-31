@@ -1,11 +1,19 @@
-# LIVRABLE 1 — Matrice d'Audit & Analyse des Écarts
+# <i class="fa-solid fa-magnifying-glass-chart"></i> LIVRABLE 1 — Matrice d'Audit & Analyse des Écarts
+
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/ANSSI-Guide_d'hygi%C3%A8ne-1A1A2E?style=flat-square" alt="ANSSI" />
+  <img src="https://img.shields.io/badge/PCI--DSS-Conformit%C3%A9-844FBA?style=flat-square" alt="PCI-DSS" />
+  <img src="https://img.shields.io/badge/5_pratiques-toutes_CRITIQUES-f85149?style=flat-square" alt="Critiques" />
+</div>
 
 ## Contexte
 
-**Client :** FinTech Global — Société spécialisée dans les transactions B2B
-**Incident :** Exfiltration de données bancaires + ransomware (4 jours d'arrêt de production)
-**Constat :** Audit flash Banque de France — violations massives du Guide d'hygiène ANSSI et PCI-DSS
-**Objectif :** Identifier les écarts, quantifier les risques, proposer les remédiations
+| Champ        | Détail                                                                   |
+| ------------ | ------------------------------------------------------------------------ |
+| **Client**   | FinTech Global — Transactions B2B                                        |
+| **Incident** | Exfiltration de données bancaires + ransomware (4 jours d'arrêt)         |
+| **Constat**  | Audit flash Banque de France — violations ANSSI & PCI-DSS                |
+| **Objectif** | Identifier les écarts, quantifier les risques, proposer les remédiations |
 
 ---
 

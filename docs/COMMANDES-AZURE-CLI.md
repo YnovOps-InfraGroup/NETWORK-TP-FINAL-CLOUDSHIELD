@@ -1,4 +1,9 @@
-# Commandes Azure CLI
+# <i class="fa-brands fa-microsoft"></i> Commandes Azure CLI
+
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/Azure_CLI-%3E%3D2.50-0078D4?style=flat-square&logo=microsoftazure&logoColor=white" alt="Azure CLI" />
+  <img src="https://img.shields.io/badge/Subscription-4b580ad2-8b949e?style=flat-square" alt="Sub" />
+</div>
 
 ## Authentification
 

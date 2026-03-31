@@ -2,79 +2,217 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Cloud Shield — Documentation</title>
+    <title>Cloud Shield — Landing Zone Azure Secure by Design</title>
     <meta
       name="description"
-      content="Landing Zone Azure Secure by Design — Projet Cloud Shield"
+      content="Cloud Shield — Architecture Hub & Spoke Zero Trust pour FinTech Global. Conforme ANSSI & PCI-DSS."
     />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
     />
+    <meta name="theme-color" content="#0078d4" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Docsify theme -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"
     />
-    <style>
-      :root {
-        --base-font-size: 15px;
-        --theme-color: #0078d4;
-        --sidebar-width: 260px;
-        --sidebar-nav-link-color--active: #0078d4;
-        --sidebar-name-color: #0078d4;
-        --cover-background-color: #0e1117;
-        --cover-heading-color: #58a6ff;
-      }
-      .sidebar .app-name {
-        font-size: 1.1em;
-        font-weight: bold;
-      }
-      .markdown-section table {
-        display: table;
-        width: 100%;
-      }
-      .markdown-section pre > code {
-        font-size: 0.85em;
-      }
-    </style>
+    <link rel="stylesheet" href="custom.css" />
   </head>
   <body>
-    <div id="app">Chargement...</div>
+    <div id="app">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          flex-direction: column;
+          background: #0d1117;
+          color: #c9d1d9;
+        "
+      >
+        <div style="font-size: 3rem; margin-bottom: 1rem">🛡️</div>
+        <div
+          style="
+            font-size: 1.1rem;
+            font-family: Inter, sans-serif;
+            letter-spacing: 0.05em;
+          "
+        >
+          Chargement de Cloud Shield...
+        </div>
+        <div
+          style="
+            width: 200px;
+            height: 3px;
+            background: #21262d;
+            border-radius: 4px;
+            margin-top: 1.2rem;
+            overflow: hidden;
+          "
+        >
+          <div
+            style="
+              width: 40%;
+              height: 100%;
+              background: linear-gradient(90deg, #0078d4, #50e6ff);
+              border-radius: 4px;
+              animation: loading 1.5s ease-in-out infinite;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes loading {
+        0% {
+          transform: translateX(-100%);
+        }
+        50% {
+          transform: translateX(150%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+    </style>
+
     <script>
       window.$docsify = {
-        name: "🛡️ Cloud Shield",
+        name: '<i class="fa-solid fa-shield-halved"></i> Cloud Shield',
+        nameLink: "/",
         repo: "https://github.com/YnovOps-InfraGroup/NETWORK-TP-FINAL-CLOUDSHIELD",
         loadSidebar: true,
         subMaxLevel: 3,
         auto2top: true,
-        search: {
-          placeholder: "Rechercher...",
-          noData: "Aucun résultat",
-          depth: 3,
-        },
         coverpage: true,
+        onlyCover: true,
         themeColor: "#0078d4",
         homepage: "CAHIER-DES-CHARGES.md",
         alias: {
           "/.*/_sidebar.md": "/_sidebar.md",
         },
-        pagination: {
-          previousText: "Précédent",
-          nextText: "Suivant",
-          crossChapter: true,
+        search: {
+          maxAge: 86400000,
+          placeholder: "🔍 Rechercher dans la documentation...",
+          noData: '<i class="fa-solid fa-circle-xmark"></i> Aucun résultat',
+          depth: 4,
+          pathNamespaces: ["/"],
         },
+        pagination: {
+          previousText: '<i class="fa-solid fa-chevron-left"></i> Précédent',
+          nextText: 'Suivant <i class="fa-solid fa-chevron-right"></i>',
+          crossChapter: true,
+          crossChapterText: true,
+        },
+        tabs: {
+          persist: true,
+          sync: false,
+          theme: "material",
+        },
+        progress: {
+          position: "top",
+          color: "var(--theme-color)",
+          height: "3px",
+        },
+        formatUpdated: "{DD}/{MM}/{YYYY}",
+        plugins: [
+          function (hook) {
+            hook.doneEach(function () {
+              // Add animated entry to sections
+              document
+                .querySelectorAll(".markdown-section h2, .markdown-section h3")
+                .forEach(function (el, i) {
+                  el.style.opacity = "0";
+                  el.style.transform = "translateY(10px)";
+                  el.style.transition =
+                    "opacity 0.4s ease, transform 0.4s ease";
+                  setTimeout(
+                    function () {
+                      el.style.opacity = "1";
+                      el.style.transform = "translateY(0)";
+                    },
+                    50 + i * 40,
+                  );
+                });
+            });
+          },
+          function (hook) {
+            // Custom alert blocks
+            hook.afterEach(function (html) {
+              html = html.replace(
+                /<blockquote>([\s\S]*?)<\/blockquote>/g,
+                function (match, content) {
+                  if (
+                    content.includes("⚠️") ||
+                    content.includes("WARN") ||
+                    content.includes("Attention")
+                  ) {
+                    return (
+                      '<div class="alert alert-warning">' + content + "</div>"
+                    );
+                  }
+                  if (
+                    content.includes("✅") ||
+                    content.includes("Scalabilité") ||
+                    content.includes("Budget")
+                  ) {
+                    return (
+                      '<div class="alert alert-success">' + content + "</div>"
+                    );
+                  }
+                  if (content.includes("❌") || content.includes("NE PAS")) {
+                    return (
+                      '<div class="alert alert-danger">' + content + "</div>"
+                    );
+                  }
+                  return '<div class="alert alert-info">' + content + "</div>";
+                },
+              );
+              return html;
+            });
+          },
+        ],
       };
     </script>
+
     <!-- Docsify core -->
     <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
     <!-- Plugins -->
     <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-progress@1/dist/progress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
     <!-- Syntax highlight -->
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-hcl.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+    <!-- Mermaid diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/docsify-mermaid@2/dist/docsify-mermaid.js"></script>
+    <script>
+      mermaid.initialize({ startOnLoad: false, theme: "dark" });
+    </script>
   </body>
 </html>

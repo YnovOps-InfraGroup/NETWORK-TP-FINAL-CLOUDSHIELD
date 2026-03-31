@@ -1,4 +1,10 @@
-# LIVRABLE 4 — Cahier de Recette & 10 Preuves Techniques ANSSI
+# <i class="fa-solid fa-clipboard-check"></i> LIVRABLE 4 — Cahier de Recette & 10 Preuves Techniques ANSSI
+
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/Preuves-10_r%C3%A8gles_ANSSI-0078D4?style=flat-square" alt="10 preuves" />
+  <img src="https://img.shields.io/badge/Tests-Connectivit%C3%A9_%2B_Portail-3fb950?style=flat-square" alt="Tests" />
+  <img src="https://img.shields.io/badge/Zero_Trust-V%C3%A9rifi%C3%A9-f85149?style=flat-square" alt="Zero Trust" />
+</div>
 
 ## Objectif
 

@@ -1,6 +1,13 @@
-# Cahier des Charges — Projet Cloud Shield
+# <i class="fa-solid fa-file-contract"></i> Cahier des Charges — Projet Cloud Shield
 
 ## Landing Zone Azure "Secure by Design" pour FinTech Global
+
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/Version-1.0-0078D4?style=flat-square" alt="v1.0" />
+  <img src="https://img.shields.io/badge/Classification-Confidentiel-FF4500?style=flat-square" alt="Confidentiel" />
+  <img src="https://img.shields.io/badge/Soutenance-14_avril_2026-3fb950?style=flat-square" alt="Soutenance" />
+  <img src="https://img.shields.io/badge/Client-FinTech_Global-8b949e?style=flat-square" alt="Client" />
+</div>
 
 | Champ              | Valeur                                         |
 | ------------------ | ---------------------------------------------- |
@@ -26,13 +33,13 @@ FinTech Global, société spécialisée dans les transactions B2B, a subi un **i
 
 ### 1.2 Causes racines identifiées (5 pratiques défaillantes)
 
-| Pratique | Description                                                                          | Criticité |
-| -------- | ------------------------------------------------------------------------------------ | --------- |
-| **A**    | Réseau plat 10.0.0.0/8 — aucune segmentation (Wi-Fi invité + BDD sur le même switch) | CRITIQUE  |
-| **B**    | IP publiques sur les BDD, SSH root, mot de passe `P@ssword123`                       | CRITIQUE  |
-| **C**    | Tunnel GRE en clair entre Lyon et le siège (aucun chiffrement)                       | CRITIQUE  |
-| **D**    | Logs en RAM uniquement — aucune journalisation centralisée                           | CRITIQUE  |
-| **E**    | Accès Internet total depuis la production (le ransomware a contacté son C2)          | CRITIQUE  |
+| Pratique | Description                                                                          | Criticité   |
+| -------- | ------------------------------------------------------------------------------------ | ----------- |
+| **A**    | Réseau plat 10.0.0.0/8 — aucune segmentation (Wi-Fi invité + BDD sur le même switch) | 🔴 CRITIQUE |
+| **B**    | IP publiques sur les BDD, SSH root, mot de passe `P@ssword123`                       | 🔴 CRITIQUE |
+| **C**    | Tunnel GRE en clair entre Lyon et le siège (aucun chiffrement)                       | 🔴 CRITIQUE |
+| **D**    | Logs en RAM uniquement — aucune journalisation centralisée                           | 🔴 CRITIQUE |
+| **E**    | Accès Internet total depuis la production (le ransomware a contacté son C2)          | 🔴 CRITIQUE |
 
 ### 1.3 Mandat
 

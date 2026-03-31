@@ -35,20 +35,17 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+.infracost/
 
 # ── Claude memory (sensitive) ─────────────────────────────────────────────────
-Claude/project-context.json
-Claude/conversations/
-Claude/SESSIONS-INDEX.md
-Claude/decisions/
+Claude/
 
 # ── Fichiers de travail internes (non destinés au repo) ───────────────────────
 info-project-cloudshiel.md
 task-project-cloudshield.md
-Claude/conversations/
 
-# Autoriser la doc et les index
-!Claude/decisions/
-!Claude/SESSIONS-INDEX.md
-!Claude/README.md
-!Claude/NEW-SESSION-PROMPT.md
+# ── Fichiers locaux de travail — jamais pushés ────────────────────────────────
+TP-Final-SOUTENANCE.md
+*-SOUTENANCE.md
+TODO-LOCAL.md
+screenshots/

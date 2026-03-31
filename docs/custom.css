@@ -1,0 +1,675 @@
+/* ================================================
+   Cloud Shield — Premium Dark Theme
+   Azure-inspired cybersecurity design
+   ================================================ */
+
+/* ---- CSS Variables ---- */
+:root {
+  /* Core palette */
+  --azure-blue: #0078d4;
+  --azure-light: #50e6ff;
+  --azure-dark: #003d6b;
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --bg-card: #1c2128;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border-color: #30363d;
+  --border-subtle: #21262d;
+  --accent-red: #f85149;
+  --accent-orange: #d29922;
+  --accent-green: #3fb950;
+  --accent-purple: #a371f7;
+
+  /* Docsify overrides */
+  --base-font-size: 15px;
+  --base-font-family:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --theme-color: var(--azure-blue);
+  --sidebar-width: 280px;
+  --sidebar-background: var(--bg-secondary);
+  --sidebar-nav-link-color: var(--text-secondary);
+  --sidebar-nav-link-color--active: var(--azure-blue);
+  --sidebar-nav-link-color--hover: var(--text-primary);
+  --sidebar-nav-link-font-weight--active: 600;
+  --sidebar-nav-link-border-color--active: var(--azure-blue);
+  --sidebar-name-color: var(--azure-blue);
+  --sidebar-name-font-size: 1.15rem;
+  --sidebar-toggle-background: var(--bg-tertiary);
+  --cover-background-color: var(--bg-primary);
+  --cover-heading-color: var(--azure-light);
+  --search-input-color: var(--text-primary);
+  --search-result-heading-color: var(--azure-blue);
+  --pagination-title-color: var(--azure-blue);
+  --code-font-family: "JetBrains Mono", "Fira Code", monospace;
+  --code-font-size: 0.85em;
+  --code-inline-background: rgba(0, 120, 212, 0.12);
+  --code-inline-color: var(--azure-light);
+  --code-block-border-radius: 8px;
+  --copycode-background: var(--bg-tertiary);
+}
+
+/* ---- Base / Body ---- */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Progress bar ---- */
+.progress {
+  background: linear-gradient(
+    90deg,
+    var(--azure-blue),
+    var(--azure-light)
+  ) !important;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar .search {
+  margin-bottom: 12px;
+  padding: 8px 16px;
+}
+
+.sidebar .search input {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+  padding: 8px 12px !important;
+  font-size: 0.85rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sidebar .search input:focus {
+  border-color: var(--azure-blue) !important;
+  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.2) !important;
+  outline: none;
+}
+
+.sidebar .search input::placeholder {
+  color: var(--text-muted);
+}
+
+.sidebar .app-name-link {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 16px 0;
+}
+
+.sidebar .app-name-link img {
+  max-width: 24px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.sidebar ul li a {
+  font-size: 0.88rem;
+  padding: 6px 0;
+  transition:
+    color 0.15s ease,
+    padding-left 0.15s ease;
+}
+
+.sidebar ul li a:hover {
+  padding-left: 4px;
+}
+
+.sidebar ul li.active > a {
+  border-right: 3px solid var(--azure-blue);
+  font-weight: 600;
+}
+
+.sidebar ul li a i,
+.sidebar ul li a .fa-solid,
+.sidebar ul li a .fa-brands {
+  width: 20px;
+  text-align: center;
+  margin-right: 6px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.sidebar ul > li > p {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 18px 0 4px 0;
+  font-weight: 600;
+}
+
+.sidebar ul > li > p i,
+.sidebar ul > li > p .fa-solid,
+.sidebar ul > li > p .fa-brands {
+  margin-right: 6px;
+  color: var(--azure-blue);
+  font-size: 0.8rem;
+}
+
+/* ---- Cover Page ---- */
+.cover {
+  background: linear-gradient(
+    135deg,
+    #0d1117 0%,
+    #0a1628 40%,
+    #0d1117 100%
+  ) !important;
+  min-height: 100vh;
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      ellipse at 20% 50%,
+      rgba(0, 120, 212, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(80, 230, 255, 0.05),
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+.cover .cover-main {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.cover h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.3em;
+}
+
+.cover h1 i {
+  font-size: 0.85em;
+  vertical-align: middle;
+}
+
+.cover h1 small {
+  font-size: 0.35em;
+  vertical-align: middle;
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.cover blockquote {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0.5em auto 1.5em;
+}
+
+.cover-badges {
+  margin-bottom: 1.5rem;
+}
+
+.cover-badges img {
+  margin: 3px 4px;
+  vertical-align: middle;
+}
+
+.cover-features {
+  text-align: left;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+
+.cover-features p {
+  margin: 0.5em 0;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.cover-features p:hover {
+  background: rgba(0, 120, 212, 0.06);
+}
+
+.cover-features p strong {
+  color: var(--text-primary);
+}
+
+.cover-features p i,
+.cover-features p .fa-solid,
+.cover-features p .fa-brands {
+  color: var(--azure-blue);
+  width: 22px;
+  text-align: center;
+  margin-right: 4px;
+}
+
+.cover .cover-main > p:last-child a {
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  color: var(--text-primary) !important;
+}
+
+.cover .cover-main > p:last-child a:first-child {
+  background: var(--azure-blue);
+  border-color: var(--azure-blue);
+  color: white !important;
+}
+
+.cover .cover-main > p:last-child a:first-child:hover {
+  background: #006cbf;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+}
+
+.cover .cover-main > p:last-child a:hover {
+  border-color: var(--azure-blue);
+  color: var(--azure-blue) !important;
+  transform: translateY(-1px);
+}
+
+/* ---- Main Content ---- */
+.markdown-section {
+  max-width: 900px;
+  padding: 30px 45px 60px;
+}
+
+/* ---- Headings ---- */
+.markdown-section h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.4em;
+  margin-top: 0;
+}
+
+.markdown-section h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--azure-light);
+  margin-top: 2.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.markdown-section h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 1.8em;
+}
+
+.markdown-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+}
+
+/* ---- Tables ---- */
+.markdown-section table {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  margin: 1.2em 0;
+}
+
+.markdown-section table thead {
+  background: var(--bg-tertiary);
+}
+
+.markdown-section table thead th {
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--azure-light);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--azure-blue);
+  white-space: nowrap;
+}
+
+.markdown-section table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.markdown-section table tbody tr:hover {
+  background: rgba(0, 120, 212, 0.04);
+}
+
+.markdown-section table tbody tr:nth-child(even) {
+  background: rgba(22, 27, 34, 0.5);
+}
+
+.markdown-section table tbody td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.markdown-section table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Bold first column */
+.markdown-section table tbody td:first-child {
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+/* ---- Code Blocks ---- */
+.markdown-section pre {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0;
+  position: relative;
+  margin: 1.2em 0;
+}
+
+.markdown-section pre::before {
+  content: "";
+  display: block;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+
+.markdown-section pre::after {
+  content: "● ● ●";
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: var(--text-muted);
+}
+
+.markdown-section pre > code {
+  font-family: var(--code-font-family);
+  font-size: var(--code-font-size);
+  padding: 16px 20px !important;
+  line-height: 1.65;
+  display: block;
+  overflow-x: auto;
+}
+
+.markdown-section code {
+  font-family: var(--code-font-family);
+  background: var(--code-inline-background);
+  color: var(--code-inline-color);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.markdown-section pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* Copy button styling */
+.docsify-copy-code-button {
+  top: 4px !important;
+  right: 8px !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  background: var(--bg-tertiary) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 2px 8px !important;
+}
+
+.docsify-copy-code-button:hover {
+  color: var(--azure-light) !important;
+  border-color: var(--azure-blue) !important;
+}
+
+/* ---- Alert Blocks ---- */
+.alert {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 1.2em 0;
+  border-left: 4px solid;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.alert p {
+  margin: 0.3em 0;
+}
+
+.alert-info {
+  background: rgba(0, 120, 212, 0.08);
+  border-color: var(--azure-blue);
+  color: var(--text-secondary);
+}
+
+.alert-info strong {
+  color: var(--azure-light);
+}
+
+.alert-warning {
+  background: rgba(210, 153, 34, 0.08);
+  border-color: var(--accent-orange);
+  color: var(--text-secondary);
+}
+
+.alert-warning strong {
+  color: var(--accent-orange);
+}
+
+.alert-success {
+  background: rgba(63, 185, 80, 0.08);
+  border-color: var(--accent-green);
+  color: var(--text-secondary);
+}
+
+.alert-success strong {
+  color: var(--accent-green);
+}
+
+.alert-danger {
+  background: rgba(248, 81, 73, 0.08);
+  border-color: var(--accent-red);
+  color: var(--text-secondary);
+}
+
+.alert-danger strong {
+  color: var(--accent-red);
+}
+
+/* ---- Horizontal Rules ---- */
+.markdown-section hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-color),
+    transparent
+  );
+  margin: 2.5em 0;
+}
+
+/* ---- Links ---- */
+.markdown-section a {
+  color: var(--azure-blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.markdown-section a:hover {
+  border-bottom-color: var(--azure-blue);
+}
+
+/* ---- Strong / Bold ---- */
+.markdown-section strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ---- Lists ---- */
+.markdown-section ul,
+.markdown-section ol {
+  padding-left: 1.5em;
+}
+
+.markdown-section li {
+  margin: 0.3em 0;
+  line-height: 1.65;
+}
+
+/* ---- Criticité badges ---- */
+.markdown-section td:last-child,
+.markdown-section td:nth-child(4),
+.markdown-section td:nth-child(5) {
+  text-align: center;
+}
+
+/* ---- Pagination ---- */
+.docsify-pagination-container {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5em;
+  margin-top: 3em;
+}
+
+.pagination-item-title {
+  font-weight: 600;
+  color: var(--azure-blue);
+}
+
+/* ---- Back to top (GitHub corner) ---- */
+.github-corner svg {
+  fill: var(--azure-blue) !important;
+}
+
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+/* ---- Search results ---- */
+.sidebar .search .matching-post {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar .search .matching-post p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: rgba(0, 120, 212, 0.3);
+  color: var(--text-primary);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .markdown-section {
+    padding: 20px 16px 40px;
+  }
+
+  .cover h1 {
+    font-size: 2rem;
+  }
+
+  .markdown-section h1 {
+    font-size: 1.6rem;
+  }
+
+  .markdown-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .markdown-section table {
+    font-size: 0.8rem;
+  }
+
+  .cover-badges img {
+    height: 22px;
+  }
+}
+
+/* ---- ASCII diagram special styling ---- */
+.markdown-section pre > code[class*="language-"] {
+  /* Keep monospace look clean for ASCII art */
+}
+
+/* ---- Print styles ---- */
+@media print {
+  .sidebar,
+  .github-corner,
+  .docsify-pagination-container {
+    display: none !important;
+  }
+
+  .markdown-section {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .alert {
+    border: 1px solid #ccc;
+  }
+}

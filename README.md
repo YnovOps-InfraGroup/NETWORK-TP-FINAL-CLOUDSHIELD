@@ -8,14 +8,13 @@
 
 ## Contexte
 
-| Champ               | Valeur                                                        |
-| ------------------- | ------------------------------------------------------------- |
-| Cours               | Cloud & Infrastructure Azure — Ynov Mastère 1                 |
-| Projet              | TP Final · Cloud Shield                                       |
-| Organisation GitHub | [YnovOps-InfraGroup](https://github.com/YnovOps-InfraGroup)   |
-| Subscription Azure  | `SUBSCRIPTION_ID_REMOVED`                        |
-| Région              | `francecentral`                                               |
-| Backend Terraform   | Storage Account `stoagreg3sr` — container `tfstate`           |
+| Champ               | Valeur                                                      |
+| ------------------- | ----------------------------------------------------------- |
+| Cours               | Cloud & Infrastructure Azure — Ynov Mastère 1               |
+| Projet              | TP Final · Cloud Shield                                     |
+| Organisation GitHub | [YnovOps-InfraGroup](https://github.com/YnovOps-InfraGroup) |
+| Région              | `francecentral`                                             |
+| Backend Terraform   | Storage Account distant — container `tfstate`               |
 
 ---
 
@@ -66,19 +65,19 @@ Internet
 └──────────────────────────┘
 ```
 
-**Backend Terraform :** Storage Account `stoagreg3sr` (Infra-core-3sr)
+**Backend Terraform :** Storage Account distant (Infra-core-3sr)
 **State key :** `network-tp-final-cloudshield/terraform.tfstate`
 
 ---
 
 ## Livrables
 
-| # | Livrable | Fichier |
-|---|----------|---------|
-| 1 | Matrice d'Audit ANSSI (5 pratiques A→E) | [docs/LIVRABLE-1-MATRICE-AUDIT.md](docs/LIVRABLE-1-MATRICE-AUDIT.md) |
-| 2 | DAT — Document d'Architecture Technique | [docs/LIVRABLE-2-DAT.md](docs/LIVRABLE-2-DAT.md) |
-| 3 | Infrastructure as Code Terraform | [terraform/](terraform/) |
-| 4 | Cahier de Recette — 10 preuves ANSSI | [docs/LIVRABLE-4-CAHIER-RECETTE.md](docs/LIVRABLE-4-CAHIER-RECETTE.md) |
+| #   | Livrable                                | Fichier                                                                |
+| --- | --------------------------------------- | ---------------------------------------------------------------------- |
+| 1   | Matrice d'Audit ANSSI (5 pratiques A→E) | [docs/LIVRABLE-1-MATRICE-AUDIT.md](docs/LIVRABLE-1-MATRICE-AUDIT.md)   |
+| 2   | DAT — Document d'Architecture Technique | [docs/LIVRABLE-2-DAT.md](docs/LIVRABLE-2-DAT.md)                       |
+| 3   | Infrastructure as Code Terraform        | [terraform/](terraform/)                                               |
+| 4   | Cahier de Recette — 10 preuves ANSSI    | [docs/LIVRABLE-4-CAHIER-RECETTE.md](docs/LIVRABLE-4-CAHIER-RECETTE.md) |
 
 ---
 
@@ -86,89 +85,89 @@ Internet
 
 ### Réseau
 
-| Ressource | Nom | Notes |
-| --------- | --- | ----- |
-| Resource Groups (4) | `rg-cloudshield-hub`, `rg-cloudshield-prod`, `rg-cloudshield-data`, `rg-cloudshield-onprem` | Un par VNet |
-| Virtual Networks (4) | `vnet-hub`, `vnet-spoke-prod`, `vnet-spoke-data`, `vnet-onprem-sim` | Hub & Spoke |
-| Peerings (4) | Hub↔Prod, Hub↔Data | Bidirectionnels + allow_gateway |
-| Subnets (11) | AzureFirewallSubnet, GatewaySubnet, AzureBastionSubnet, snet-waf, snet-web, snet-app, snet-db, snet-pe, … | Micro-segmentés |
-| Route Tables (3) | `rt-spoke-prod`, `rt-spoke-data`, `rt-onprem-sim` | UDR 0.0.0.0/0 → Firewall |
+| Ressource            | Nom                                                                                                       | Notes                           |
+| -------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Resource Groups (4)  | `rg-cloudshield-hub`, `rg-cloudshield-prod`, `rg-cloudshield-data`, `rg-cloudshield-onprem`               | Un par VNet                     |
+| Virtual Networks (4) | `vnet-hub`, `vnet-spoke-prod`, `vnet-spoke-data`, `vnet-onprem-sim`                                       | Hub & Spoke                     |
+| Peerings (4)         | Hub↔Prod, Hub↔Data                                                                                        | Bidirectionnels + allow_gateway |
+| Subnets (11)         | AzureFirewallSubnet, GatewaySubnet, AzureBastionSubnet, snet-waf, snet-web, snet-app, snet-db, snet-pe, … | Micro-segmentés                 |
+| Route Tables (3)     | `rt-spoke-prod`, `rt-spoke-data`, `rt-onprem-sim`                                                         | UDR 0.0.0.0/0 → Firewall        |
 
 ### Sécurité
 
-| Ressource | Nom | Notes |
-| --------- | --- | ----- |
-| Azure Firewall Premium | `fw-cloudshield-hub` | Policy + règles App/Net/DNAT |
-| Application Gateway v2 WAF | `waf-cloudshield-hub` | OWASP 3.2, mode Prévention |
-| Azure Bastion Standard | `bastion-cloudshield-hub` | Accès admin uniquement |
-| NSG (5) | `nsg-bastion`, `nsg-waf`, `nsg-web`, `nsg-app`, `nsg-db` | Deny-all implicite |
-| ASG (3) | `asg-web`, `asg-app`, `asg-db` | Zero Trust, pas d'IP statiques |
+| Ressource                  | Nom                                                      | Notes                          |
+| -------------------------- | -------------------------------------------------------- | ------------------------------ |
+| Azure Firewall Premium     | `fw-cloudshield-hub`                                     | Policy + règles App/Net/DNAT   |
+| Application Gateway v2 WAF | `waf-cloudshield-hub`                                    | OWASP 3.2, mode Prévention     |
+| Azure Bastion Standard     | `bastion-cloudshield-hub`                                | Accès admin uniquement         |
+| NSG (5)                    | `nsg-bastion`, `nsg-waf`, `nsg-web`, `nsg-app`, `nsg-db` | Deny-all implicite             |
+| ASG (3)                    | `asg-web`, `asg-app`, `asg-db`                           | Zero Trust, pas d'IP statiques |
 
 ### Compute
 
-| Ressource | Nom | SKU | Notes |
-| --------- | --- | --- | ----- |
-| VM Web | `vm-web-prod-01` | Standard_B2s | Ubuntu 22.04, asg-web |
-| VM App | `vm-app-prod-01` | Standard_B2s | Ubuntu 22.04, asg-app |
-| VM DB | `vm-db-prod-01` | Standard_B2s | Ubuntu 22.04, asg-db |
+| Ressource | Nom              | SKU          | Notes                 |
+| --------- | ---------------- | ------------ | --------------------- |
+| VM Web    | `vm-web-prod-01` | Standard_B2s | Ubuntu 22.04, asg-web |
+| VM App    | `vm-app-prod-01` | Standard_B2s | Ubuntu 22.04, asg-app |
+| VM DB     | `vm-db-prod-01`  | Standard_B2s | Ubuntu 22.04, asg-db  |
 
 ### PaaS & Connexions
 
-| Ressource | Nom | Notes |
-| --------- | --- | ----- |
-| SQL Server + DB | `sql-cloudshield-data` | Pas d'endpoint public, Private Endpoint |
-| Storage Account | `stcloudshielddata` | Private Endpoint, TLS 1.2 |
-| Private DNS Zones (2) | `privatelink.database.windows.net`, `privatelink.blob.core.windows.net` | DNS interne fonctionnel |
-| VPN Gateway | `vpng-cloudshield-hub` | VpnGw1, IKEv2, BGP AS 65001 |
-| Local Network Gateway | `lgw-onprem-01` | Simulation on-premises |
+| Ressource             | Nom                                                                     | Notes                                   |
+| --------------------- | ----------------------------------------------------------------------- | --------------------------------------- |
+| SQL Server + DB       | `sql-cloudshield-data`                                                  | Pas d'endpoint public, Private Endpoint |
+| Storage Account       | `stcloudshielddata`                                                     | Private Endpoint, TLS 1.2               |
+| Private DNS Zones (2) | `privatelink.database.windows.net`, `privatelink.blob.core.windows.net` | DNS interne fonctionnel                 |
+| VPN Gateway           | `vpng-cloudshield-hub`                                                  | VpnGw1, IKEv2, BGP AS 65001             |
+| Local Network Gateway | `lgw-onprem-01`                                                         | Simulation on-premises                  |
 
 ### Observabilité
 
-| Ressource | Notes |
-| --------- | ----- |
+| Ressource               | Notes                                          |
+| ----------------------- | ---------------------------------------------- |
 | Log Analytics Workspace | `law-cloudshield-01`, PerGB2018, 30j rétention |
-| NSG Flow Logs v2 × 5 | Traffic Analytics 10min → LAW |
-| Diagnostic Settings | Firewall, WAF, Bastion → LAW |
-| AMA + DCR | Sur toutes les VMs |
-| Action Groups + Alertes | Email on anomalie volumétrique |
+| NSG Flow Logs v2 × 5    | Traffic Analytics 10min → LAW                  |
+| Diagnostic Settings     | Firewall, WAF, Bastion → LAW                   |
+| AMA + DCR               | Sur toutes les VMs                             |
+| Action Groups + Alertes | Email on anomalie volumétrique                 |
 
 ---
 
 ## Plan d'adressage IP (IPAM)
 
-| VNet / Subnet | CIDR | Rôle |
-| ------------- | ---- | ---- |
-| `vnet-hub` | `10.0.0.0/16` | Hub central |
-| `AzureFirewallSubnet` | `10.0.1.0/26` | Azure Firewall |
-| `GatewaySubnet` | `10.0.2.0/27` | VPN Gateway |
-| `AzureBastionSubnet` | `10.0.3.0/26` | Azure Bastion |
-| `snet-waf` | `10.0.4.0/24` | Application Gateway WAF |
-| `vnet-spoke-prod` | `10.1.0.0/16` | Spoke Production |
-| `snet-web` | `10.1.1.0/24` | VMs Web |
-| `snet-app` | `10.1.2.0/24` | VMs App |
-| `vnet-spoke-data` | `10.2.0.0/16` | Spoke Data |
-| `snet-db` | `10.2.1.0/24` | VMs DB |
-| `snet-pe` | `10.2.2.0/24` | Private Endpoints |
-| `vnet-onprem-sim` | `192.168.0.0/24` | Simulation OnPrem |
+| VNet / Subnet         | CIDR             | Rôle                    |
+| --------------------- | ---------------- | ----------------------- |
+| `vnet-hub`            | `10.0.0.0/16`    | Hub central             |
+| `AzureFirewallSubnet` | `10.0.1.0/26`    | Azure Firewall          |
+| `GatewaySubnet`       | `10.0.2.0/27`    | VPN Gateway             |
+| `AzureBastionSubnet`  | `10.0.3.0/26`    | Azure Bastion           |
+| `snet-waf`            | `10.0.4.0/24`    | Application Gateway WAF |
+| `vnet-spoke-prod`     | `10.1.0.0/16`    | Spoke Production        |
+| `snet-web`            | `10.1.1.0/24`    | VMs Web                 |
+| `snet-app`            | `10.1.2.0/24`    | VMs App                 |
+| `vnet-spoke-data`     | `10.2.0.0/16`    | Spoke Data              |
+| `snet-db`             | `10.2.1.0/24`    | VMs DB                  |
+| `snet-pe`             | `10.2.2.0/24`    | Private Endpoints       |
+| `vnet-onprem-sim`     | `192.168.0.0/24` | Simulation OnPrem       |
 
 ---
 
 ## Phases du TP couvertes
 
-| Phase | Description | Statut |
-| ----- | ----------- | ------ |
-| 1 | Matrice d'Audit — Gap Analysis ANSSI (A→E) | ✅ L1 |
-| 2 | Plan d'adressage IP + HLD Architecture | ✅ L2 |
-| 3 | Resource Groups + VNets + Peerings | ✅ IaC |
-| 4 | NSG micro-segmentés + ASG Zero Trust | ✅ IaC |
-| 5 | Azure Firewall Premium + Politique + UDR | ✅ IaC |
-| 6 | WAF Application Gateway v2 OWASP 3.2 | ✅ IaC |
-| 7 | Azure Bastion Standard | ✅ IaC |
-| 8 | VMs 3-tiers (Web / App / DB) | ✅ IaC |
-| 9 | VPN Gateway IPsec/IKEv2 + BGP | ✅ IaC |
-| 10 | PaaS sécurisé — Private Endpoints + DNS | ✅ IaC |
-| 11 | Observabilité — LAW + Flow Logs + AMA + Alertes | ✅ IaC |
-| 12 | Cahier de Recette — 10 preuves ANSSI | ✅ L4 |
+| Phase | Description                                     | Statut |
+| ----- | ----------------------------------------------- | ------ |
+| 1     | Matrice d'Audit — Gap Analysis ANSSI (A→E)      | ✅ L1  |
+| 2     | Plan d'adressage IP + HLD Architecture          | ✅ L2  |
+| 3     | Resource Groups + VNets + Peerings              | ✅ IaC |
+| 4     | NSG micro-segmentés + ASG Zero Trust            | ✅ IaC |
+| 5     | Azure Firewall Premium + Politique + UDR        | ✅ IaC |
+| 6     | WAF Application Gateway v2 OWASP 3.2            | ✅ IaC |
+| 7     | Azure Bastion Standard                          | ✅ IaC |
+| 8     | VMs 3-tiers (Web / App / DB)                    | ✅ IaC |
+| 9     | VPN Gateway IPsec/IKEv2 + BGP                   | ✅ IaC |
+| 10    | PaaS sécurisé — Private Endpoints + DNS         | ✅ IaC |
+| 11    | Observabilité — LAW + Flow Logs + AMA + Alertes | ✅ IaC |
+| 12    | Cahier de Recette — 10 preuves ANSSI            | ✅ L4  |
 
 ---
 
@@ -178,7 +177,7 @@ Internet
 
 ```bash
 terraform >= 1.11.0
-az login && az account set --subscription SUBSCRIPTION_ID_REMOVED
+az login && az account set --subscription <SUBSCRIPTION_ID>
 ```
 
 ### 2 — Préparer les variables
@@ -189,12 +188,12 @@ cp terraform.tfvars.template terraform.tfvars
 # Remplir : vm_ssh_public_key, alert_email
 ```
 
-| Variable | Obligatoire | Défaut |
-| -------- | ----------- | ------ |
-| `subscription_id` | ✅ | — |
-| `vm_ssh_public_key` | ✅ | — |
-| `alert_email` | ✅ | — |
-| `deploy_vpn_gateways` | ❌ | `false` (économies ~0,76 €/h) |
+| Variable              | Obligatoire | Défaut                        |
+| --------------------- | ----------- | ----------------------------- |
+| `subscription_id`     | ✅          | —                             |
+| `vm_ssh_public_key`   | ✅          | —                             |
+| `alert_email`         | ✅          | —                             |
+| `deploy_vpn_gateways` | ❌          | `false` (économies ~0,76 €/h) |
 
 ### 3 — Déployer
 
@@ -230,84 +229,20 @@ terraform destroy -auto-approve
 
 ## FinOps
 
-| Ressource | Coût estimé/h | Coût/j |
-| --------- | ------------- | ------ |
-| Azure Firewall Premium | ~0,98 €/h | ~23,5 €/j |
-| Application Gateway WAF v2 | ~0,35 €/h | ~8,4 €/j |
-| Azure Bastion Standard | ~0,19 €/h | ~4,6 €/j |
-| VMs ×3 Standard_B2s | ~0,12 €/h | ~2,8 €/j |
-| SQL + Storage | ~0,06 €/h | ~1,4 €/j |
-| **Total Phase 1** | **~1,70 €/h** | **~40,7 €/j** |
-| VPN Gateways ×2 (optionnel) | +0,76 €/h | +18,2 €/j |
+| Ressource                   | Coût estimé/h | Coût/j        |
+| --------------------------- | ------------- | ------------- |
+| Azure Firewall Premium      | ~0,98 €/h     | ~23,5 €/j     |
+| Application Gateway WAF v2  | ~0,35 €/h     | ~8,4 €/j      |
+| Azure Bastion Standard      | ~0,19 €/h     | ~4,6 €/j      |
+| VMs ×3 Standard_B2s         | ~0,12 €/h     | ~2,8 €/j      |
+| SQL + Storage               | ~0,06 €/h     | ~1,4 €/j      |
+| **Total Phase 1**           | **~1,70 €/h** | **~40,7 €/j** |
+| VPN Gateways ×2 (optionnel) | +0,76 €/h     | +18,2 €/j     |
 
 > Destroy quotidien recommandé pour limiter les coûts hors démo.
 
-Spoke-Prod (vnet-spoke-prod) : 3 tiers applicatifs (Web, App, Mgmt)
+---
 
-Spoke-Data (vnet-spoke-data) : CDE PCI-DSS, SubnetDB isolé, Private Endpoints PaaS
+## Auteur
 
-OnPrem-Sim (vnet-onprem-sim) : simulation datacenter on-premise relié via tunnel IPsec IKEv2 BGP
-
-Les Spokes communiquent exclusivement via le Hub. Tout trafic sortant est forcé vers Azure Firewall via UDR. L'accès SSH/RDP aux VMs est uniquement possible via Azure Bastion. Les services PaaS (Storage, SQL) sont exposés exclusivement en privé via Private Endpoints et DNS Privées. L'Application Gateway v2 avec WAF intercepte tout le trafic entrant.
-
-Hiérarchie des composants
-
-rg-zerotrust-prod (francecentral)
-├── RÉSEAU
-│   ├── vnet-hub (10.0.0.0/16)
-│   │   ├── GatewaySubnet (10.0.6.0/27)
-│   │   ├── AzureBastionSubnet (10.0.5.0/26)
-│   │   ├── AzureFirewallSubnet (10.0.0.0/26)
-│   │   └── SubnetMgmt (10.0.4.0/24)
-│   ├── vnet-spoke-prod (10.1.0.0/16)
-│   │   ├── SubnetWeb (10.1.1.0/24)
-│   │   ├── SubnetApp (10.1.2.0/24)
-│   │   └── SubnetMgmt (10.1.3.0/24)
-│   ├── vnet-spoke-data (10.2.0.0/16)
-│   │   ├── SubnetDB (10.2.1.0/24)
-│   │   └── SubnetMgmt (10.2.2.0/24)
-│   └── vnet-onprem-sim (10.10.0.0/16)
-│       ├── GatewaySubnet (10.10.6.0/27)
-│       └── SubnetSrv (10.10.1.0/24)
-├── PEERINGS
-│   ├── Hub ↔ Spoke-Prod (Gateway Transit ON)
-│   └── Hub ↔ Spoke-Data (Gateway Transit ON)
-├── SÉCURITÉ
-│   ├── ASG : asg-web, asg-app, asg-db, asg-bastion
-│   ├── NSG nsg-web (SubnetWeb)
-│   ├── NSG nsg-db (SubnetDB)
-│   └── NSG AzureBastionSubnet
-├── COMPUTE
-│   ├── vm-web → SubnetWeb, asg-web (sans IP publique)
-│   ├── vm-app → SubnetApp, asg-app (sans IP publique)
-│   ├── vm-db → SubnetDB, asg-db (sans IP publique)
-│   └── vm-onprem → SubnetSrv
-├── GATEWAY
-│   ├── VPN Gateway Hub (VpnGw1, AS 65001)
-│   └── VPN Gateway OnPrem (VpnGw1, AS 65002)
-│       └── Connexion IPsec IKEv2 BGP
-├── PARE-FEU & ROUTAGE
-│   ├── Azure Firewall Standard (Hub)
-│   ├── Firewall Policy (règle TCP 5432 + FQDN)
-│   └── UDR rt-spoke-to-hub → 0.0.0.0/0 → Firewall
-├── ACCÈS SÉCURISÉ
-│   └── Azure Bastion (Hub)
-├── PAAS SÉCURISÉ
-│   ├── Storage Account (accès public OFF)
-│   │   └── Private Endpoint Blob (SubnetDB)
-│   ├── Azure SQL Server (accès public OFF)
-│   │   └── Private Endpoint SQL (SubnetDB)
-│   ├── Zone DNS Privée : privatelink.blob.core.windows.net
-│   └── Zone DNS Privée : privatelink.database.windows.net
-├── ENTRÉE WEB
-│   └── Application Gateway v2 + WAF (OWASP 3.2, mode Prévention)
-└── OBSERVABILITÉ (tout IaC)
-    ├── Log Analytics Workspace
-    ├── Storage Account (logs NSG Flow Logs)
-    ├── NSG Flow Logs v2 (nsg-web, nsg-db)
-    ├── Diagnostic Settings (Firewall, Bastion, VPN GW)
-    ├── Azure Monitor Agent (vm-web, vm-app, vm-db)
-    ├── Data Collection Rule (Syslog)
-    ├── Action Group AG-SecOps (email)
-    └── Alert Rule (>500 Denied / 5 min)
-    
+**Myscile Gregory** — Mastère 1 Cloud & Infrastructure · Ynov · 2025-2026

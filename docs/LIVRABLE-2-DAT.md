@@ -1,12 +1,21 @@
-# LIVRABLE 2 — Dossier d'Architecture Technique (DAT)
+# <i class="fa-solid fa-sitemap"></i> LIVRABLE 2 — Dossier d'Architecture Technique (DAT)
 
 ## Cloud Shield — Landing Zone Azure "Secure by Design"
 
-**Client :** FinTech Global
-**Cabinet :** Expert Cloud & Réseaux
-**Date :** 31 mars 2026
-**Version :** 1.0
-**Classification :** Confidentiel
+<div style="margin-bottom:1.5em">
+  <img src="https://img.shields.io/badge/Architecture-Hub_%26_Spoke-0078D4?style=flat-square&logo=microsoftazure&logoColor=white" alt="Hub & Spoke" />
+  <img src="https://img.shields.io/badge/Security-Zero_Trust-f85149?style=flat-square" alt="Zero Trust" />
+  <img src="https://img.shields.io/badge/IaC-Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white" alt="Terraform" />
+  <img src="https://img.shields.io/badge/Version-1.0-3fb950?style=flat-square" alt="v1.0" />
+</div>
+
+| Champ              | Valeur                 |
+| ------------------ | ---------------------- |
+| **Client**         | FinTech Global         |
+| **Cabinet**        | Expert Cloud & Réseaux |
+| **Date**           | 31 mars 2026           |
+| **Version**        | 1.0                    |
+| **Classification** | Confidentiel           |
 
 ---
 
