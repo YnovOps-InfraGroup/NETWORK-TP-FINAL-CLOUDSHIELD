@@ -34,3 +34,146 @@ resource "azurerm_bastion_host" "bastion" {
 
   tags = var.tags
 }
+
+# ═══════════════════════════════════════════════════════════════
+# NSG — AzureBastionSubnet (Phase 4 TP — règles exactes Microsoft)
+# Ref : https://learn.microsoft.com/azure/bastion/bastion-nsg
+# ═══════════════════════════════════════════════════════════════
+
+resource "azurerm_network_security_group" "nsg_bastion" {
+  count = var.deploy_bastion ? 1 : 0
+
+  name                = "nsg-bastion"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  # ── INBOUND ─────────────────────────────────────────────────
+
+  # Trafic HTTPS depuis Internet (portail Azure Bastion)
+  security_rule {
+    name                       = "Allow-HTTPS-Internet-Inbound"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "*"
+  }
+
+  # GatewayManager (plan de contrôle Azure Bastion)
+  security_rule {
+    name                       = "Allow-GatewayManager-Inbound"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "GatewayManager"
+    destination_address_prefix = "*"
+  }
+
+  # Azure Load Balancer health probes
+  security_rule {
+    name                       = "Allow-AzureLoadBalancer-Inbound"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  }
+
+  # Communication intra Bastion (data plane)
+  security_rule {
+    name                       = "Allow-BastionHostCommunication-Inbound"
+    priority                   = 130
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_ranges    = ["8080", "5701"]
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  # Deny-all inbound
+  security_rule {
+    name                       = "Deny-All-Inbound"
+    priority                   = 4000
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  # ── OUTBOUND ────────────────────────────────────────────────
+
+  # SSH/RDP vers les VMs cibles (VirtualNetwork)
+  security_rule {
+    name                       = "Allow-SSH-RDP-Outbound"
+    priority                   = 100
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["22", "3389"]
+    source_address_prefix      = "*"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  # HTTPS vers AzureCloud (sessions, certificats, métriques)
+  security_rule {
+    name                       = "Allow-AzureCloud-Outbound"
+    priority                   = 110
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "AzureCloud"
+  }
+
+  # Communication intra Bastion (data plane)
+  security_rule {
+    name                       = "Allow-BastionHostCommunication-Outbound"
+    priority                   = 120
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_ranges    = ["8080", "5701"]
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  # Session info (GetSessionInformation)
+  security_rule {
+    name                       = "Allow-HTTP-Outbound"
+    priority                   = 130
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
+
+  tags = var.tags
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_bastion_assoc" {
+  count = var.deploy_bastion ? 1 : 0
+
+  subnet_id                 = azurerm_subnet.hub_bastion.id
+  network_security_group_id = azurerm_network_security_group.nsg_bastion[0].id
+}

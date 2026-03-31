@@ -29,6 +29,14 @@ resource "azurerm_application_security_group" "asg_db" {
   tags                = var.tags
 }
 
+# Phase 4 TP : asg-bastion obligatoire
+resource "azurerm_application_security_group" "asg_bastion" {
+  name                = "asg-bastion"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  tags                = var.tags
+}
+
 # ═══════════════════════════════════════════════════════════════
 # NSG — SUBNET WEB (Tier 1 — Présentation)
 # Autorise : WAF → Web (HTTP/80), Bastion → SSH
@@ -66,10 +74,10 @@ resource "azurerm_network_security_group" "nsg_web" {
     destination_address_prefix = "*"
   }
 
-  # Zero Trust : refus explicite de tout le reste en inbound
+  # Zero Trust : refus explicite de tout le reste en inbound (prio 4000 = TP)
   security_rule {
     name                       = "Deny-All-Inbound"
-    priority                   = 4096
+    priority                   = 4000
     direction                  = "Inbound"
     access                     = "Deny"
     protocol                   = "*"
@@ -111,10 +119,10 @@ resource "azurerm_network_security_group" "nsg_app" {
     destination_application_security_group_ids = [azurerm_application_security_group.asg_app.id]
   }
 
-  # Zero Trust : deny-all inbound
+  # Zero Trust : deny-all inbound (prio 4000 = TP)
   security_rule {
     name                       = "Deny-All-Inbound"
-    priority                   = 4096
+    priority                   = 4000
     direction                  = "Inbound"
     access                     = "Deny"
     protocol                   = "*"
@@ -157,10 +165,10 @@ resource "azurerm_network_security_group" "nsg_db" {
     destination_application_security_group_ids = [azurerm_application_security_group.asg_db.id]
   }
 
-  # Deny-all inbound
+  # Deny-all inbound (prio 4000 = TP)
   security_rule {
     name                       = "Deny-All-Inbound"
-    priority                   = 4096
+    priority                   = 4000
     direction                  = "Inbound"
     access                     = "Deny"
     protocol                   = "*"
@@ -285,7 +293,7 @@ resource "azurerm_network_security_group" "nsg_pe" {
 
   security_rule {
     name                       = "Deny-All-Inbound"
-    priority                   = 4096
+    priority                   = 4000
     direction                  = "Inbound"
     access                     = "Deny"
     protocol                   = "*"
