@@ -1,0 +1,56 @@
+# ============================================================
+# TEMPLATE — terraform.tfvars
+# Copier ce fichier en terraform.tfvars et remplir les valeurs
+# ⚠ Ne JAMAIS committer terraform.tfvars (contient des secrets)
+# ============================================================
+
+# ── Identité Azure ────────────────────────────────────────────
+subscription_id = "SUBSCRIPTION_ID_REMOVED"
+tenant_id       = "TENANT_ID_REMOVED"
+
+# ── Projet ────────────────────────────────────────────────────
+project_name = "cloudshield"
+environment  = "prod"
+location     = "France Central"
+
+# ── Tags ──────────────────────────────────────────────────────
+tags = {
+  projet     = "TP-Final"
+  managed_by = "terraform"
+  owner      = "Myscile-gregory"
+}
+
+# ── Clé SSH publique (remplacer par votre clé) ───────────────
+vm_ssh_public_key = "ssh-ed25519 AAAA... votre-cle-publique"
+
+# ── VMs ───────────────────────────────────────────────────────
+vm_admin_username = "azureuser"
+vm_size           = "Standard_B1s"
+
+# ── VPN ───────────────────────────────────────────────────────
+vpn_shared_key = "***VPN_KEY_REMOVED***"
+hub_bgp_asn    = 65001
+onprem_bgp_asn = 65002
+
+# ── PaaS ──────────────────────────────────────────────────────
+sql_admin_login    = "sqladmin"
+sql_admin_password = "***SQL_PASSWORD_REMOVED***"
+
+# ── Observabilité ─────────────────────────────────────────────
+alert_email        = "secops@fintechglobal.local"
+law_retention_days = 30
+
+# ══════════════════════════════════════════════════════════════
+# FEATURE FLAGS — Déploiement progressif (FinOps)
+# ══════════════════════════════════════════════════════════════
+# Activer progressivement pour maîtriser les coûts :
+#
+# Phase 1 (jour 1) : Réseau + Sécurité + VMs
+deploy_firewall      = true   # ~1,30 €/h
+deploy_bastion       = true   # ~0,12 €/h
+deploy_waf           = true   # ~0,25 €/h (autoscale min=0)
+deploy_paas          = true   # ~0,01 €/h
+deploy_observability = true   # ~0 €/h (5Go gratuits)
+#
+# Phase 2 (jour 2+) : VPN — les plus coûteuses
+deploy_vpn_gateways  = false  # ~0,38 €/h x2 — activer pour la recette hybridation
