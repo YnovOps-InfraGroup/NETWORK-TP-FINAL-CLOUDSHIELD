@@ -43,28 +43,26 @@ resource "azurerm_storage_account" "logs" {
 # NETWORK WATCHER — Prérequis pour Flow Logs
 # ═══════════════════════════════════════════════════════════════
 
-resource "azurerm_network_watcher" "nw" {
-  count = var.deploy_observability ? 1 : 0
-
-  name                = "nw-${var.project_name}-${var.location}"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-  tags                = var.tags
+# Utilise le Network Watcher existant (Azure en crée 1 automatiquement par région/sub)
+data "azurerm_network_watcher" "nw" {
+  name                = "NetworkWatcher_francecentral"
+  resource_group_name = "NetworkWatcherRG"
 }
 
 # ═══════════════════════════════════════════════════════════════
 # NSG FLOW LOGS — Capture du trafic réseau
 # ═══════════════════════════════════════════════════════════════
 
-# Flow Logs NSG Web
-resource "azurerm_network_watcher_flow_log" "flow_nsg_web" {
+# VNet Flow Logs (remplace NSG Flow Logs dépréciés depuis juin 2025)
+# Ref: https://learn.microsoft.com/azure/network-watcher/vnet-flow-logs-overview
+resource "azurerm_network_watcher_flow_log" "flow_vnet_hub" {
   count = var.deploy_observability ? 1 : 0
 
-  network_watcher_name = azurerm_network_watcher.nw[0].name
-  resource_group_name  = azurerm_resource_group.main.name
-  name                 = "fl-nsg-web"
+  network_watcher_name = data.azurerm_network_watcher.nw.name
+  resource_group_name  = data.azurerm_network_watcher.nw.resource_group_name
+  name                 = "fl-vnet-hub"
 
-  target_resource_id = azurerm_network_security_group.nsg_web.id
+  target_resource_id = azurerm_virtual_network.hub.id
   storage_account_id = azurerm_storage_account.logs[0].id
   enabled            = true
   version            = 2
@@ -85,15 +83,14 @@ resource "azurerm_network_watcher_flow_log" "flow_nsg_web" {
   tags = var.tags
 }
 
-# Flow Logs NSG DB
-resource "azurerm_network_watcher_flow_log" "flow_nsg_db" {
+resource "azurerm_network_watcher_flow_log" "flow_vnet_spoke_prod" {
   count = var.deploy_observability ? 1 : 0
 
-  network_watcher_name = azurerm_network_watcher.nw[0].name
-  resource_group_name  = azurerm_resource_group.main.name
-  name                 = "fl-nsg-db"
+  network_watcher_name = data.azurerm_network_watcher.nw.name
+  resource_group_name  = data.azurerm_network_watcher.nw.resource_group_name
+  name                 = "fl-vnet-spoke-prod"
 
-  target_resource_id = azurerm_network_security_group.nsg_db.id
+  target_resource_id = azurerm_virtual_network.spoke_prod.id
   storage_account_id = azurerm_storage_account.logs[0].id
   enabled            = true
   version            = 2
