@@ -301,3 +301,64 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
 
   tags = var.tags
 }
+
+# ═══════════════════════════════════════════════════════════════
+# AUTO-SHUTDOWN — FinOps : arrêt automatique quotidien 20h00
+# Économie : ~0,34 $/jour sur 4 VMs B1s (12h OFF/24h)
+# ═══════════════════════════════════════════════════════════════
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_web" {
+  virtual_machine_id    = azurerm_linux_virtual_machine.vm_web.id
+  location              = azurerm_resource_group.main.location
+  enabled               = true
+  daily_recurrence_time = var.auto_shutdown_time
+  timezone              = "Romance Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+
+  tags = var.tags
+}
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_app" {
+  virtual_machine_id    = azurerm_linux_virtual_machine.vm_app.id
+  location              = azurerm_resource_group.main.location
+  enabled               = true
+  daily_recurrence_time = var.auto_shutdown_time
+  timezone              = "Romance Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+
+  tags = var.tags
+}
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_db" {
+  virtual_machine_id    = azurerm_linux_virtual_machine.vm_db.id
+  location              = azurerm_resource_group.main.location
+  enabled               = true
+  daily_recurrence_time = var.auto_shutdown_time
+  timezone              = "Romance Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+
+  tags = var.tags
+}
+
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_onprem" {
+  virtual_machine_id    = azurerm_linux_virtual_machine.vm_onprem.id
+  location              = azurerm_resource_group.main.location
+  enabled               = true
+  daily_recurrence_time = var.auto_shutdown_time
+  timezone              = "Romance Standard Time"
+
+  notification_settings {
+    enabled = false
+  }
+
+  tags = var.tags
+}

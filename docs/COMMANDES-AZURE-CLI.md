@@ -91,3 +91,19 @@ nslookup stcloudshielddata.blob.core.windows.net
 # Consommation du jour
 az consumption usage list --start-date 2026-03-31 --end-date 2026-04-01 -o table
 ```
+
+## Gestion des VMs (Start/Stop)
+
+```bash
+# Démarrer toutes les VMs du RG (matin)
+az vm start --ids $(az vm list -g rg-cloudshield-prod --query "[].id" -o tsv)
+
+# Arrêter + désallouer toutes les VMs (soir — stop facturation)
+az vm deallocate --ids $(az vm list -g rg-cloudshield-prod --query "[].id" -o tsv)
+
+# Vérifier le statut
+az vm list -g rg-cloudshield-prod -d --query "[].{Name:name, State:powerState}" -o table
+
+# Note : L'auto-shutdown à 20h00 est géré par Terraform (compute.tf)
+# Les VMs s'éteignent automatiquement chaque soir.
+```

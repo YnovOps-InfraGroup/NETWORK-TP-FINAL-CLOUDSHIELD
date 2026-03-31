@@ -20,14 +20,36 @@
 
 ## Leviers d'économie
 
-| Levier                          | Impact            | Détail                        |
-| ------------------------------- | ----------------- | ----------------------------- |
-| `terraform destroy` chaque soir | **-70%**          | Ne payer que 8h/jour          |
-| `terraform apply` chaque matin  | ~30 min           | Infrastructure reproductible  |
-| Phase 1 sans VPN                | **-0,76 €/h**     | `deploy_vpn_gateways = false` |
-| VMs B1s (burstable)             | Coût minimal      | ~0,01 €/h par VM              |
-| WAF `min_capacity = 0`          | Coût nul au repos | Autoscale natif               |
-| Bastion Basic                   | -50% vs Standard  | Suffisant pour SSH            |
+| Levier                          | Impact            | Détail                                         |
+| ------------------------------- | ----------------- | ---------------------------------------------- |
+| `terraform destroy` chaque soir | **-70%**          | Ne payer que 8h/jour                           |
+| `terraform apply` chaque matin  | ~30 min           | Infrastructure reproductible                   |
+| **Auto-shutdown 20h00**         | **-33% sur VMs**  | `azurerm_dev_test_global_vm_shutdown_schedule` |
+| Phase 1 sans VPN                | **-0,76 €/h**     | `deploy_vpn_gateways = false`                  |
+| Feature flags (FW/Bastion/WAF)  | **-95%**          | `deploy_firewall = false` → 2 €/j              |
+| VMs B1s (burstable)             | Coût minimal      | ~0,01 €/h par VM                               |
+| WAF `min_capacity = 0`          | Coût nul au repos | Autoscale natif                                |
+| Bastion Basic                   | -50% vs Standard  | Suffisant pour SSH                             |
+
+## Auto-Shutdown Automatique
+
+Les 4 VMs sont programmées pour s'éteindre automatiquement à **20h00 (heure de Paris)** tous les jours :
+
+```hcl
+# compute.tf — appliqué sur vm-web, vm-app, vm-db, vm-onprem
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_web" {
+  virtual_machine_id    = azurerm_linux_virtual_machine.vm_web.id
+  daily_recurrence_time = "2000"    # 20h00
+  timezone              = "Romance Standard Time"  # Paris
+}
+```
+
+Pour redémarrer les VMs le matin :
+
+```bash
+# Start toutes les VMs du RG en une commande
+az vm start --ids $(az vm list -g rg-cloudshield-prod --query "[].id" -o tsv)
+```
 
 ## Budget réel
 

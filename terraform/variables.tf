@@ -153,6 +153,12 @@ variable "vm_size" {
   default     = "Standard_B1s"
 }
 
+variable "auto_shutdown_time" {
+  description = "Heure d'arrêt automatique des VMs (format HHMM, timezone Paris)"
+  type        = string
+  default     = "2000"
+}
+
 # ── VPN / Hybridation ────────────────────────────────────────────────────────
 variable "vpn_shared_key" {
   description = "Pre-Shared Key pour le tunnel IPsec (>32 caractères)"
