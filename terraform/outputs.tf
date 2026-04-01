@@ -1,6 +1,5 @@
 # ============================================================
 # OUTPUTS — Cloud Shield Landing Zone
-# Valeurs exportées pour validation et recette
 # ============================================================
 
 # ── Resource Group ────────────────────────────────────────────────────────────
@@ -82,11 +81,13 @@ output "private_endpoint_ips" {
 # ── Commandes utiles (Bastion SSH) ────────────────────────────────────────────
 output "bastion_ssh_vm_web" {
   description = "Commande SSH via Bastion vers vm-web"
+  sensitive   = true
   value       = var.deploy_bastion ? "az network bastion ssh --name ${azurerm_bastion_host.bastion[0].name} --resource-group ${azurerm_resource_group.main.name} --target-resource-id ${azurerm_linux_virtual_machine.vm_web.id} --auth-type ssh-key --username ${var.vm_admin_username} --ssh-key ~/.ssh/id_ed25519" : "N/A"
 }
 
 output "bastion_ssh_vm_db" {
   description = "Commande SSH via Bastion vers vm-db"
+  sensitive   = true
   value       = var.deploy_bastion ? "az network bastion ssh --name ${azurerm_bastion_host.bastion[0].name} --resource-group ${azurerm_resource_group.main.name} --target-resource-id ${azurerm_linux_virtual_machine.vm_db.id} --auth-type ssh-key --username ${var.vm_admin_username} --ssh-key ~/.ssh/id_ed25519" : "N/A"
 }
 

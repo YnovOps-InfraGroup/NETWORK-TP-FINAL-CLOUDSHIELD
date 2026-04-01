@@ -1,51 +1,64 @@
-# Local .terraform directories
-.terraform/
+# ═══════════════════════════════════════════════════════════════════
+# .gitignore — Cloud Shield | TP Final YNOV
+# ═══════════════════════════════════════════════════════════════════
 
-# .tfstate files
+# ── Terraform — State & Cache ──────────────────────────────────────
+.terraform/
 *.tfstate
 *.tfstate.*
-
-# Crash log files
+*.tfstate.lock.info
 crash.log
 crash.*.log
-
-# Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version
-# control as they are data points which are potentially sensitive and subject
-# to change depending on the environment.
-*.tfvars
-*.tfvars.json
-
-# Ignore override files as they are usually used to override resources locally and so
-# are not checked in
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-
-# Ignore transient lock info files created by terraform apply
-.terraform.tfstate.lock.info
-
-# Include override files you do wish to add to version control using negated pattern
-# !example_override.tf
-
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
-
-# Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# ── Terraform — Secrets (NE JAMAIS COMMITER) ──────────────────────
+*.tfvars
+*.tfvars.json
+
+# Exception : valeurs non-sensibles commitables
+!terraform/variables.auto.tfvars
+!variables.auto.tfvars
+
+# ── Infracost ──────────────────────────────────────────────────────
 .infracost/
 
-# ── Claude memory (sensitive) ─────────────────────────────────────────────────
-Claude/
+# Rapports JSON bruts (trop verbeux pour Git, générés localement)
+security/infracost-current.json
+security/tfsec-report.json
+security/tflint-report.json
+security/tflint-report.txt
+security/infracost-current.txt
+security/results_json.json
+security/results_cli.txt
+security/gitleaks-report.json
 
-# ── Fichiers de travail internes (non destinés au repo) ───────────────────────
-info-project-cloudshiel.md
-task-project-cloudshield.md
+# Scripts de génération de rapports (locaux uniquement)
+security/*.sh
 
-# ── Fichiers locaux de travail — jamais pushés ────────────────────────────────
+# ── Fichiers de travail locaux ─────────────────────────────────────
 TP-Final-SOUTENANCE.md
 *-SOUTENANCE.md
 TODO-LOCAL.md
-screenshots/
+DEPLOY-EXPENSIVE-RESOURCES.sh
+*.sh
+
+# ── Fichiers de projet internes ────────────────────────────────────
+info-project-cloudshiel.md
+task-project-cloudshield.md
+
+# ── Claude — Mémoire de session ────────────────────────────────────
+Claude/
+
+# ── IDE & OS ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+

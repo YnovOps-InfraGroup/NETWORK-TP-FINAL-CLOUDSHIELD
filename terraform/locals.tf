@@ -1,9 +1,9 @@
 # ============================================================
-# LOCALS — Valeurs calculées, conventions de nommage
+# LOCALS — Variables locales pour nommage cohérent et suffixe unique
 # ============================================================
 
 locals {
-  # Suffixe unique basé sur la subscription (pour noms globalement uniques)
+  # Suffixe unique basé sur la subscription
   sub_suffix = substr(replace(var.subscription_id, "-", ""), 0, 8)
 
   # Nommage des Resource Groups
@@ -15,13 +15,11 @@ locals {
   vnet_spoke_data_name = "vnet-spoke-data-${var.project_name}"
   vnet_onprem_name     = "vnet-onprem-sim-${var.project_name}"
 
-  # Nommage PaaS (globalement uniques)
+  # Nommage PaaS
   storage_name     = "st${var.project_name}${local.sub_suffix}"
   storage_log_name = "stlog${var.project_name}${local.sub_suffix}"
   sql_server_name  = "sql-${var.project_name}-${local.sub_suffix}"
 }
 
-# Subscription courante (pour RBAC, alertes)
-data "azurerm_subscription" "current" {}
 
-# data "azurerm_client_config" "current" {} # Réservé pour Key Vault RBAC futur
+data "azurerm_subscription" "current" {}

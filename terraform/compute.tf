@@ -5,7 +5,7 @@
 # ============================================================
 
 # ═══════════════════════════════════════════════════════════════
-# VM-WEB — Tier 1 Présentation (Flask)
+# VM-WEB — Tier 1 Présentation (Flask app)
 # Subnet : snet-prod-web | ASG : asg-web
 # ═══════════════════════════════════════════════════════════════
 
@@ -94,7 +94,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
 }
 
 # ═══════════════════════════════════════════════════════════════
-# VM-APP — Tier 2 Traitement (Logique métier)
+# VM-APP — Tier 2 Traitement (API Flask)
 # Subnet : snet-prod-app | ASG : asg-app
 # ═══════════════════════════════════════════════════════════════
 
@@ -303,8 +303,7 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
 }
 
 # ═══════════════════════════════════════════════════════════════
-# AUTO-SHUTDOWN — FinOps : arrêt automatique quotidien 20h00
-# Économie : ~0,34 $/jour sur 4 VMs B1s (12h OFF/24h)
+# AUTO-SHUTDOWN — FinOps : arrêt automatique quotidien 18h-8h (12h OFF/24h)
 # ═══════════════════════════════════════════════════════════════
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_web" {

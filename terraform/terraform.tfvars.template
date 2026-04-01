@@ -1,56 +1,37 @@
 # ============================================================
 # TEMPLATE — terraform.tfvars
-# Copier ce fichier en terraform.tfvars et remplir les valeurs
-# ⚠ Ne JAMAIS committer terraform.tfvars (contient des secrets)
+# ============================================================
+# 1. Copier : cp terraform.tfvars.template terraform.tfvars
+# 2. Remplir toutes les valeurs CHANGE_ME
+# 3. Ne JAMAIS committer terraform.tfvars (.gitignore)
+#
+# Les valeurs non-sensibles (CIDRs, tailles, flags) sont déjà
+# définies dans variables.auto.tfvars — ne pas les redéfinir ici.
 # ============================================================
 
 # ── Identité Azure ────────────────────────────────────────────
-subscription_id = "SUBSCRIPTION_ID_REMOVED"
-tenant_id       = "TENANT_ID_REMOVED"
 
-# ── Projet ────────────────────────────────────────────────────
-project_name = "cloudshield"
-environment  = "prod"
-location     = "France Central"
+
+subscription_id = "CHANGE_ME" # az account show --query id
+tenant_id       = "CHANGE_ME" # az account show --query tenantId
 
 # ── Tags ──────────────────────────────────────────────────────
 tags = {
   projet     = "TP-Final"
   managed_by = "terraform"
-  owner      = "Myscile-gregory"
+  owner      = "CHANGE_ME"   # ex: "prenom-nom"
 }
 
-# ── Clé SSH publique (remplacer par votre clé) ───────────────
-vm_ssh_public_key = "ssh-ed25519 AAAA... votre-cle-publique"
+# ── Authentification VMs ──────────────────────────────────────
+# cat ~/.ssh/id_ed25519.pub  → vm_ssh_public_key
+vm_admin_username = "CHANGE_ME"            # ex: "azureuser"
+vm_ssh_public_key = "CHANGE_ME"            # ex: "ssh-ed25519 AAAA..."
 
-# ── VMs ───────────────────────────────────────────────────────
-vm_admin_username = "azureuser"
-vm_size           = "Standard_B1s"
+# ── VPN / IPsec Pre-Shared Key ────────────────────────────────
 
-# ── VPN ───────────────────────────────────────────────────────
-vpn_shared_key = "***VPN_KEY_REMOVED***"
-hub_bgp_asn    = 65001
-onprem_bgp_asn = 65002
+vpn_shared_key = "CHANGE_ME_MIN_32_CHARS"  # Générer une clé forte : openssl rand -base64 32
 
-# ── PaaS ──────────────────────────────────────────────────────
-sql_admin_login    = "sqladmin"
-sql_admin_password = "***SQL_PASSWORD_REMOVED***"
+# ── PaaS — SQL Server ─────────────────────────────────────────
 
-# ── Observabilité ─────────────────────────────────────────────
-alert_email        = "secops@fintechglobal.local"
-law_retention_days = 30
-
-# ══════════════════════════════════════════════════════════════
-# FEATURE FLAGS — Déploiement progressif (FinOps)
-# ══════════════════════════════════════════════════════════════
-# Activer progressivement pour maîtriser les coûts :
-#
-# Phase 1 (jour 1) : Réseau + Sécurité + VMs
-deploy_firewall      = true   # ~1,30 €/h
-deploy_bastion       = true   # ~0,12 €/h
-deploy_waf           = true   # ~0,25 €/h (autoscale min=0)
-deploy_paas          = true   # ~0,01 €/h
-deploy_observability = true   # ~0 €/h (5Go gratuits)
-#
-# Phase 2 (jour 2+) : VPN — les plus coûteuses
-deploy_vpn_gateways  = false  # ~0,38 €/h x2 — activer pour la recette hybridation
+sql_admin_login    = "CHANGE_ME"
+sql_admin_password = "CHANGE_ME_16_CHARS"  # Règle Azure : 16+ caractères, 1 majuscule, 1 chiffre, 1 symbole

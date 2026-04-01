@@ -2,7 +2,6 @@
 # AZURE FIREWALL — Inspection centralisée de tout le trafic
 # ANSSI R22/R23/R24 : Filtrage sortant + proxy + contrôle flux
 # Exigence 4b : Tout trafic egress inspecté par FW centralisé
-# ⚠ Coût : ~1,30 €/h — terraform destroy chaque soir !
 # ============================================================
 
 # ── IP Publique Azure Firewall ────────────────────────────────────────────────
@@ -127,7 +126,6 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
     priority = 300
     action   = "Allow"
 
-    # Mises à jour Ubuntu (apt)
     rule {
       name = "Allow-Ubuntu-Updates"
       protocols {

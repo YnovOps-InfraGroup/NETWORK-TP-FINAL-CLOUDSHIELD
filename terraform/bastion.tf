@@ -17,7 +17,7 @@ resource "azurerm_public_ip" "bastion_pip" {
 }
 
 # ── Azure Bastion (Basic — FinOps) ────────────────────────────────────────────
-# Permet SSH/RDP via le portail Azure sans exposer de port public
+
 resource "azurerm_bastion_host" "bastion" {
   count = var.deploy_bastion ? 1 : 0
 
@@ -49,7 +49,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
 
   # ── INBOUND ─────────────────────────────────────────────────
 
-  # Trafic HTTPS depuis Internet (portail Azure Bastion)
   security_rule {
     name                       = "Allow-HTTPS-Internet-Inbound"
     priority                   = 100
@@ -62,7 +61,7 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     destination_address_prefix = "*"
   }
 
-  # GatewayManager (plan de contrôle Azure Bastion)
+
   security_rule {
     name                       = "Allow-GatewayManager-Inbound"
     priority                   = 110
@@ -75,7 +74,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     destination_address_prefix = "*"
   }
 
-  # Azure Load Balancer health probes
   security_rule {
     name                       = "Allow-AzureLoadBalancer-Inbound"
     priority                   = 120
@@ -88,7 +86,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     destination_address_prefix = "*"
   }
 
-  # Communication intra Bastion (data plane)
   security_rule {
     name                       = "Allow-BastionHostCommunication-Inbound"
     priority                   = 130
@@ -116,7 +113,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
 
   # ── OUTBOUND ────────────────────────────────────────────────
 
-  # SSH/RDP vers les VMs cibles (VirtualNetwork)
   security_rule {
     name                       = "Allow-SSH-RDP-Outbound"
     priority                   = 100
@@ -129,7 +125,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     destination_address_prefix = "VirtualNetwork"
   }
 
-  # HTTPS vers AzureCloud (sessions, certificats, métriques)
   security_rule {
     name                       = "Allow-AzureCloud-Outbound"
     priority                   = 110
@@ -141,8 +136,6 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     source_address_prefix      = "*"
     destination_address_prefix = "AzureCloud"
   }
-
-  # Communication intra Bastion (data plane)
   security_rule {
     name                       = "Allow-BastionHostCommunication-Outbound"
     priority                   = 120
@@ -155,7 +148,7 @@ resource "azurerm_network_security_group" "nsg_bastion" {
     destination_address_prefix = "VirtualNetwork"
   }
 
-  # Session info (GetSessionInformation)
+
   security_rule {
     name                       = "Allow-HTTP-Outbound"
     priority                   = 130
