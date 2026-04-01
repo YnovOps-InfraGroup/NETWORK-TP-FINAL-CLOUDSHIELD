@@ -2,8 +2,7 @@
 
 - <i class="fa-solid fa-house"></i> **Projet Cloud Shield**
   - [<i class="fa-solid fa-file-contract"></i> Cahier des Charges](CAHIER-DES-CHARGES.md)
-  - [<i class="fa-solid fa-sitemap"></i> Architecture Technique (DAT)](LIVRABLE-2-DAT.md)
-
+  - [<i class="fa-solid fa-sitemap"></i> Architecture Technique (DAT)](LIVRABLE-2-DAT.md)  - [<i class="fa-solid fa-diagram-project"></i> Schéma Infra — InfraMap](ARCHITECTURE.md)
 - <i class="fa-solid fa-shield-halved"></i> **Sécurité & Conformité**
   - [<i class="fa-solid fa-magnifying-glass-chart"></i> Matrice Audit ANSSI](LIVRABLE-1-MATRICE-AUDIT.md)
   - [<i class="fa-solid fa-clipboard-check"></i> Cahier de Recette — 10 Preuves](LIVRABLE-4-CAHIER-RECETTE.md)
