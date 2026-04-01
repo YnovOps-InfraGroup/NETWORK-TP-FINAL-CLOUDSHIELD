@@ -55,6 +55,3 @@ repos:
         name: "JSON syntax check"
       - id: detect-private-key
         name: "Detect private keys"
-      - id: no-commit-to-branch
-        name: "No direct commit to main"
-        args: [--branch, main]

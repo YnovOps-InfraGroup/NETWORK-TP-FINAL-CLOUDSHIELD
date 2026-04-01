@@ -18,7 +18,6 @@
 | Fichier | Raison |
 |---------|--------|
 | `terraform/terraform.tfvars` | Secrets — gitignore |
-| `Claude/` | Dossier mémoire — gitignore |
 | `.terraform/` | Cache provider — gitignore |
 
 ## Variables sensibles protégées
