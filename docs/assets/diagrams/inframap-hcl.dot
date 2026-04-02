@@ -1,0 +1,21 @@
+strict digraph G {
+	"azurerm_virtual_network_peering.spoke_data_to_hub"->"azurerm_virtual_network_gateway.hub_vpn_gw";
+	"azurerm_virtual_network_peering.spoke_data_to_hub"->"azurerm_virtual_network.spoke_data";
+	"azurerm_virtual_network_peering.spoke_data_to_hub"->"azurerm_virtual_network.hub";
+	"azurerm_virtual_network_peering.spoke_prod_to_hub"->"azurerm_virtual_network.hub";
+	"azurerm_virtual_network_peering.spoke_prod_to_hub"->"azurerm_virtual_network_gateway.hub_vpn_gw";
+	"azurerm_virtual_network_peering.spoke_prod_to_hub"->"azurerm_virtual_network.spoke_prod";
+	"azurerm_virtual_network_peering.hub_to_spoke_data"->"azurerm_virtual_network.hub";
+	"azurerm_virtual_network_peering.hub_to_spoke_data"->"azurerm_virtual_network.spoke_data";
+	"azurerm_virtual_network_peering.hub_to_spoke_prod"->"azurerm_virtual_network.hub";
+	"azurerm_virtual_network_peering.hub_to_spoke_prod"->"azurerm_virtual_network.spoke_prod";
+	"azurerm_virtual_network.hub" [ height=1.15, image="/home/gymy/.cache/inframap/assets/azurerm/Networking/10075-icon-service-Virtual-Networks-(Classic).png", imagepos=tc, labelloc=b, shape=plaintext ];
+	"azurerm_virtual_network.spoke_data" [ height=1.15, image="/home/gymy/.cache/inframap/assets/azurerm/Networking/10075-icon-service-Virtual-Networks-(Classic).png", imagepos=tc, labelloc=b, shape=plaintext ];
+	"azurerm_virtual_network.spoke_prod" [ height=1.15, image="/home/gymy/.cache/inframap/assets/azurerm/Networking/10075-icon-service-Virtual-Networks-(Classic).png", imagepos=tc, labelloc=b, shape=plaintext ];
+	"azurerm_virtual_network_gateway.hub_vpn_gw" [ height=1.15, image="/home/gymy/.cache/inframap/assets/azurerm/Networking/10063-icon-service-Virtual-Network-Gateways.png", imagepos=tc, labelloc=b, shape=plaintext ];
+	"azurerm_virtual_network_peering.hub_to_spoke_data" [ shape=rectangle ];
+	"azurerm_virtual_network_peering.hub_to_spoke_prod" [ shape=rectangle ];
+	"azurerm_virtual_network_peering.spoke_data_to_hub" [ shape=rectangle ];
+	"azurerm_virtual_network_peering.spoke_prod_to_hub" [ shape=rectangle ];
+
+}

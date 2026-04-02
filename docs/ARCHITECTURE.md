@@ -5,6 +5,25 @@
 
 ---
 
+## 0. Schémas PNG/SVG (affichage garanti GitHub, Wiki, Pages)
+
+### Schéma Azure avec icônes officielles
+
+![Schéma Azure Cloud Shield](assets/diagrams/cloudshield-azure-icons.png)
+
+- PNG: [assets/diagrams/cloudshield-azure-icons.png](assets/diagrams/cloudshield-azure-icons.png)
+- SVG: [assets/diagrams/cloudshield-azure-icons.svg](assets/diagrams/cloudshield-azure-icons.svg)
+- Source DOT: [assets/diagrams/cloudshield-azure-icons.dot](assets/diagrams/cloudshield-azure-icons.dot)
+
+### Schéma InfraMap (basé sur les fichiers Terraform HCL)
+
+![Schéma InfraMap HCL](assets/diagrams/inframap-hcl.png)
+
+- PNG: [assets/diagrams/inframap-hcl.png](assets/diagrams/inframap-hcl.png)
+- DOT: [assets/diagrams/inframap-hcl.dot](assets/diagrams/inframap-hcl.dot)
+
+---
+
 ## 1. Vue Globale — Hub & Spoke
 
 ```mermaid
@@ -257,19 +276,19 @@ graph LR
 
 ## 4. Plan d'Adressage IP (IPAM)
 
-| Composant | VNet / Subnet | CIDR | Rôle |
-|-----------|--------------|------|------|
-| **Hub** | vnet-hub | `10.0.0.0/16` | Sécurité, egress, hybridation |
-| ↳ | AzureFirewallSubnet | `10.0.1.0/26` | Azure Firewall Standard |
-| ↳ | AzureBastionSubnet | `10.0.2.0/26` | Azure Bastion Basic |
-| ↳ | GatewaySubnet | `10.0.3.0/27` | VPN Gateway |
-| **Spoke-Prod** | vnet-spoke-prod | `10.1.0.0/16` | Application 3-tiers |
-| ↳ | SubnetWAF | `10.1.3.0/24` | Application Gateway WAF |
-| ↳ | SubnetWeb | `10.1.1.0/24` | vm-web Flask :80 |
-| ↳ | SubnetApp | `10.1.2.0/24` | vm-app Flask :8080 |
-| **Spoke-Data** | vnet-spoke-data | `10.2.0.0/16` | Base de données & PaaS |
-| ↳ | SubnetDB | `10.2.1.0/24` | vm-db PostgreSQL :5432 |
-| ↳ | SubnetPE | `10.2.2.0/24` | Private Endpoints |
-| **OnPrem Sim** | vnet-onprem-sim | `10.10.0.0/16` | Lyon datacenter simulé |
-| ↳ | GatewaySubnet | `10.10.0.0/27` | VPN Gateway OnPrem |
-| ↳ | SubnetSrv | `10.10.1.0/24` | vm-onprem |
+| Composant      | VNet / Subnet       | CIDR           | Rôle                          |
+| -------------- | ------------------- | -------------- | ----------------------------- |
+| **Hub**        | vnet-hub            | `10.0.0.0/16`  | Sécurité, egress, hybridation |
+| ↳              | AzureFirewallSubnet | `10.0.1.0/26`  | Azure Firewall Standard       |
+| ↳              | AzureBastionSubnet  | `10.0.2.0/26`  | Azure Bastion Basic           |
+| ↳              | GatewaySubnet       | `10.0.3.0/27`  | VPN Gateway                   |
+| **Spoke-Prod** | vnet-spoke-prod     | `10.1.0.0/16`  | Application 3-tiers           |
+| ↳              | SubnetWAF           | `10.1.3.0/24`  | Application Gateway WAF       |
+| ↳              | SubnetWeb           | `10.1.1.0/24`  | vm-web Flask :80              |
+| ↳              | SubnetApp           | `10.1.2.0/24`  | vm-app Flask :8080            |
+| **Spoke-Data** | vnet-spoke-data     | `10.2.0.0/16`  | Base de données & PaaS        |
+| ↳              | SubnetDB            | `10.2.1.0/24`  | vm-db PostgreSQL :5432        |
+| ↳              | SubnetPE            | `10.2.2.0/24`  | Private Endpoints             |
+| **OnPrem Sim** | vnet-onprem-sim     | `10.10.0.0/16` | Lyon datacenter simulé        |
+| ↳              | GatewaySubnet       | `10.10.0.0/27` | VPN Gateway OnPrem            |
+| ↳              | SubnetSrv           | `10.10.1.0/24` | vm-onprem                     |

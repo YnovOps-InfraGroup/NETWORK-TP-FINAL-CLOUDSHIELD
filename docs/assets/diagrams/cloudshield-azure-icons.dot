@@ -1,0 +1,89 @@
+digraph CloudShield {
+  graph [rankdir=LR, splines=spline, nodesep=0.45, ranksep=0.75, bgcolor="white", fontname="Arial"];
+  node [shape=plaintext, fontname="Arial", fontsize=10];
+  edge [color="#4b5563", penwidth=1.2, arrowsize=0.8, fontname="Arial", fontsize=9];
+
+  Internet [label="Internet", shape=oval, style=filled, fillcolor="#e0f2fe", color="#0284c7"];
+
+  subgraph cluster_hub {
+    label="VNet Hub (10.0.0.0/16)";
+    style="rounded,filled";
+    color="#60a5fa";
+    fillcolor="#eff6ff";
+
+    VNetHub [label="vnet-hub", image="docs/assets/azure-icons/vnet.png", imagepos=tc, labelloc=b, height=1.2];
+    Firewall [label="Azure Firewall", image="docs/assets/azure-icons/firewall.png", imagepos=tc, labelloc=b, height=1.2];
+    Bastion [label="Azure Bastion", image="docs/assets/azure-icons/bastion.png", imagepos=tc, labelloc=b, height=1.2];
+    VPNHub [label="VPN Gateway", image="docs/assets/azure-icons/vpngw.png", imagepos=tc, labelloc=b, height=1.2];
+  }
+
+  subgraph cluster_prod {
+    label="Spoke PROD (10.1.0.0/16)";
+    style="rounded,filled";
+    color="#34d399";
+    fillcolor="#ecfdf5";
+
+    VNetProd [label="vnet-spoke-prod", image="docs/assets/azure-icons/vnet.png", imagepos=tc, labelloc=b, height=1.2];
+    WAF [label="App Gateway WAF", image="docs/assets/azure-icons/appgw.png", imagepos=tc, labelloc=b, height=1.2];
+    VMWeb [label="vm-web (10.1.1.4)", image="docs/assets/azure-icons/vm.png", imagepos=tc, labelloc=b, height=1.2];
+    VMApp [label="vm-app (10.1.2.4)", image="docs/assets/azure-icons/vm.png", imagepos=tc, labelloc=b, height=1.2];
+  }
+
+  subgraph cluster_data {
+    label="Spoke DATA (10.2.0.0/16)";
+    style="rounded,filled";
+    color="#f87171";
+    fillcolor="#fef2f2";
+
+    VNetData [label="vnet-spoke-data", image="docs/assets/azure-icons/vnet.png", imagepos=tc, labelloc=b, height=1.2];
+    VMDB [label="vm-db (10.2.1.4)", image="docs/assets/azure-icons/vm.png", imagepos=tc, labelloc=b, height=1.2];
+    PESQL [label="Private Endpoint SQL", image="docs/assets/azure-icons/privatelink.png", imagepos=tc, labelloc=b, height=1.2];
+    PEBlob [label="Private Endpoint Blob", image="docs/assets/azure-icons/privatelink.png", imagepos=tc, labelloc=b, height=1.2];
+  }
+
+  subgraph cluster_paas {
+    label="PaaS (Private only)";
+    style="rounded,filled";
+    color="#a78bfa";
+    fillcolor="#f5f3ff";
+
+    SQLDB [label="Azure SQL DB", image="docs/assets/azure-icons/sqldb.png", imagepos=tc, labelloc=b, height=1.2];
+    Storage [label="Storage Account", image="docs/assets/azure-icons/storage.png", imagepos=tc, labelloc=b, height=1.2];
+  }
+
+  subgraph cluster_onprem {
+    label="On-Prem Sim (10.10.0.0/16)";
+    style="rounded,filled";
+    color="#fbbf24";
+    fillcolor="#fffbeb";
+
+    VNetOnPrem [label="vnet-onprem-sim", image="docs/assets/azure-icons/vnet.png", imagepos=tc, labelloc=b, height=1.2];
+    VPNOnPrem [label="VPN Gateway", image="docs/assets/azure-icons/vpngw.png", imagepos=tc, labelloc=b, height=1.2];
+  }
+
+  LAW [label="Log Analytics", image="docs/assets/azure-icons/law.png", imagepos=tc, labelloc=b, height=1.2];
+
+  Internet -> WAF [label="HTTPS 443"];
+  WAF -> VMWeb [label="HTTP 80"];
+  VMWeb -> VMApp [label="HTTP 8080"];
+  VMApp -> VMDB [label="TCP 5432"];
+  VMApp -> PESQL [label="privatelink"];
+  VMApp -> PEBlob [label="privatelink"];
+  PESQL -> SQLDB;
+  PEBlob -> Storage;
+
+  VNetHub -> VNetProd [label="VNet peering", dir=both, color="#0284c7"];
+  VNetHub -> VNetData [label="VNet peering", dir=both, color="#0284c7"];
+  VPNHub -> VPNOnPrem [label="IPsec + BGP", dir=both, color="#f59e0b"];
+
+  VNetProd -> Firewall [label="UDR 0.0.0.0/0"];
+  VNetData -> Firewall [label="UDR 0.0.0.0/0"];
+  Firewall -> Internet [label="egress filtré"];
+
+  Bastion -> VMWeb [style=dashed, label="SSH/RDP"];
+  Bastion -> VMApp [style=dashed, label="SSH/RDP"];
+  Bastion -> VMDB [style=dashed, label="SSH/RDP"];
+
+  VNetProd -> LAW [style=dotted, label="Flow logs"];
+  VNetData -> LAW [style=dotted, label="Flow logs"];
+}

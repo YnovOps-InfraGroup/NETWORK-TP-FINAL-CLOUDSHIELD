@@ -1,5 +1,9 @@
 # NETWORK-TP-FINAL — Cloud Shield
 
+## Documentation en ligne
+
+👉 https://ynovops-infragroup.github.io/NETWORK-TP-FINAL-CLOUDSHIELD/
+
 **Statut : IaC Prêt** · 16 fichiers Terraform · francecentral · 31 mars 2026
 
 > Infrastructure as Code (Terraform) déployant une **Landing Zone Azure Secure by Design** pour la société FinTech Global, suite à un incident cyber critique. Architecture Hub & Spoke, Zero Trust, conformité ANSSI. Évaluation finale Mastère 1 — Module Conformité, Référentiels & Protocoles Réseaux.
