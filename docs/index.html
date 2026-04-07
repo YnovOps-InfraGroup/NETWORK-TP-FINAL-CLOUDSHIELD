@@ -209,10 +209,9 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
-    <!-- Mermaid diagrams -->
+    <!-- Mermaid diagrams : charger mermaid AVANT le plugin docsify-mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: false, theme: "dark" });</script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-mermaid@2/dist/docsify-mermaid.js"></script>
-    <script>
-      mermaid.initialize({ startOnLoad: false, theme: "dark" });
-    </script>
   </body>
 </html>
