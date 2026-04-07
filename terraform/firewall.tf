@@ -84,11 +84,13 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
     }
 
     # NTP (synchronisation horaire — ANSSI R36)
+    # Ciblé sur l'IP NTP Azure interne (168.63.129.16) au lieu de * (ANSSI R23 — filtrage sortant)
+    # Toutes les VMs Azure utilisent 168.63.129.16 pour NTP par défaut
     rule {
       name                  = "Allow-NTP"
       protocols             = ["UDP"]
       source_addresses      = [var.vnet_spoke_prod_cidr, var.vnet_spoke_data_cidr]
-      destination_addresses = ["*"]
+      destination_addresses = ["168.63.129.16"] # Azure NTP interne — remplace * trop permissif
       destination_ports     = ["123"]
     }
 
