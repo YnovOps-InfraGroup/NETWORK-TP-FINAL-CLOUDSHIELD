@@ -124,6 +124,57 @@ L'architecture cible repose sur un modèle **Hub & Spoke** avec :
 
 ---
 
+### Schéma Mermaid — Architecture Hub & Spoke (rendu interactif)
+
+> _Ce schéma est rendu automatiquement sur [GitHub Pages](https://ynovops-infragroup.github.io/NETWORK-TP-FINAL-CLOUDSHIELD/#/LIVRABLE-2-DAT) via Docsify-Mermaid._
+
+```mermaid
+graph TD
+    Internet((🌐 Internet))
+    OnPrem["🏢 OnPrem-Sim\n10.10.0.0/16\nvm-onprem"]
+
+    subgraph HUB["🔵 HUB — vnet-hub-cloudshield 10.0.0.0/16"]
+        FW["🔥 Azure Firewall\n10.0.1.0/26\nEgress + Inspection"]
+        BASTION["🛡️ Azure Bastion\n10.0.2.0/26\nSSH/RDP sans port ouvert"]
+        GW["🔗 VPN Gateway\n10.0.3.0/27\nIKEv2 + BGP AS65001"]
+    end
+
+    subgraph PROD["🟢 SPOKE-PROD — vnet-spoke-prod 10.1.0.0/16"]
+        WAF["🛡️ App Gateway WAF\nsnet-prod-waf 10.1.3.0/24\nOWASP 3.2 Prévention"]
+        WEB["💻 vm-web Flask\nsnet-prod-web 10.1.1.0/24\nasg-web"]
+        APP["⚙️ vm-app API 8080\nsnet-prod-app 10.1.2.0/24\nasg-app"]
+    end
+
+    subgraph DATA["🔴 SPOKE-DATA — CDE PCI-DSS — vnet-spoke-data 10.2.0.0/16"]
+        DB["🗄️ vm-db PostgreSQL\nsnet-data-db 10.2.1.0/24\nasg-db"]
+        PE["🔒 Private Endpoints\nsnet-data-pe 10.2.2.0/24\nBlob + SQL"]
+    end
+
+    Internet -->|"HTTPS :443"| WAF
+    WAF -->|"HTTP :80"| WEB
+    WEB -->|"TCP :8080\nNSG + FW"| APP
+    APP -->|"TCP :5432\nNSG + FW cross-spoke"| DB
+    DB -->|"HTTPS/TDS :443/1433\nPrivate DNS"| PE
+
+    BASTION -->|"SSH :22\ntunnel chiffré"| WEB
+    BASTION -->|"SSH :22\ntunnel chiffré"| APP
+    BASTION -->|"SSH :22\ntunnel chiffré"| DB
+
+    PROD -->|"UDR 0.0.0.0/0\nForced Egress"| FW
+    DATA -->|"UDR 0.0.0.0/0\nForced Egress"| FW
+    FW -->|"FQDN filtré\n*.ubuntu.com"| Internet
+
+    GW <-->|"IPsec IKEv2\nBGP AS65001↔AS65002"| OnPrem
+
+    style HUB fill:#0078D4,color:#fff,stroke:#005a9e
+    style PROD fill:#107C10,color:#fff,stroke:#0a5c0a
+    style DATA fill:#D13438,color:#fff,stroke:#a52122
+    style Internet fill:#6e40c9,color:#fff
+    style OnPrem fill:#8764b8,color:#fff
+```
+
+---
+
 ## 3. Plan d'Adressage IP (IPAM)
 
 ### Vue globale
@@ -347,7 +398,10 @@ terraform init → terraform validate → terraform plan → terraform apply
 
 ## 8. Prouving ANSSI — 10 Preuves Techniques
 
-> Voir **LIVRABLE 4** pour le détail de chaque preuve avec les captures/tests correspondants.
+> Voir **LIVRABLE 4** pour le détail de chaque preuve avec les captures/tests correspondants :
+> - 📄 [LIVRABLE-4-CAHIER-RECETTE.md](LIVRABLE-4-CAHIER-RECETTE.md) (Markdown local)
+> - 🌐 [GitHub Pages — Livrable 4](https://ynovops-infragroup.github.io/NETWORK-TP-FINAL-CLOUDSHIELD/#/LIVRABLE-4-CAHIER-RECETTE)
+> - 📚 [Wiki — Preuves ANSSI](https://github.com/YnovOps-InfraGroup/NETWORK-TP-FINAL-CLOUDSHIELD/wiki/Preuves-ANSSI)
 
 | #   | Règle ANSSI                       | Configuration Azure                               | Méthode de preuve                             |
 | --- | --------------------------------- | ------------------------------------------------- | --------------------------------------------- |
