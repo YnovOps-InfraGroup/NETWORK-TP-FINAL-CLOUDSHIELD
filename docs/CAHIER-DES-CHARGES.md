@@ -135,10 +135,10 @@ Construire une **architecture Cloud Azure complète**, sécurisée, conforme au 
                      │              │
     ┌────────────────┼──────────────┼────────────────┐
     │            HUB VNET (10.0.0.0/16)              │
-    │                                                 │
-    │  Azure Firewall ◄── inspecte tout le trafic     │
-    │  Azure Bastion  ◄── admin SSH sécurisé          │
-    │  GatewaySubnet  ◄── VPN IPsec/BGP               │
+    │                                                │
+    │  Azure Firewall ◄── inspecte tout le trafic    │
+    │  Azure Bastion  ◄── admin SSH sécurisé         │
+    │  GatewaySubnet  ◄── VPN IPsec/BGP              │
     └───┬─────────────────────┬──────────────────┬───┘
         │                     │                  │
    ┌────▼──────┐       ┌─────▼──────┐    ┌─────▼──────┐

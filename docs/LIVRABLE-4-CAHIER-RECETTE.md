@@ -21,9 +21,10 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 | **Méthode de preuve**   | **Capture portail** : Azure Portal → Resource Group → Virtual Networks → afficher les 4 VNets avec leurs address space distincts                                                                 |
 | **Commande Terraform**  | `terraform output vnets`                                                                                                                                                                         |
 | **Résultat attendu**    | 4 VNets isolés, communication inter-spokes uniquement via Hub Firewall                                                                                                                           |
-![alt text](../screenshots/PREUVE-01-segmentation-4vnets.png)
-![alt text](../screenshots/PREUVE-01.2-segmentation-4vnets-tfoutput.png)
-```
+---
+
+![R19 — 4 VNets segmentés dans Azure Portal](screenshots/PREUVE-01-segmentation-4vnets.png)
+![R19 — terraform output vnets (adress spaces distincts)](screenshots/PREUVE-01.2-segmentation-4vnets-tfoutput.png)
 
 ---
 
@@ -34,8 +35,9 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 | **Règle ANSSI**         | R22 — Interdire la connexion directe à Internet des postes ou serveurs sensibles                                                                            |
 | **Configuration Azure** | UDR (Route Table) `rt-spoke-prod-to-fw` avec route 0.0.0.0/0 → Azure Firewall. Associée à snet-prod-web et snet-prod-app. BGP route propagation désactivée. |
 | **Méthode de preuve**   | **Test de connectivité** depuis vm-web (via Bastion) + **Capture portail** : Effective Routes sur la NIC de vm-web                                          |
-
 | **Résultat attendu** | `curl google.com` échoue (timeout). Effective Routes montre 0.0.0.0/0 → VirtualAppliance (IP Firewall) |
+
+---
 
 ### Tests à exécuter
 
@@ -55,16 +57,16 @@ curl -s --connect-timeout 5 http://google.com
 # NIC vm-web → Effective Routes → 0.0.0.0/0 → VirtualAppliance → 10.0.1.4
 ```
 
+> 📸 *Capture à réaliser lors du déploiement complet (Azure Bastion actif requis)*
+
 ---
 
 ## Preuve 3 — Règle ANSSI R14 : Authentification forte
 
 | Élément | Détail |
 | ------- | ------ |
-
 | **Règle ANSSI** | R14 — Mettre en place des mécanismes d'authentification forte |
 | **Configuration Azure** | VMs déployées avec clés SSH Ed25519 uniquement (pas de mot de passe). Aucune IP publique sur les VMs. Accès uniquement via Azure Bastion. |
-
 | **Méthode de preuve** | **Capture portail** : Vue NIC de vm-db → montrer "Public IP address: None". Vue VM → montrer "Password authentication: Disabled" |
 | **Résultat attendu** | Zéro IP publique, authentification par clé SSH uniquement |
 
@@ -80,17 +82,17 @@ ssh azureuser@<vm-db-private-ip>
 # Résultat : timeout (pas d'IP publique, pas de route)
 ```
 
+![R14 — Aucune IP publique sur les VMs (Azure Portal)](screenshots/PREUVE-03-R14-auth-sans-ip-public.png)
+
 ---
 
 ## Preuve 4 — Règle ANSSI R25 : Chiffrement des interconnexions
 
 | Élément | Détail |
 | ------- | ------ |
-
 | **Règle ANSSI** | R25 — Sécuriser les interconnexions réseau dédiées avec des tiers |
 | **Configuration Azure** | VPN IPsec IKEv2 entre Hub (BGP AS 65001) et OnPrem (BGP AS 65002). Pre-Shared Key 35+ caractères. Connexion Vnet2Vnet avec BGP activé. |
 | **Méthode de preuve** | **Capture portail** : VPN Gateway → Connections → Status = "Connected". BGP peer status showing established sessions. |
-
 | **Résultat attendu** | Tunnel IPsec IKEv2 établi, routes BGP échangées |
 
 ### Test à exécuter
@@ -113,6 +115,8 @@ az network vnet-gateway list-learned-routes \
 # Résultat : route 10.10.0.0/16 apprise via BGP
 ```
 
+> 📸 *Capture à réaliser lors du déploiement complet (VPN Gateway + Bastion requis)*
+
 ---
 
 ## Preuve 5 — Règle ANSSI R36 : Journalisation centralisée
@@ -121,7 +125,6 @@ az network vnet-gateway list-learned-routes \
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **Règle ANSSI**         | R36 — Activer et configurer les journaux des composants les plus importants                                                 |
 | **Configuration Azure** | Log Analytics Workspace `law-cloudshield` avec AMA sur 3 VMs, NSG Flow Logs v2, Diagnostic Settings sur Firewall et Bastion |
-
 | **Méthode de preuve** | **Capture portail** : Log Analytics → Logs → requête KQL montrant des données Syslog + Flow Logs |
 | **Résultat attendu** | Données Syslog, Perf et NetworkSecurityGroupFlowEvent présentes dans le workspace |
 
@@ -149,6 +152,8 @@ AzureDiagnostics
 | take 20
 ```
 
+![R36 — Data Collection Rule Linux (Azure Monitor)](screenshots/PREUVE-05-R36-logs-monitor-DCR.png)
+
 ---
 
 ## Preuve 6 — Règle ANSSI R19 (Zero Trust) : Micro-segmentation — Isolation Web↔DB
@@ -156,7 +161,6 @@ AzureDiagnostics
 | Élément         | Détail                                                         |
 | --------------- | -------------------------------------------------------------- |
 | **Règle ANSSI** | R19 — Segmentation + Zero Trust : mouvement latéral impossible |
-
 | **Configuration Azure** | NSG nsg-data-db : autoriser uniquement asg-app → asg-db (TCP/5432). Deny-all inbound (prio 4000). vm-web n'est PAS dans asg-app → ne peut pas atteindre vm-db. |
 | **Méthode de preuve** | **Test de connectivité** depuis vm-web vers vm-db (doit échouer) |
 | **Résultat attendu** | ping vm-db → timeout. SSH vm-db → connection refused. Mouvement latéral impossible. |
@@ -191,13 +195,14 @@ nc -zv 10.2.1.4 5432
 # Résultat : Connection OK (port open)
 ```
 
+![R19 Zero Trust — Deny-all NSG inbound (prio 4000, aucune IP publique)](screenshots/PREUVE-06-R19-zerotrust-deny-all.png)
+
 ---
 
 ## Preuve 7 — Règle ANSSI R23 : Filtrage sortant via Firewall
 
 | Élément | Détail |
 | ------- | ------ |
-
 | **Règle ANSSI** | R23 — Utiliser un proxy et des passerelles de sécurité pour l'accès Internet |
 | **Configuration Azure** | Azure Firewall avec règles FQDN : seuls Ubuntu updates, Azure Monitor et PyPI autorisés. Tout autre trafic sortant bloqué (deny implicite). |
 | **Méthode de preuve** | **Test de connectivité** depuis vm-app : `apt update` fonctionne, `curl google.com` échoue |
@@ -226,13 +231,14 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 ```
 
+> 📸 *Capture à réaliser lors du déploiement complet (Azure Firewall actif requis)*
+
 ---
 
 ## Preuve 8 — Règle ANSSI R28 : Administration sécurisée (Bastion)
 
 | Élément | Détail |
-
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| ------- | ------ |
 | **Règle ANSSI** | R28 — Protéger les flux d'administration |
 | **Configuration Azure** | Azure Bastion dans le Hub. SSH/RDP uniquement via tunnel Bastion (portail ou CLI). Aucun port 22 ouvert sur les NSG vers Internet. |
 | **Méthode de preuve** | **Capture portail** : Session Bastion active + NSG nsg-prod-web montrant aucune règle SSH depuis Internet |
@@ -257,6 +263,8 @@ whoami
 # NSG nsg-prod-web → Inbound rules → aucune règle Allow SSH depuis Internet
 # Bastion → Activity Logs → session SSH auditable
 ```
+
+> 📸 *Capture à réaliser lors du déploiement complet (Azure Bastion actif requis)*
 
 ---
 
@@ -288,6 +296,10 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # Storage Account → Networking → "Public network access: Disabled"
 # SQL Server → Networking → "Public network access: Disabled"
 ```
+
+![R15 — Private Endpoint Storage : nslookup résout en IP privée](screenshots/PREUVE-09-R15-pe-storage.png)
+![R15 — Private Endpoint SQL : nslookup résout en IP privée](screenshots/PREUVE-09-R15-pe-sql.png)
+![R15 — Private Endpoint Blob dans snet-data-pe](screenshots/PREUVE-09-R15-pe-blob.png)
 
 ---
 
@@ -335,6 +347,9 @@ search *
 // AzureDiagnostics → logs Firewall + Bastion
 // AzureNetworkAnalytics_CL → Flow Logs NSG
 ```
+
+![R37 — Alert Rules actives dans Azure Monitor](screenshots/PREUVE-10-R37-alertes-rules.png)
+![R37 — Notification email reçue par le groupe AG-SecOps](screenshots/PREUVE-10-R37-alertes-mail.png)
 
 ---
 
