@@ -28,19 +28,19 @@
 Internet
     │
     ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│  vnet-hub (10.0.0.0/16)                                             │
-│                                                                     │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
-│  │  WAF v2      │  │ Azure        │  │  VPN Gateway │              │
-│  │  (AppGW)     │  │ Firewall     │  │  (IPsec/BGP) │              │
-│  │  OWASP 3.2   │  │  Standard    │  │  ← OnPrem    │              │
-│  │  Prévention  │  │  UDR 0/0     │  └──────────────┘              │
-│  └──────┬───────┘  └──────┬───────┘                                │
-│         │ (inspection)    │ (egress forcé)  ┌─────────────────┐    │
-│         │                 │                 │  Azure Bastion  │    │
-│         │                 │                 │  (admin seul)   │    │
-│         │                 │                 └────────┬────────┘    │
+┌───────────────────────────────────────────────────────────────────┐
+│  vnet-hub (10.0.0.0/16)                                           │
+│                                                                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
+│  │  WAF v2      │  │ Azure        │  │  VPN Gateway │             │
+│  │  (AppGW)     │  │ Firewall     │  │  (IPsec/BGP) │             │
+│  │  OWASP 3.2   │  │  Standard    │  │  ← OnPrem    │             │
+│  │  Prévention  │  │  UDR 0/0     │  └──────────────┘             │
+│  └──────┬───────┘  └──────┬───────┘                               │
+│         │ (inspection)    │ (egress forcé)  ┌─────────────────┐   │
+│         │                 │                 │  Azure Bastion  │   │
+│         │                 │                 │  (admin seul)   │   │
+│         │                 │                 └────────┬────────┘   │
 └─────────┼─────────────────┼──────────────────────────┼────────────┘
           │ peering         │ peering                  │ peering
     ┌─────▼──────────────────▼──────────────────────────▼──────┐
@@ -49,21 +49,21 @@ Internet
 │  vnet-spoke-prod         │  │  vnet-spoke-data                  │
 │  (10.1.0.0/16)           │  │  (10.2.0.0/16)                    │
 │                          │  │                                   │
-│  ┌──────────┐            │  │  ┌──────────┐  ┌──────────────┐  │
-│  │ vm-web   │ asg-web    │  │  │ vm-db    │  │  SQL Server  │  │
-│  │ (Ubuntu) │            │  │  │ (Ubuntu) │  │  Private EP  │  │
-│  └──────────┘            │  │  └──────────┘  └──────────────┘  │
-│  ┌──────────┐            │  │  ┌────────────────────────────┐  │
-│  │ vm-app   │ asg-app    │  │  │  Storage Account           │  │
-│  │ (Ubuntu) │            │  │  │  Private Endpoint          │  │
-│  └──────────┘            │  │  └────────────────────────────┘  │
-│  NSG micro-segmenté      │  │  NSG: Web→App→DB uniquement      │
-│  ASG (pas d'IP statiques)│  │  Aucun accès Internet direct     │
+│  ┌──────────┐            │  │  ┌──────────┐  ┌──────────────┐   │
+│  │ vm-web   │ asg-web    │  │  │ vm-db    │  │  SQL Server  │   │
+│  │ (Ubuntu) │            │  │  │ (Ubuntu) │  │  Private EP  │   │
+│  └──────────┘            │  │  └──────────┘  └──────────────┘   │
+│  ┌──────────┐            │  │  ┌────────────────────────────┐   │
+│  │ vm-app   │ asg-app    │  │  │  Storage Account           │   │
+│  │ (Ubuntu) │            │  │  │  Private Endpoint          │   │
+│  └──────────┘            │  │  └────────────────────────────┘   │
+│  NSG micro-segmenté      │  │  NSG: Web→App→DB uniquement       │
+│  ASG (pas d'IP statiques)│  │  Aucun accès Internet direct      │
 └──────────────────────────┘  └───────────────────────────────────┘
           │
 ┌─────────▼────────────────┐
 │  vnet-onprem-sim         │
-│  (10.10.0.0/16)         │
+│  (10.10.0.0/16)          │
 │  Simulation On-Premises  │
 │  VPN IKEv2 + BGP         │
 └──────────────────────────┘
