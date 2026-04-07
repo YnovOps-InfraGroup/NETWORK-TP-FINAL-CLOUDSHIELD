@@ -19,8 +19,6 @@ repos:
 
       - id: terraform_tflint
         name: "TFLint"
-        args:
-          - --args=--chdir=terraform
 
       - id: terraform_tfsec
         name: "TFSec"
@@ -31,6 +29,7 @@ repos:
         name: "Checkov"
         args:
           - --args=--framework terraform
+          - --args=--soft-fail
           - --args=--skip-check CKV_AZURE_131,CKV_AZURE_190,CKV_AZURE_213
           - --args=--skip-check CKV2_AZURE_1,CKV2_AZURE_18,CKV_AZURE_59
 

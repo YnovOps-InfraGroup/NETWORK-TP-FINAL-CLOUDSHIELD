@@ -133,6 +133,7 @@ resource "azurerm_subnet" "onprem_gateway" {
 }
 
 # Serveurs On-Premises simulés
+#checkov:skip=CKV2_AZURE_31:Simulation subnet OnPrem — pas de NSG requis en environnement lab
 resource "azurerm_subnet" "onprem_srv" {
   name                 = "snet-onprem-srv"
   resource_group_name  = azurerm_resource_group.main.name

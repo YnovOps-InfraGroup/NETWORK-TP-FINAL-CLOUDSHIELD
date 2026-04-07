@@ -181,7 +181,7 @@ resource "azurerm_network_security_group" "nsg_db" {
   # ANSSI R22 : Interdire Internet sortant depuis la zone CDE
   security_rule {
     name                       = "Deny-Internet-Outbound"
-    priority                   = 4000
+    priority                   = 4001
     direction                  = "Outbound"
     access                     = "Deny"
     protocol                   = "*"
