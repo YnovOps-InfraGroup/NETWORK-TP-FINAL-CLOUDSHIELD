@@ -195,6 +195,13 @@ variable "law_retention_days" {
 }
 
 # ── PaaS ──────────────────────────────────────────────────────────────────────
+# ── PostgreSQL VM ────────────────────────────────────────────────────────────
+variable "db_password" {
+  description = "Mot de passe PostgreSQL (compte appuser sur vm-db) — Key Vault en prod"
+  type        = string
+  sensitive   = true
+}
+
 variable "sql_admin_login" {
   description = "Login admin Azure SQL Server"
   type        = string

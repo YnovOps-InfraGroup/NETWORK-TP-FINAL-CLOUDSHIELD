@@ -242,7 +242,7 @@ resource "azurerm_linux_virtual_machine" "vm_db" {
     runcmd:
       - systemctl enable postgresql
       - systemctl start postgresql
-      - sudo -u postgres psql -c "CREATE USER appuser WITH PASSWORD 'ChangeMe123!';"
+      - sudo -u postgres psql -c "CREATE USER appuser WITH PASSWORD '${var.db_password}';"
       - sudo -u postgres psql -c "CREATE DATABASE fintechdb OWNER appuser;"
       - echo "host all appuser 10.1.2.0/24 md5" >> /etc/postgresql/*/main/pg_hba.conf
       - sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/*/main/postgresql.conf

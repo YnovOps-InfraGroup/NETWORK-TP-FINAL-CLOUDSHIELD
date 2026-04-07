@@ -55,3 +55,7 @@ deploy_waf           = false # App Gateway WAF v2       ~11 €/j  ← Phase 2
 deploy_vpn_gateways  = false # VPN Gateways x2          ~18 €/j  ← Phase 3
 deploy_paas          = true  # SQL + Storage + PE       ~0,7 €/j ✅
 deploy_observability = true  # Log Analytics + Alertes  ~0 €/j   ✅
+
+# ── PostgreSQL VM ────────────────────────────────────────────
+# TODO: remplacer par une référence Key Vault en production
+db_password = "ChangeMe123!" # Lab only — changer avant mise en prod
