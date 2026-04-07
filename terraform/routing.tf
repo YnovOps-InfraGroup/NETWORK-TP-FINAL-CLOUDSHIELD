@@ -14,17 +14,20 @@ resource "azurerm_route_table" "rt_spoke_prod" {
 
   # Route par défaut → Azure Firewall (egress Internet)
   route {
-    name                   = "default-to-firewall"
-    address_prefix         = "0.0.0.0/0"
-    next_hop_type          = "VirtualAppliance"
+    name           = "default-to-firewall"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type  = "VirtualAppliance"
+    # ⚠ LAB ONLY — 10.0.1.4 est l'IP fallback quand deploy_firewall=false
+    # Le trafic sera blackholé intentionnellement (subnets isolés en lab, aucun egress)
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
   # Route Spoke-Data → Firewall (forcer l'inspection cross-spoke)
   route {
-    name                   = "spoke-data-via-firewall"
-    address_prefix         = var.vnet_spoke_data_cidr
-    next_hop_type          = "VirtualAppliance"
+    name           = "spoke-data-via-firewall"
+    address_prefix = var.vnet_spoke_data_cidr
+    next_hop_type  = "VirtualAppliance"
+    # ⚠ LAB ONLY — voir commentaire ci-dessus
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
@@ -41,17 +44,20 @@ resource "azurerm_route_table" "rt_spoke_data" {
 
   # Route par défaut → Azure Firewall
   route {
-    name                   = "default-to-firewall"
-    address_prefix         = "0.0.0.0/0"
-    next_hop_type          = "VirtualAppliance"
+    name           = "default-to-firewall"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type  = "VirtualAppliance"
+    # ⚠ LAB ONLY — 10.0.1.4 est l'IP fallback quand deploy_firewall=false
+    # Le trafic sera blackholé intentionnellement (subnets isolés en lab, aucun egress)
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
   # Route Spoke-Prod → Firewall (inspection cross-spoke)
   route {
-    name                   = "spoke-prod-via-firewall"
-    address_prefix         = var.vnet_spoke_prod_cidr
-    next_hop_type          = "VirtualAppliance"
+    name           = "spoke-prod-via-firewall"
+    address_prefix = var.vnet_spoke_prod_cidr
+    next_hop_type  = "VirtualAppliance"
+    # ⚠ LAB ONLY — voir commentaire ci-dessus
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
