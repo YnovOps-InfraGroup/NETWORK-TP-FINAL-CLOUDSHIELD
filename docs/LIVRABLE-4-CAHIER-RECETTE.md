@@ -21,13 +21,8 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 | **Méthode de preuve**   | **Capture portail** : Azure Portal → Resource Group → Virtual Networks → afficher les 4 VNets avec leurs address space distincts                                                                 |
 | **Commande Terraform**  | `terraform output vnets`                                                                                                                                                                         |
 | **Résultat attendu**    | 4 VNets isolés, communication inter-spokes uniquement via Hub Firewall                                                                                                                           |
-
-### Test à exécuter
-
-```bash
-# Depuis le portail Azure :
-# Réseau > Virtual Networks > lister les 4 VNets
-# Capturer la liste avec les CIDRs 10.0.0.0/16, 10.1.0.0/16, 10.2.0.0/16, 10.10.0.0/16
+![alt text](../screenshots/PREUVE-01-segmentation-4vnets.png)
+![alt text](../screenshots/PREUVE-01.2-segmentation-4vnets-tfoutput.png)
 ```
 
 ---

@@ -2,7 +2,7 @@
 
 > Généré le 2026-04-01 | Phase : Éco (Firewall/WAF/Bastion désactivés)
 
-## Coût Phase Éco (état actuel deployé)
+## Coût Phase Éco
 
 | Ressource | SKU | Coût/mois | Coût/jour |
 |-----------|-----|-----------|-----------|

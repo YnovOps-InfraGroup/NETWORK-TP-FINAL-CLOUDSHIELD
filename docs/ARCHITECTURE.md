@@ -5,9 +5,8 @@
 
 ---
 
-## 0. Schémas PNG/SVG (affichage garanti GitHub, Wiki, Pages)
+## 1. Schémas
 
-### Schéma Azure avec icônes officielles
 
 ![Schéma Azure Cloud Shield](assets/diagrams/cloudshield-azure-icons.png)
 
@@ -15,16 +14,9 @@
 - SVG: [assets/diagrams/cloudshield-azure-icons.svg](assets/diagrams/cloudshield-azure-icons.svg)
 - Source DOT: [assets/diagrams/cloudshield-azure-icons.dot](assets/diagrams/cloudshield-azure-icons.dot)
 
-### Schéma InfraMap (basé sur les fichiers Terraform HCL)
-
-![Schéma InfraMap HCL](assets/diagrams/inframap-hcl.png)
-
-- PNG: [assets/diagrams/inframap-hcl.png](assets/diagrams/inframap-hcl.png)
-- DOT: [assets/diagrams/inframap-hcl.dot](assets/diagrams/inframap-hcl.dot)
-
 ---
 
-## 1. Vue Globale — Hub & Spoke
+## 2. Vue Globale — Hub & Spoke
 
 ```mermaid
 graph TB
@@ -139,7 +131,7 @@ graph TB
 
 ---
 
-## 2. Zero Trust — Matrice de Flux East-West
+## 3. Zero Trust — Matrice de Flux East-West
 
 ```mermaid
 flowchart LR
@@ -179,7 +171,7 @@ flowchart LR
 
 ---
 
-## 3. Dépendances Terraform — Ressources Clés
+## 4. Dépendances Terraform — Ressources Clés
 
 ```mermaid
 graph LR
@@ -274,7 +266,7 @@ graph LR
 
 ---
 
-## 4. Plan d'Adressage IP (IPAM)
+## 5. Plan d'Adressage IP (IPAM)
 
 | Composant      | VNet / Subnet       | CIDR           | Rôle                          |
 | -------------- | ------------------- | -------------- | ----------------------------- |
