@@ -28,7 +28,7 @@
 
 </div>
 
-[<i class="fa-solid fa-book"></i> Cahier des Charges](CAHIER-DES-CHARGES.md)
+[<i class="fa-solid fa-book"></i> Cahier des Charges](Reference/CAHIER-DES-CHARGES.md)
 [<i class="fa-solid fa-sitemap"></i> Architecture DAT](LIVRABLE-2-DAT.md)
 [<i class="fa-brands fa-github"></i> Code Source](https://github.com/YnovOps-InfraGroup/NETWORK-TP-FINAL-CLOUDSHIELD)
 

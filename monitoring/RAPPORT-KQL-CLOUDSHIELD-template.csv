@@ -64,6 +64,3 @@ alice.dupont@fintechglobal.local,vm-db,203.0.113.10,2026-04-09 11:03,N/A,❌ TIM
 ,[REQ-03] NSG Flows Denied
 ,[REQ-04] Firewall Denials
 ,[REQ-09] Synthèse (Dashboard)
-
-💡 CONSEIL,Ces requêtes sont paramétrées pour votre infrastructure CloudShield.
-,"Adapter les noms de VMs (vm-web, vm-app, etc.) si différents dans votre déploiement."

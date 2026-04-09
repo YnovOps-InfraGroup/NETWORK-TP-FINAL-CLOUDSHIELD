@@ -74,3 +74,5 @@ terraform/*.tfplan
 # ── Monitoring local (scripts + données brutes) ───────────────────
 monitoring/execute_queries.py
 monitoring/KQL-CLOUDSHIELD-SIMPLIFIED.kql
+monitoring/OBSERVABILITY-SUMMARY.md
+monitoring/results.json

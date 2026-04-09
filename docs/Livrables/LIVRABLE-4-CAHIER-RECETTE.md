@@ -24,8 +24,8 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 
 ---
 
-![R19 — 4 VNets segmentés dans Azure Portal](screenshots/PREUVE-01-segmentation-4vnets.png)
-![R19 — terraform output vnets (adress spaces distincts)](screenshots/PREUVE-01.2-segmentation-4vnets-tfoutput.png)
+![R19 — 4 VNets segmentés dans Azure Portal](../screenshots/PREUVE-01-segmentation-4vnets.png)
+![R19 — terraform output vnets (adress spaces distincts)](../screenshots/PREUVE-01.2-segmentation-4vnets-tfoutput.png)
 
 ---
 
@@ -58,17 +58,17 @@ curl -s --connect-timeout 5 http://google.com
 
 **Preuve terminale :**
 
-> Voir [`screenshots/PREUVE-02a-curl-timeout.txt`](screenshots/PREUVE-02a-curl-timeout.txt) — `curl http://google.com` → HTTP 470 Deny, firewall bloque la sortie Internet.
+> Voir [`screenshots/PREUVE-02a-curl-timeout.txt`](../screenshots/PREUVE-02a-curl-timeout.txt) — `curl http://google.com` → HTTP 470 Deny, firewall bloque la sortie Internet.
 
 **Capture portail — Effective Routes :**
 
-![R22 — Effective Routes 0.0.0.0/0 → VirtualAppliance 10.0.1.4](screenshots/PREUVE-02b-effective-routes.png)
+![R22 — Effective Routes 0.0.0.0/0 → VirtualAppliance 10.0.1.4](../screenshots/PREUVE-02b-effective-routes.png)
 
-> Voir aussi [`screenshots/PREUVE-02b-effective-routes.txt`](screenshots/PREUVE-02b-effective-routes.txt) — sortie CLI `az network nic show-effective-route-table`.
+> Voir aussi [`screenshots/PREUVE-02b-effective-routes.txt`](../screenshots/PREUVE-02b-effective-routes.txt) — sortie CLI `az network nic show-effective-route-table`.
 
 **Capture portail — IP publique Azure Firewall (egress centralisé) :**
 
-![R22 — fw-cloudshield-hub IP publique 51.103.110.220 — tout le trafic sortant passe par ce point](screenshots/PREUVE-02c-firewall-public-ip.png)
+![R22 — fw-cloudshield-hub IP publique 51.103.110.220 — tout le trafic sortant passe par ce point](../screenshots/PREUVE-02c-firewall-public-ip.png)
 
 ---
 
@@ -90,7 +90,7 @@ ssh azureuser@10.2.1.4
 # Résultat : timeout (pas d'IP publique, pas de route)
 ```
 
-![R14 — Aucune IP publique sur les VMs (Azure Portal)](screenshots/PREUVE-03-R14-auth-sans-ip-public.png)
+![R14 — Aucune IP publique sur les VMs (Azure Portal)](../screenshots/PREUVE-03-R14-auth-sans-ip-public.png)
 
 ---
 
@@ -120,11 +120,11 @@ az network vnet-gateway list-learned-routes \
 # Résultat : route 10.10.0.0/16 apprise via BGP
 ```
 
-![R25 — VPN Gateway cn-vpn-hub-to-onprem : Status Connected (portail Azure)](screenshots/PREUVE-04-vpn-connected.png)
+![R25 — VPN Gateway cn-vpn-hub-to-onprem : Status Connected (portail Azure)](../screenshots/PREUVE-04-vpn-connected.png)
 
-![R25 — BGP Peers : 2 sessions established entre AS65001 (Hub) et AS65002 (OnPrem)](screenshots/PREUVE-04b-vpn-bgp-peers.png)
+![R25 — BGP Peers : 2 sessions established entre AS65001 (Hub) et AS65002 (OnPrem)](../screenshots/PREUVE-04b-vpn-bgp-peers.png)
 
-> Voir aussi [`docs/screenshots/PREUVE-04-vpn-connected.txt`](screenshots/PREUVE-04-vpn-connected.txt) — sortie CLI
+> Voir aussi [`docs/screenshots/PREUVE-04-vpn-connected.txt`](../screenshots/PREUVE-04-vpn-connected.txt) — sortie CLI
 > `az network vpn-connection show` → `"connectionStatus": "Connected"`, `"connectionProtocol": "IKEv2"`, `"enableBgp": true`
 >
 > CSVs BGP disponibles dans `on-premise/` :
@@ -167,13 +167,13 @@ AzureDiagnostics
 | take 20
 ```
 
-![R36 — Data Collection Rule Linux (Azure Monitor)](screenshots/PREUVE-05-R36-logs-monitor-DCR.png)
+![R36 — Data Collection Rule Linux (Azure Monitor)](../screenshots/PREUVE-05-R36-logs-monitor-DCR.png)
 
-![Law-cloudshield](screenshots/PREUVE-05b-law-workspace.png)
+![Law-cloudshield](../screenshots/PREUVE-05b-law-workspace.png)
 
-![R36 — Log centralise](screenshots/PREUVE-05-R36-journalisation-centralisee.png)
+![R36 — Log centralise](../screenshots/PREUVE-05-R36-journalisation-centralisee.png)
 
-![Securty log](screenshots/PREUVE-05C-SecurityLogs.png)
+![Securty log](../screenshots/PREUVE-05C-SecurityLogs.png)
 
 ---
 
@@ -216,9 +216,9 @@ nc -zv 10.2.1.4 5432
 # Résultat : Connection OK (port open)
 ```
 
-![R19 Zero Trust — Deny-all NSG inbound (prio 4000, aucune IP publique)](screenshots/PREUVE-06-R19-zerotrust-deny-all.png)
+![R19 Zero Trust — Deny-all NSG inbound (prio 4000, aucune IP publique)](../screenshots/PREUVE-06-R19-zerotrust-deny-all.png)
 
-> Voir aussi [`screenshots/PREUVE-06b-web-cant-reach-db.txt`](screenshots/PREUVE-06b-web-cant-reach-db.txt) — sortie CLI
+> Voir aussi [`screenshots/PREUVE-06b-web-cant-reach-db.txt`](../screenshots/PREUVE-06b-web-cant-reach-db.txt) — sortie CLI
 
 ---
 
@@ -256,15 +256,15 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 **Preuve terminale :**
 
-> Voir [`screenshots/PREUVE-07-firewall-filtering.txt`](screenshots/PREUVE-07-firewall-filtering.txt) — `curl http://google.com` et `curl http://evil.com` → HTTP 470 Deny, filtrage FQDN Firewall confirmé.
+> Voir [`screenshots/PREUVE-07-firewall-filtering.txt`](../screenshots/PREUVE-07-firewall-filtering.txt) — `curl http://google.com` et `curl http://evil.com` → HTTP 470 Deny, filtrage FQDN Firewall confirmé.
 
 **Capture portail — Firewall Policy règles réseau :**
 
-![R23 — fp-cloudshield : règle Allow-App-to-DB-PostgreSQL TCP 10.1.2.0/24 → 10.2.1.0/24:5432](screenshots/PREUVE-07-firewall-policy-rules.png)
+![R23 — fp-cloudshield : règle Allow-App-to-DB-PostgreSQL TCP 10.1.2.0/24 → 10.2.1.0/24:5432](../screenshots/PREUVE-07-firewall-policy-rules.png)
 
 **Capture portail — Firewall Policy VNet sécurisé :**
 
-![R23 — fp-cloudshield : vnet-hub-cloudshield/AzureFirewallSubnet — état Managé, fw-cloudshield-hub actif](screenshots/PREUVE-07-firewall-vnet-secure.png)
+![R23 — fp-cloudshield : vnet-hub-cloudshield/AzureFirewallSubnet — état Managé, fw-cloudshield-hub actif](../screenshots/PREUVE-07-firewall-vnet-secure.png)
 
 ---
 
@@ -295,15 +295,15 @@ whoami
 
 **Capture portail — Session Bastion SSH active :**
 
-![R28 — Azure Bastion session SSH vers vm-web via kv-core-security](screenshots/PREUVE-08a-bastion-session.png)
+![R28 — Azure Bastion session SSH vers vm-web via kv-core-security](../screenshots/PREUVE-08a-bastion-session.png)
 
 **Capture portail — NSG sans SSH depuis Internet :**
 
-![R28 — nsg-prod-web : Deny-All-Inbound prio 4000, aucun port 22 depuis Internet](screenshots/PREUVE-08b-nsg-no-ssh-internet.png)
+![R28 — nsg-prod-web : Deny-All-Inbound prio 4000, aucun port 22 depuis Internet](../screenshots/PREUVE-08b-nsg-no-ssh-internet.png)
 
 **Capture portail — NSG activity logs -> sessions SSH auditable :**
 
-![R28 — Azure Bastion session SSH audit](screenshots/PREUVE-08-Bastion-activity-log-audit-ssh.png)
+![R28 — Azure Bastion session SSH audit](../screenshots/PREUVE-08-Bastion-activity-log-audit-ssh.png)
 
 ---
 
@@ -332,9 +332,9 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 
 ```
 
-![R15 — Private Endpoint Storage : nslookup résout en IP privée](screenshots/PREUVE-09-R15-pe-storage.png)
-![R15 — Private Endpoint SQL : nslookup résout en IP privée](screenshots/PREUVE-09-R15-pe-sql.png)
-![R15 — Private Endpoint Blob dans snet-data-pe](screenshots/PREUVE-09-R15-pe-blob.png)
+![R15 — Private Endpoint Storage : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-storage.png)
+![R15 — Private Endpoint SQL : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-sql.png)
+![R15 — Private Endpoint Blob dans snet-data-pe](../screenshots/PREUVE-09-R15-pe-blob.png)
 
 ---
 
@@ -367,11 +367,11 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # → vérifier réception email à secops@fintechglobal.local
 ```
 
-![Monitor Alerts-Alertes Rules](screenshots/PREUVE-10-AlerteRules.png)
+![Monitor Alerts-Alertes Rules](../screenshots/PREUVE-10-AlerteRules.png)
 
-![R37 — Alert Rules actives dans Azure Monitor](screenshots/PREUVE-10-R37-alertes-rules.png)
+![R37 — Alert Rules actives dans Azure Monitor](../screenshots/PREUVE-10-R37-alertes-rules.png)
 
-![R37 — Notification email reçue par le groupe AG-SecOps](screenshots/PREUVE-10-R37-alertes-mail.png)
+![R37 — Notification email reçue par le groupe AG-SecOps](../screenshots/PREUVE-10-R37-alertes-mail.png)
 
 
 ### Requête KQL — Vérification exhaustive des sources de logs
@@ -411,13 +411,13 @@ curl -v "http://<appgw-pip>/?q=' OR 1=1 --"
 # > HTTP/1.1 403 Forbidden
 ```
 
-> Voir [`docs/screenshots/PREUVE-waf-sqli-blocked.txt`](screenshots/PREUVE-waf-sqli-blocked.txt) — sortie CLI complète.
+> Voir [`docs/screenshots/PREUVE-waf-sqli-blocked.txt`](../screenshots/PREUVE-waf-sqli-blocked.txt) — sortie CLI complète.
 
-![WAF — Application Gateway Overview : appgw-waf-cloudshield actif, Frontend IP publique](screenshots/PREUVE-11-waf-appgw-overview.png)
+![WAF — Application Gateway Overview : appgw-waf-cloudshield actif, Frontend IP publique](../screenshots/PREUVE-11-waf-appgw-overview.png)
 
-![WAF — Policy wafpol-cloudshield : Mode Prevention, 7 Managed Rule Sets OWASP 3.2](screenshots/PREUVE-11b-waf-policy-prevention.png)
+![WAF — Policy wafpol-cloudshield : Mode Prevention, 7 Managed Rule Sets OWASP 3.2](../screenshots/PREUVE-11b-waf-policy-prevention.png)
 
-![WAF — Managed Rules actives : 948 règles SQL Injection, XSS, RFI, LFI, RCE](screenshots/PREUVE-11c-waf-managed-rules.png)
+![WAF — Managed Rules actives : 948 règles SQL Injection, XSS, RFI, LFI, RCE](../screenshots/PREUVE-11c-waf-managed-rules.png)
 
 > CSV des règles disponible dans `on-premise/wafpol-cloudshield_ManagedRules.csv`.
 

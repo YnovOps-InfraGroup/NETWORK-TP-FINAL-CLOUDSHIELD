@@ -58,7 +58,7 @@ Mettre en place alertes ARM,MOYENNE,AzureActivity vide. Vérifier retention et a
 6,Exporter résultats,"Cliquer Export (haut right) → ""Excel"" ou ""CSV"""
 7,Répéter,Pour requêtes [REQ-02] à [REQ-09]
 
-⚠️ NOTES IMPORTANTES:,
+NOTES IMPORTANTES:,
 ,• Ce rapport contient les VRAIS résultats de law-cloudshield au 2026-04-09 12:25
 ,"• Certaines tables manquent de données (Syslog, NTANetAnalytics, AzureActivity)"
 ,• Vérifier que tous les agents monitoring sont installés (LAD/OMS sur Perf)
