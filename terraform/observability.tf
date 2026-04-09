@@ -392,3 +392,69 @@ resource "azurerm_monitor_activity_log_alert" "service_health" {
 
   tags = var.tags
 }
+
+# ═══════════════════════════════════════════════════════════════
+# RSYSLOG → AMA SYMLINKS — fix(ama): les symlinks ne sont pas
+# créés automatiquement par l'extension AMA sur Ubuntu 24.04.
+# Sans ces symlinks, rsyslog ne forward pas vers le socket AMA
+# et la table Syslog reste vide dans Log Analytics.
+# ═══════════════════════════════════════════════════════════════
+
+locals {
+  rsyslog_ama_script = <<-SCRIPT
+    ln -sf /etc/opt/microsoft/azuremonitoragent/syslog/rsyslogconf/05-azuremonitoragent-loadomuxsock.conf /etc/rsyslog.d/05-azuremonitoragent-loadomuxsock.conf
+    ln -sf /etc/opt/microsoft/azuremonitoragent/syslog/rsyslogconf/10-azuremonitoragent.conf /etc/rsyslog.d/10-azuremonitoragent.conf
+    systemctl restart rsyslog
+  SCRIPT
+}
+
+resource "azurerm_virtual_machine_run_command" "rsyslog_ama_web" {
+  count = var.deploy_observability ? 1 : 0
+
+  name               = "rsyslog-ama-symlinks"
+  location           = azurerm_resource_group.main.location
+  virtual_machine_id = azurerm_linux_virtual_machine.vm_web.id
+
+  source {
+    script = local.rsyslog_ama_script
+  }
+
+  depends_on = [
+    azurerm_virtual_machine_extension.ama_web,
+    azurerm_monitor_data_collection_rule_association.dcr_web,
+  ]
+}
+
+resource "azurerm_virtual_machine_run_command" "rsyslog_ama_app" {
+  count = var.deploy_observability ? 1 : 0
+
+  name               = "rsyslog-ama-symlinks"
+  location           = azurerm_resource_group.main.location
+  virtual_machine_id = azurerm_linux_virtual_machine.vm_app.id
+
+  source {
+    script = local.rsyslog_ama_script
+  }
+
+  depends_on = [
+    azurerm_virtual_machine_extension.ama_app,
+    azurerm_monitor_data_collection_rule_association.dcr_app,
+  ]
+}
+
+resource "azurerm_virtual_machine_run_command" "rsyslog_ama_db" {
+  count = var.deploy_observability ? 1 : 0
+
+  name               = "rsyslog-ama-symlinks"
+  location           = azurerm_resource_group.main.location
+  virtual_machine_id = azurerm_linux_virtual_machine.vm_db.id
+
+  source {
+    script = local.rsyslog_ama_script
+  }
+
+  depends_on = [
+    azurerm_virtual_machine_extension.ama_db,
+    azurerm_monitor_data_collection_rule_association.dcr_db,
+  ]
+}

@@ -1,0 +1,108 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2500 >>
+stream
+BT
+/F1 20 Tf
+50 750 Td
+(CLOUDSHIELD - OBSERVABILITY REPORT) Tj
+0 -30 Td
+/F1 12 Tf
+(Generated: 09 April 2026 - Log Analytics Monitoring) Tj
+0 -40 Td
+/F1 14 Tf
+(1. EXECUTIVE SUMMARY) Tj
+0 -30 Td
+/F1 10 Tf
+(Workspace: law-cloudshield | RG: rg-cloudshield-prod) Tj
+0 -15 Td
+(Subscription: 4b580ad2-a9e9-4c88-9f85-83c2bf43ce21) Tj
+0 -15 Td
+(Monitoring: 24h | Status: PARTIAL (2/4 VMs with data)) Tj
+0 -30 Td
+/F1 14 Tf
+(2. PERFORMANCE VMs) Tj
+0 -30 Td
+/F1 10 Tf
+(vm-web:  Memory 45.75% avg, 49.04% max, Disk 9.96% - OK) Tj
+0 -15 Td
+(vm-app:  Memory 45.60% avg, 47.54% max, Disk 9.92% - OK) Tj
+0 -15 Td
+(vm-db:   NO DATA (LAD agent missing)) Tj
+0 -15 Td
+(vm-jumpbox: NO DATA (LAD agent missing)) Tj
+0 -30 Td
+/F1 14 Tf
+(3. SECURITY & NSG) Tj
+0 -30 Td
+/F1 10 Tf
+(SSH Protection: Bastion Standard + tunneling ENABLED) Tj
+0 -15 Td
+(Application WAF: AppGateway v2 + Firewall Standard ACTIVE) Tj
+0 -15 Td
+(VPN Site-to-Site: OnPrem connected, BGP enabled) Tj
+0 -15 Td
+(Micro-segmentation: App to DB (5432 TCP) APPLIED) Tj
+0 -15 Td
+(Internet Access: UDR 0.0.0.0/0 via Firewall ENFORCED) Tj
+0 -15 Td
+(NSG Flow Logs: NEEDS ACTIVATION) Tj
+0 -30 Td
+/F1 14 Tf
+(4. PRIORITY RECOMMENDATIONS) Tj
+0 -30 Td
+/F1 10 Tf
+(HIGH: Install LAD agents on vm-db and vm-jumpbox) Tj
+0 -15 Td
+(HIGH: Verify Syslog forwarding configuration) Tj
+0 -15 Td
+(HIGH: Enable NSG Flow Logs in Azure Portal) Tj
+0 -15 Td
+(MEDIUM: Configure memory alerts > 75%) Tj
+0 -15 Td
+(MEDIUM: Monitor SSH Failed Auth > 10/hour) Tj
+0 -15 Td
+(MEDIUM: Export queries automatically for audit) Tj
+0 -30 Td
+/F1 14 Tf
+(5. GENERATED FILES) Tj
+0 -30 Td
+/F1 10 Tf
+(KQL-CLOUDSHIELD-SIMPLIFIED.kql - 9 ready-to-import queries) Tj
+0 -15 Td
+(RAPPORT-KQL-CLOUDSHIELD-REEL.csv - Real results from law-cloudshield) Tj
+0 -15 Td
+(observability.html - Web/printable version) Tj
+0 -15 Td
+(observability.pdf - This comprehensive report) Tj
+0 -40 Td
+/F1 8 Tf
+(Workspace: law-cloudshield | Region: francecentral | Generated: 2026-04-09) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000229 00000 n
+0000002779 00000 n
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2870
+%%EOF

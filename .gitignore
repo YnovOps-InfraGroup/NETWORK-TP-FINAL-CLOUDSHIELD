@@ -62,3 +62,15 @@ Claude/
 .DS_Store
 Thumbs.db
 
+# ── Secrets SSH ───────────────────────────────────────────────────
+ssh/
+*.pem
+*.ppk
+
+# ── Terraform — Plans (contiennent des secrets en clair) ──────────
+terraform/*.tfplan
+*.tfplan
+
+# ── Monitoring local (scripts + données brutes) ───────────────────
+monitoring/execute_queries.py
+monitoring/KQL-CLOUDSHIELD-SIMPLIFIED.kql

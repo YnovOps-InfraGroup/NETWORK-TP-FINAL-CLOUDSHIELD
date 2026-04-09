@@ -49,9 +49,9 @@ subnet_onprem_srv     = "10.10.1.0/24"
 # FEATURE FLAGS — Déploiement progressif (FinOps)
 # false = non déployé | true = déployé
 # ══════════════════════════════════════════════════════════════
-deploy_firewall      = false # Azure Firewall Standard  ~30 €/j  ← Phase 2
-deploy_bastion       = false # Azure Bastion Basic      ~4,6 €/j ← Phase 2
-deploy_waf           = false # App Gateway WAF v2       ~11 €/j  ← Phase 2
-deploy_vpn_gateways  = false # VPN Gateways x2          ~18 €/j  ← Phase 3
-deploy_paas          = true  # SQL + Storage + PE       ~0,7 €/j ✅
-deploy_observability = true  # Log Analytics + Alertes  ~0 €/j   ✅
+deploy_firewall      = false # Azure Firewall Standard  ~30 €/j
+deploy_bastion       = false # Azure Bastion Standard   ~5 €/j
+deploy_waf           = true  # App Gateway WAF v2       ~6 €/j
+deploy_vpn_gateways  = true  # VPN Gateways x2          ~18 €/j
+deploy_paas          = true  # SQL + Storage + PE       ~0,7 €/j
+deploy_observability = true  # Log Analytics + Alertes  ~0 €/j

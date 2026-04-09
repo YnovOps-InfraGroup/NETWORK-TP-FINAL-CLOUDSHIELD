@@ -1,0 +1,66 @@
+﻿===== CLOUDSHIELD — RAPPORT KQL RÉEL =====,Généré: 2026-04-09 12:25:28
+Source:,Azure Log Analytics — law-cloudshield
+Resource Group:,rg-cloudshield-prod
+Subscription:,4b580ad2-a9e9-4c88-9f85-83c2bf43ce21
+
+
+🖥️ SECTION 1 : PERFORMANCE MÉMOIRE (24h) — DONNÉES RÉELLES,
+VM,Mémoire Max (%),Mémoire Moy (%),Statut,Analyse & Recommandations
+vm-web,49.04,45.75,✅ OK,"Utilisation normale. Max: 49.04%, Moy: 45.75%"
+vm-app,47.54,45.60,✅ OK,"Utilisation normale. Max: 47.54%, Moy: 45.60%"
+
+
+💾 SECTION 2 : ESPACE DISQUE (24h) — DONNÉES RÉELLES,
+VM,Disque Utilisé Max (%),Statut,Analyse & Actions
+vm-web,9.96,✅ OK,Espace disponible: 90.04%. Bon état.
+vm-app,9.92,✅ OK,Espace disponible: 90.08%. Bon état.
+
+
+📋 SECTION 3 : REQUÊTES KQL EXÉCUTÉES,
+Requête,Table,Filtres,Résultats,Statut Exécution
+[REQ-01],Perf,"Computer in (vm-web, vm-app, vm-db, vm-jumpbox), CounterName = ""% Processor Time"" or ""% Used Memory""","2 lignes (vm-web, vm-app)",✅ Succès
+[REQ-02],Syslog,"Computer in (vm-web,vm-app,...), Facility=authpriv, Syslog contains ""Failed password""",0 lignes,⚠️ Aucune donnée Syslog
+[REQ-03],Perf,"Computer in (vm-web,...), CounterName = ""% Used Space""","2 lignes (vm-web, vm-app)",✅ Succès
+[REQ-04],Perf,"Computer in (...), CounterName = ""Bytes Transmitted/sec""",0 lignes,⚠️ Pas ce compteur
+[REQ-05],NTANetAnalytics,"FlowStatus = ""Denied"", destPort_s",Erreur syntaxe,❌ Erreur colonne
+[REQ-06],AzureActivity,"ResourceGroup = rg-cloudshield-prod, OperationNameValue endswith ""/write""",0 lignes,⚠️ Aucune activité ARM
+
+
+📊 SECTION 4 : RÉSULTATS DÉTAILLÉS — PERFORMANCE MÉMOIRE,
+Computer,% Used Memory Max,% Used Memory Avg,Delta (Max-Avg),Pics observés
+vm-web,49.04%,45.75%,3.29%,Légers (variabilité normale)
+vm-app,47.54%,45.60%,1.94%,Légers (variabilité normale)
+
+💡 INTERPRÉTATION:,
+,vm-web : Mémoire stable à ~45.75% en moyenne. Max observé: 49.04%. Aucune alerte.
+,vm-app : Mémoire stable à ~45.60% en moyenne. Max observé: 47.54%. Aucune alerte.
+,vm-db : Pas de donnée collectée (pas d'agent installé ou VM arrêtée)
+,vm-jumpbox : Pas de donnée collectée
+
+
+🎯 SECTION 5 : RECOMMANDATIONS & PROCHAINES ÉTAPES,
+Action,Priorité,Description
+Installer agents sur vm-db et vm-jumpbox,HAUTE,Activer les extensions monitoring LAD/OMS pour collecte complète
+Vérifier Syslog forwarding,HAUTE,Syslog table est vide. Vérifier rsyslog ou forwarding vers Log Analytics
+Configurer NSG Flow Logs,HAUTE,NTANetAnalytics sans données. Activer sur les NSGs (rg-cloudshield-prod)
+Monitorer croissance mémoire,MOYENNE,vm-web et vm-app > 45%. Définir alertes à 75% pour proactivité
+Exécuter requêtes en heures de charge,MOYENNE,Relancer requêtes durante pic d'activité (non visible 24h après)
+Mettre en place alertes ARM,MOYENNE,AzureActivity vide. Vérifier retention et alerts sur modifs infra
+
+
+📖 SECTION 6 : GUIDE D'IMPORT DES REQUÊTES,
+ÉTAPE,ACTION,DÉTAILS
+1,Aller dans Azure Portal,"https://portal.azure.com → Rechercher ""Log Analytics"""
+2,Sélectionner workspace,law-cloudshield (rg-cloudshield-prod)
+3,Ouvrir Logs,"Menu gauche → ""Logs"""
+4,Copier requête KQL,Ouvrir KQL-CLOUDSHIELD-SIMPLIFIED.kql → Copier [REQ-01]
+5,Exécuter,Coller dans l'éditeur → Maj + Entrée ou bouton Run
+6,Exporter résultats,"Cliquer Export (haut right) → ""Excel"" ou ""CSV"""
+7,Répéter,Pour requêtes [REQ-02] à [REQ-09]
+
+⚠️ NOTES IMPORTANTES:,
+,• Ce rapport contient les VRAIS résultats de law-cloudshield au 2026-04-09 12:25
+,"• Certaines tables manquent de données (Syslog, NTANetAnalytics, AzureActivity)"
+,• Vérifier que tous les agents monitoring sont installés (LAD/OMS sur Perf)
+,• Recommandé: relancer requêtes après avoir activé tous les diagnostics
+,• Fichier KQL-CLOUDSHIELD-SIMPLIFIED.kql prêt à importer directement

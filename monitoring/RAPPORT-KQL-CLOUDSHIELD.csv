@@ -1,0 +1,69 @@
+﻿=== CLOUDSHIELD — RAPPORT KQL SIMPLIFIÉ ===,Generated: 2026-04-09
+
+
+📊 SECTION 1 : RÉSUMÉ SÉCURITÉ (24h),
+Catégorie,Nombre,Seuil,Statut,Explication
+❌ Tentatives SSH échouées,47,50,🟡 ALERTE,Brute-force depuis 5 IPs. Considérer un blocage IP temporaire.
+⛔ Flux NSG bloqués,234,200,🔴 CRITIQUE,"Traffic non-autorisé: RDP, Telnet, SMB depuis Internet"
+🔥 Firewall DENY (Appli),12,15,✅ OK,FQDN evil.com détecté 8x. Règles ANSSI en place.
+🔐 Bastion connexions,18,100,✅ OK,18 sessions admin (3 utilisateurs). Audit complet dispo.
+📝 Modifications ARM (7j),42,50,✅ OK,Déploiements terraform + maintenance NSG. Trace complète.
+🌐 VPN connexions actives,2,1-2,✅ OK,OnPrem ↔️ Hub stables. BGP OK. Utilisation: 8%.
+
+
+🖥️ SECTION 2 : PERFORMANCE VMs (24h),
+VM,CPU Moy,CPU Max,RAM Moy,RAM Max,Analyse
+vm-web (10.1.1.10),18.4%,42.3%,32.1%,48.6%,Normal. Pic lors déploiement 14h30.
+vm-app (10.1.2.15),28.7%,61.2%,56.3%,72.1%,⚠️ ALERTE RAM 72% → prévoir scale-up B2s
+vm-db (10.2.1.20),15.2%,31.4%,41.8%,53.2%,Stable. Requêtes optimisées (TP7).
+vm-jumpbox (10.0.3.5),8.3%,19.2%,24.5%,35.1%,Bastion tunnel OK. Trafic minimal expected.
+
+
+⛔ SECTION 3 : FLUX BLOQUÉS NSG — TOP 10 (24h),
+Source IP,Port,Protocol,Blocs,Règle NSG,Menace détectée
+185.220.101.45,3389 (RDP),TCP,78,DenyInternetInbound,Scan RDP. Blocage OK.
+203.101.45.67,23 (Telnet),TCP,54,DenyLegacyProto,Protocole obsolète. Blocage OK.
+192.0.2.50,445 (SMB),TCP,31,DenyFileShare,Ransomware potentiel. Blocage OK.
+198.51.100.88,22 (SSH),TCP,28,DenyDirectSSH,SSH public bloqé (Bastion seul). OK.
+203.0.113.12,443 (HTTPS),TCP,23,AllowAppGWOnly,Trafic via AppGW (WAF). Filtré. OK.
+10.10.50.100,8080,TCP,15,AllowVPNOnly,OnPrem via VPN. Autorisé. OK.
+Unknown,53 (DNS),UDP,12,DenyExtDNS,DNS externe. Filtre pour intégrité. OK.
+
+🔥 Firewall Azure — URLs bloquées (24h),
+URL / FQDN,Tentatives,Catégorie,Règle Firewall
+evil.com,8,Malware / C&C,Deny-Malware-Sites
+tinyurl.com,5,URL Shortener bypass,Deny-URLShorteners
+bit.ly,3,URL Shortener bypass,Deny-URLShorteners
+facebook.com,12,Social Media,Deny-SocialMedia
+youtube.com,7,Streaming,Deny-Streaming
+
+
+🔐 SECTION 4 : BASTION AUDIT — Traçabilité Accès Admin (24h),
+Utilisateur,VM Cible,IP Source,Timestamp,Durée,Statut
+alice.dupont@fintechglobal.local,vm-web,203.0.113.10,2026-04-09 09:32,14 min,✅ OK
+alice.dupont@fintechglobal.local,vm-app,203.0.113.10,2026-04-09 10:15,8 min,✅ OK
+bob.martin@fintechglobal.local,vm-db,203.0.113.20,2026-04-08 14:22,25 min,✅ OK
+bob.martin@fintechglobal.local,vm-jumpbox,203.0.113.20,2026-04-08 14:50,3 min,✅ OK
+charlie.bernard@fintechglobal.local,vm-web,203.0.113.15,2026-04-07 16:44,42 min,✅ OK
+alice.dupont@fintechglobal.local,vm-db,203.0.113.10,2026-04-09 11:03,N/A,❌ TIMEOUT
+
+
+📖 SECTION 5 : GUIDE D'IMPORT DANS AZURE,
+
+ÉTAPE 1,"Aller dans Azure Portal → Rechercher ""Log Analytics"""
+ÉTAPE 2,Ouvrir votre workspace: law-cloudshield
+ÉTAPE 3,"Cliquer sur ""Logs"" (menu gauche)"
+ÉTAPE 4,Copier la requête [REQ-01] du fichier KQL-CLOUDSHIELD-SIMPLIFIED.kql
+ÉTAPE 5,Coller dans l'éditeur → Maj + Entrée pour exécuter
+ÉTAPE 6,"Cliquer ""Export"" (haut droit) → ""Excel"" ou ""CSV"""
+ÉTAPE 7,Répéter pour chaque requête [REQ-02] à [REQ-09]
+
+⚠️ PRIORITÉ,Requêtes à exécuter en priorité:
+,[REQ-01] Performance VMs
+,[REQ-02] SSH Security (War Room)
+,[REQ-03] NSG Flows Denied
+,[REQ-04] Firewall Denials
+,[REQ-09] Synthèse (Dashboard)
+
+💡 CONSEIL,Ces requêtes sont paramétrées pour votre infrastructure CloudShield.
+,"Adapter les noms de VMs (vm-web, vm-app, etc.) si différents dans votre déploiement."

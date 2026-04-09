@@ -38,6 +38,11 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
 
   network_interface_ids = [azurerm_network_interface.nic_web.id]
 
+  # fix(ama): Managed Identity requise pour Azure Monitor Agent (AMA)
+  identity {
+    type = "SystemAssigned"
+  }
+
   admin_ssh_key {
     username   = var.vm_admin_username
     public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
@@ -125,6 +130,11 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
   admin_username      = var.vm_admin_username
 
   network_interface_ids = [azurerm_network_interface.nic_app.id]
+
+  # fix(ama): Managed Identity requise pour Azure Monitor Agent (AMA)
+  identity {
+    type = "SystemAssigned"
+  }
 
   admin_ssh_key {
     username   = var.vm_admin_username
@@ -214,6 +224,11 @@ resource "azurerm_linux_virtual_machine" "vm_db" {
 
   network_interface_ids = [azurerm_network_interface.nic_db.id]
 
+  # fix(ama): Managed Identity requise pour Azure Monitor Agent (AMA)
+  identity {
+    type = "SystemAssigned"
+  }
+
   admin_ssh_key {
     username   = var.vm_admin_username
     public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
@@ -280,6 +295,11 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
   admin_username      = var.vm_admin_username
 
   network_interface_ids = [azurerm_network_interface.nic_onprem.id]
+
+  # fix(ama): Managed Identity requise pour Azure Monitor Agent (AMA)
+  identity {
+    type = "SystemAssigned"
+  }
 
   admin_ssh_key {
     username   = var.vm_admin_username

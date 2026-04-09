@@ -21,6 +21,7 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 | **Méthode de preuve**   | **Capture portail** : Azure Portal → Resource Group → Virtual Networks → afficher les 4 VNets avec leurs address space distincts                                                                 |
 | **Commande Terraform**  | `terraform output vnets`                                                                                                                                                                         |
 | **Résultat attendu**    | 4 VNets isolés, communication inter-spokes uniquement via Hub Firewall                                                                                                                           |
+
 ---
 
 ![R19 — 4 VNets segmentés dans Azure Portal](screenshots/PREUVE-01-segmentation-4vnets.png)
@@ -35,7 +36,7 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 | **Règle ANSSI**         | R22 — Interdire la connexion directe à Internet des postes ou serveurs sensibles                                                                            |
 | **Configuration Azure** | UDR (Route Table) `rt-spoke-prod-to-fw` avec route 0.0.0.0/0 → Azure Firewall. Associée à snet-prod-web et snet-prod-app. BGP route propagation désactivée. |
 | **Méthode de preuve**   | **Test de connectivité** depuis vm-web (via Bastion) + **Capture portail** : Effective Routes sur la NIC de vm-web                                          |
-| **Résultat attendu** | `curl google.com` échoue (timeout). Effective Routes montre 0.0.0.0/0 → VirtualAppliance (IP Firewall) |
+| **Résultat attendu**    | `curl google.com` échoue (timeout). Effective Routes montre 0.0.0.0/0 → VirtualAppliance (IP Firewall)                                                      |
 
 ---
 
@@ -75,12 +76,12 @@ curl -s --connect-timeout 5 http://google.com
 
 ## Preuve 3 — Règle ANSSI R14 : Authentification forte
 
-| Élément | Détail |
-| ------- | ------ |
-| **Règle ANSSI** | R14 — Mettre en place des mécanismes d'authentification forte |
+| Élément                 | Détail                                                                                                                                    |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R14 — Mettre en place des mécanismes d'authentification forte                                                                             |
 | **Configuration Azure** | VMs déployées avec clés SSH Ed25519 uniquement (pas de mot de passe). Aucune IP publique sur les VMs. Accès uniquement via Azure Bastion. |
-| **Méthode de preuve** | **Capture portail** : Vue NIC de vm-db → montrer "Public IP address: None". Vue VM → montrer "Password authentication: Disabled" |
-| **Résultat attendu** | Zéro IP publique, authentification par clé SSH uniquement |
+| **Méthode de preuve**   | **Capture portail** : Vue NIC de vm-db → montrer "Public IP address: None". Vue VM → montrer "Password authentication: Disabled"          |
+| **Résultat attendu**    | Zéro IP publique, authentification par clé SSH uniquement                                                                                 |
 
 ### Test à exécuter
 
@@ -100,12 +101,12 @@ ssh azureuser@<vm-db-private-ip>
 
 ## Preuve 4 — Règle ANSSI R25 : Chiffrement des interconnexions
 
-| Élément | Détail |
-| ------- | ------ |
-| **Règle ANSSI** | R25 — Sécuriser les interconnexions réseau dédiées avec des tiers |
+| Élément                 | Détail                                                                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R25 — Sécuriser les interconnexions réseau dédiées avec des tiers                                                                      |
 | **Configuration Azure** | VPN IPsec IKEv2 entre Hub (BGP AS 65001) et OnPrem (BGP AS 65002). Pre-Shared Key 35+ caractères. Connexion Vnet2Vnet avec BGP activé. |
-| **Méthode de preuve** | **Capture portail** : VPN Gateway → Connections → Status = "Connected". BGP peer status showing established sessions. |
-| **Résultat attendu** | Tunnel IPsec IKEv2 établi, routes BGP échangées |
+| **Méthode de preuve**   | **Capture portail** : VPN Gateway → Connections → Status = "Connected". BGP peer status showing established sessions.                  |
+| **Résultat attendu**    | Tunnel IPsec IKEv2 établi, routes BGP échangées                                                                                        |
 
 ### Test à exécuter
 
@@ -127,7 +128,17 @@ az network vnet-gateway list-learned-routes \
 # Résultat : route 10.10.0.0/16 apprise via BGP
 ```
 
-> 📸 *Capture à réaliser lors du déploiement complet (VPN Gateway + Bastion requis)*
+![R25 — VPN Gateway cn-vpn-hub-to-onprem : Status Connected (portail Azure)](screenshots/PREUVE-04-vpn-connected.png)
+
+![R25 — BGP Peers : 2 sessions established entre AS65001 (Hub) et AS65002 (OnPrem)](screenshots/PREUVE-04b-vpn-bgp-peers.png)
+
+> Voir aussi [`docs/screenshots/PREUVE-04-vpn-connected.txt`](screenshots/PREUVE-04-vpn-connected.txt) — sortie CLI
+> `az network vpn-connection show` → `"connectionStatus": "Connected"`, `"connectionProtocol": "IKEv2"`, `"enableBgp": true`
+>
+> CSVs BGP disponibles dans `on-premise/` :
+>
+> - `BgpLearnedRoutes_vpngw-hub-cloudshield.csv` — routes 10.10.0.0/16 apprises via BGP
+> - `BgpPeers_vpngw-hub-cloudshield.csv` — 2 sessions BGP established
 
 ---
 
@@ -137,8 +148,8 @@ az network vnet-gateway list-learned-routes \
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **Règle ANSSI**         | R36 — Activer et configurer les journaux des composants les plus importants                                                 |
 | **Configuration Azure** | Log Analytics Workspace `law-cloudshield` avec AMA sur 3 VMs, NSG Flow Logs v2, Diagnostic Settings sur Firewall et Bastion |
-| **Méthode de preuve** | **Capture portail** : Log Analytics → Logs → requête KQL montrant des données Syslog + Flow Logs |
-| **Résultat attendu** | Données Syslog, Perf et NetworkSecurityGroupFlowEvent présentes dans le workspace |
+| **Méthode de preuve**   | **Capture portail** : Log Analytics → Logs → requête KQL montrant des données Syslog + Flow Logs                            |
+| **Résultat attendu**    | Données Syslog, Perf et NetworkSecurityGroupFlowEvent présentes dans le workspace                                           |
 
 ### Tests à exécuter
 
@@ -170,12 +181,12 @@ AzureDiagnostics
 
 ## Preuve 6 — Règle ANSSI R19 (Zero Trust) : Micro-segmentation — Isolation Web↔DB
 
-| Élément         | Détail                                                         |
-| --------------- | -------------------------------------------------------------- |
-| **Règle ANSSI** | R19 — Segmentation + Zero Trust : mouvement latéral impossible |
+| Élément                 | Détail                                                                                                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R19 — Segmentation + Zero Trust : mouvement latéral impossible                                                                                                 |
 | **Configuration Azure** | NSG nsg-data-db : autoriser uniquement asg-app → asg-db (TCP/5432). Deny-all inbound (prio 4000). vm-web n'est PAS dans asg-app → ne peut pas atteindre vm-db. |
-| **Méthode de preuve** | **Test de connectivité** depuis vm-web vers vm-db (doit échouer) |
-| **Résultat attendu** | ping vm-db → timeout. SSH vm-db → connection refused. Mouvement latéral impossible. |
+| **Méthode de preuve**   | **Test de connectivité** depuis vm-web vers vm-db (doit échouer)                                                                                               |
+| **Résultat attendu**    | ping vm-db → timeout. SSH vm-db → connection refused. Mouvement latéral impossible.                                                                            |
 
 ### Tests à exécuter (démonstration soutenance)
 
@@ -213,12 +224,12 @@ nc -zv 10.2.1.4 5432
 
 ## Preuve 7 — Règle ANSSI R23 : Filtrage sortant via Firewall
 
-| Élément | Détail |
-| ------- | ------ |
-| **Règle ANSSI** | R23 — Utiliser un proxy et des passerelles de sécurité pour l'accès Internet |
+| Élément                 | Détail                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R23 — Utiliser un proxy et des passerelles de sécurité pour l'accès Internet                                                                |
 | **Configuration Azure** | Azure Firewall avec règles FQDN : seuls Ubuntu updates, Azure Monitor et PyPI autorisés. Tout autre trafic sortant bloqué (deny implicite). |
-| **Méthode de preuve** | **Test de connectivité** depuis vm-app : `apt update` fonctionne, `curl google.com` échoue |
-| **Résultat attendu** | Mises à jour OS OK, navigation libre bloquée |
+| **Méthode de preuve**   | **Test de connectivité** depuis vm-app : `apt update` fonctionne, `curl google.com` échoue                                                  |
+| **Résultat attendu**    | Mises à jour OS OK, navigation libre bloquée                                                                                                |
 
 ### Tests à exécuter
 
@@ -259,12 +270,12 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 ## Preuve 8 — Règle ANSSI R28 : Administration sécurisée (Bastion)
 
-| Élément | Détail |
-| ------- | ------ |
-| **Règle ANSSI** | R28 — Protéger les flux d'administration |
+| Élément                 | Détail                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R28 — Protéger les flux d'administration                                                                                           |
 | **Configuration Azure** | Azure Bastion dans le Hub. SSH/RDP uniquement via tunnel Bastion (portail ou CLI). Aucun port 22 ouvert sur les NSG vers Internet. |
-| **Méthode de preuve** | **Capture portail** : Session Bastion active + NSG nsg-prod-web montrant aucune règle SSH depuis Internet |
-| **Résultat attendu** | Session Bastion SSH fonctionnelle, port 22 non exposé |
+| **Méthode de preuve**   | **Capture portail** : Session Bastion active + NSG nsg-prod-web montrant aucune règle SSH depuis Internet                          |
+| **Résultat attendu**    | Session Bastion SSH fonctionnelle, port 22 non exposé                                                                              |
 
 ### Test à exécuter
 
@@ -381,6 +392,35 @@ search *
 
 ---
 
+## Preuve 11 _(Bonus)_ — WAF Application Gateway : Protection OWASP 3.2
+
+| Élément                 | Détail                                                                                                                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Règle ANSSI**         | R24 — Filtrage des flux applicatifs (WAF mode Prévention)                                                                                    |
+| **Configuration Azure** | Application Gateway v2 `appgw-waf-cloudshield` + WAF Policy `wafpol-cloudshield` OWASP 3.2, mode **Prevention**. 7 managed rule sets actifs. |
+| **Méthode de preuve**   | Injection SQLi `' OR 1=1 --` → HTTP 403 bloqué. Portail Azure : WAF Policy status = Enabled/Prevention.                                      |
+| **Résultat attendu**    | Attaque SQLi bloquée, règle OWASP SQL Injection active                                                                                       |
+
+### Test SQLi exécuté
+
+```bash
+# Résultat : HTTP/1.1 403 Forbidden — Application Gateway bloque l'injection
+curl -v "http://<appgw-pip>/?q=' OR 1=1 --"
+# > HTTP/1.1 403 Forbidden
+```
+
+> Voir [`docs/screenshots/PREUVE-waf-sqli-blocked.txt`](screenshots/PREUVE-waf-sqli-blocked.txt) — sortie CLI complète.
+
+![WAF — Application Gateway Overview : appgw-waf-cloudshield actif, Frontend IP publique](screenshots/PREUVE-11-waf-appgw-overview.png)
+
+![WAF — Policy wafpol-cloudshield : Mode Prevention, 7 Managed Rule Sets OWASP 3.2](screenshots/PREUVE-11b-waf-policy-prevention.png)
+
+![WAF — Managed Rules actives : 948 règles SQL Injection, XSS, RFI, LFI, RCE](screenshots/PREUVE-11c-waf-managed-rules.png)
+
+> CSV des règles disponible dans `on-premise/wafpol-cloudshield_ManagedRules.csv`.
+
+---
+
 ## Synthèse des 10 Preuves
 
 | #   | Règle ANSSI | Titre                         | Type de preuve                        | Criticité |
@@ -388,7 +428,7 @@ search *
 | 1   | R19         | Segmentation réseau           | Capture portail (4 VNets)             | 🔴        |
 | 2   | R22         | Pas d'accès Internet direct   | Test `curl` + Effective Routes        | 🔴        |
 | 3   | R14         | Authentification forte        | Capture VM (no public IP, SSH key)    | 🔴        |
-| 4   | R25         | Chiffrement IPsec IKEv2 + BGP | Capture VPN Connection Status         | 🔴        |
+| 4   | R25         | Chiffrement IPsec IKEv2 + BGP | Capture VPN Connection Status ✅      | 🔴        |
 | 5   | R36         | Journalisation centralisée    | Requête KQL (Syslog, Flow Logs)       | 🔴        |
 | 6   | R19 (ZT)    | Micro-segmentation Web→DB     | Test ping/SSH (isolation prouvée)     | 🔴        |
 | 7   | R23         | Filtrage sortant Firewall     | Test `curl google.com` échoue         | 🔴        |

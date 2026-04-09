@@ -22,4 +22,3 @@ XSS: HTTP 403
 === CONFORMITÉ ANSSI ===
 R17 - Protection applicative  : ✅ WAF OWASP 3.2 mode Prevention actif
 R22 - Filtrage SQLi/XSS       : ✅ 403 sur injections SQL et XSS
-R25 - Chiffrement réseau      : ⏳ VPN Gateways en cours de provisionnement
