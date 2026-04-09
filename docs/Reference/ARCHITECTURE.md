@@ -7,7 +7,6 @@
 
 ## 1. Schémas
 
-
 ![Schéma Azure Cloud Shield](../assets/diagrams/cloudshield-azure-icons.png)
 
 - PNG: [assets/diagrams/cloudshield-azure-icons.png](../assets/diagrams/cloudshield-azure-icons.png)

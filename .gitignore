@@ -27,6 +27,12 @@ terraform.rc
 # ── Infracost ──────────────────────────────────────────────────────
 .infracost/
 
+# Fichiers inframap générés automatiquement (dot bruts)
+inframap*.dot
+docs/infracost/inframap.dot
+docs/assets/diagrams/inframap-hcl.dot
+docs/inframap.dot
+
 # Rapports JSON bruts (trop verbeux pour Git, générés localement)
 security/infracost-current.json
 security/tfsec-report.json

@@ -78,10 +78,10 @@ Internet
 
 | #   | Livrable                                | Fichier                                                                |
 | --- | --------------------------------------- | ---------------------------------------------------------------------- |
-| 1   | Matrice d'Audit ANSSI (5 pratiques A→E) | [docs/LIVRABLE-1-MATRICE-AUDIT.md](docs/LIVRABLE-1-MATRICE-AUDIT.md)   |
-| 2   | DAT — Document d'Architecture Technique | [docs/LIVRABLE-2-DAT.md](docs/LIVRABLE-2-DAT.md)                       |
-| 3   | Infrastructure as Code Terraform        | [terraform/](terraform/)                                               |
-| 4   | Cahier de Recette — 10 preuves ANSSI    | [docs/LIVRABLE-4-CAHIER-RECETTE.md](docs/LIVRABLE-4-CAHIER-RECETTE.md) |
+| 1   | Matrice d'Audit ANSSI (5 pratiques A→E) | [docs/Livrables/LIVRABLE-1-MATRICE-AUDIT.md](docs/Livrables/LIVRABLE-1-MATRICE-AUDIT.md) |
+| 2   | DAT — Document d'Architecture Technique | [docs/Livrables/LIVRABLE-2-DAT.md](docs/Livrables/LIVRABLE-2-DAT.md)                     |
+| 3   | Infrastructure as Code Terraform        | [terraform/](terraform/)                                                                 |
+| 4   | Cahier de Recette — 10 preuves ANSSI    | [docs/Livrables/LIVRABLE-4-CAHIER-RECETTE.md](docs/Livrables/LIVRABLE-4-CAHIER-RECETTE.md) |
 
 ---
 
