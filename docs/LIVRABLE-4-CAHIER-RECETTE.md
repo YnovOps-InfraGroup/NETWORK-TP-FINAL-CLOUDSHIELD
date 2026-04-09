@@ -57,7 +57,15 @@ curl -s --connect-timeout 5 http://google.com
 # NIC vm-web → Effective Routes → 0.0.0.0/0 → VirtualAppliance → 10.0.1.4
 ```
 
-> 📸 *Capture à réaliser lors du déploiement complet (Azure Bastion actif requis)*
+**Preuve terminale (az vm run-command) :**
+
+> Voir [`screenshots/PREUVE-02a-curl-timeout.txt`](screenshots/PREUVE-02a-curl-timeout.txt) — `curl http://google.com` → HTTP 470 Deny, firewall bloque la sortie Internet.
+
+**Capture portail — Effective Routes :**
+
+![R22 — Effective Routes 0.0.0.0/0 → VirtualAppliance 10.0.1.4](screenshots/PREUVE-02b-effective-routes.png)
+
+> Voir aussi [`screenshots/PREUVE-02b-effective-routes.txt`](screenshots/PREUVE-02b-effective-routes.txt) — sortie CLI `az network nic show-effective-route-table`.
 
 ---
 
@@ -231,7 +239,9 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 ```
 
-> 📸 *Capture à réaliser lors du déploiement complet (Azure Firewall actif requis)*
+**Preuve terminale (az vm run-command) :**
+
+> Voir [`screenshots/PREUVE-07-firewall-filtering.txt`](screenshots/PREUVE-07-firewall-filtering.txt) — `curl http://google.com` et `curl http://evil.com` → HTTP 470 Deny, filtrage FQDN Firewall confirmé.
 
 ---
 
@@ -264,7 +274,13 @@ whoami
 # Bastion → Activity Logs → session SSH auditable
 ```
 
-> 📸 *Capture à réaliser lors du déploiement complet (Azure Bastion actif requis)*
+**Capture portail — Session Bastion SSH active :**
+
+![R28 — Azure Bastion session SSH vers vm-web via kv-core-security](screenshots/PREUVE-08a-bastion-session.png)
+
+**Capture portail — NSG sans SSH depuis Internet :**
+
+![R28 — nsg-prod-web : Deny-All-Inbound prio 4000, aucun port 22 depuis Internet](screenshots/PREUVE-08b-nsg-no-ssh-internet.png)
 
 ---
 
