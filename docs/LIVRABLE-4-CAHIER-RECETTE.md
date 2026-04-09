@@ -367,6 +367,8 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # → vérifier réception email à secops@fintechglobal.local
 ```
 
+![Monitor Alerts-Alertes Rules](screenshots/PREUVE-10-AlerteRules.png)
+
 ![R37 — Alert Rules actives dans Azure Monitor](screenshots/PREUVE-10-R37-alertes-rules.png)
 
 ![R37 — Notification email reçue par le groupe AG-SecOps](screenshots/PREUVE-10-R37-alertes-mail.png)
