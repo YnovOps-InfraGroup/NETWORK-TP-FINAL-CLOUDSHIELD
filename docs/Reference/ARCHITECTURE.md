@@ -8,11 +8,11 @@
 ## 1. Schémas
 
 
-![Schéma Azure Cloud Shield](assets/diagrams/cloudshield-azure-icons.png)
+![Schéma Azure Cloud Shield](../assets/diagrams/cloudshield-azure-icons.png)
 
-- PNG: [assets/diagrams/cloudshield-azure-icons.png](assets/diagrams/cloudshield-azure-icons.png)
-- SVG: [assets/diagrams/cloudshield-azure-icons.svg](assets/diagrams/cloudshield-azure-icons.svg)
-- Source DOT: [assets/diagrams/cloudshield-azure-icons.dot](assets/diagrams/cloudshield-azure-icons.dot)
+- PNG: [assets/diagrams/cloudshield-azure-icons.png](../assets/diagrams/cloudshield-azure-icons.png)
+- SVG: [assets/diagrams/cloudshield-azure-icons.svg](../assets/diagrams/cloudshield-azure-icons.svg)
+- Source DOT: [assets/diagrams/cloudshield-azure-icons.dot](../assets/diagrams/cloudshield-azure-icons.dot)
 
 ---
 
