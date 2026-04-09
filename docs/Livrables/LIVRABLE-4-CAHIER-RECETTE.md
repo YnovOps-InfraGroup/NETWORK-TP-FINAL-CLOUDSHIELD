@@ -81,7 +81,7 @@ curl -s --connect-timeout 5 http://google.com
 | **Méthode de preuve**   | **Capture portail** : Vue NIC de vm-db → montrer "Public IP address: None". Vue VM → montrer "Password authentication: Disabled"          |
 | **Résultat attendu**    | Zéro IP publique, authentification par clé SSH uniquement                                                                                 |
 
-### Test à exécuter
+### Tests exécuté
 
 ```bash
 
@@ -103,7 +103,7 @@ ssh azureuser@10.2.1.4
 | **Méthode de preuve**   | **Capture portail** : VPN Gateway → Connections → Status = "Connected". BGP peer status showing established sessions.                  |
 | **Résultat attendu**    | Tunnel IPsec IKEv2 établi, routes BGP échangées                                                                                        |
 
-### Test à exécuter
+### Tests exécuté
 
 ```bash
 # Azure CLI :
@@ -277,7 +277,7 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 | **Méthode de preuve**   | **Capture portail** : Session Bastion active + NSG nsg-prod-web montrant aucune règle SSH depuis Internet                          |
 | **Résultat attendu**    | Session Bastion SSH fonctionnelle, port 22 non exposé                                                                              |
 
-### Test à exécuter
+### Tests exécuté
 
 ```bash
 # Connexion Bastion CLI (preuve que SSH fonctionne via Bastion)
@@ -366,6 +366,7 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # Modifier manuellement une règle NSG → l'alerte ala-nsg-rule-change se déclenche
 # → vérifier réception email à secops@fintechglobal.local
 ```
+
 
 ![Monitor Alerts-Alertes Rules](../screenshots/PREUVE-10-AlerteRules.png)
 
