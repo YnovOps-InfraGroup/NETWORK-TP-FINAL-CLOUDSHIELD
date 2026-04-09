@@ -77,6 +77,7 @@ resource "azurerm_network_security_group" "nsg_web" {
   # fix(nsg): Bastion → VM SSH (port 22) — root cause #2
   # Sans cette règle, le tunnel TCP Bastion s'ouvre mais SSH timeout (banner exchange)
   # ANSSI R28 : seul Bastion peut joindre les VMs en SSH — pas depuis Internet
+  # ⚠ Bastion Standard force toujours le port 22 (pas de redirection possible)
   security_rule {
     name                       = "Allow-SSH-from-Bastion"
     priority                   = 200
@@ -84,7 +85,7 @@ resource "azurerm_network_security_group" "nsg_web" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "2221"
+    destination_port_range     = "22"
     source_address_prefix      = var.subnet_hub_bastion
     destination_address_prefix = "*"
   }

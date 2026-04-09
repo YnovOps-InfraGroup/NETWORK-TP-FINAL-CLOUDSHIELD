@@ -62,6 +62,9 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
   }
 
   # Cloud-init : Flask application web
+  # ⚠️ ATTENTION : IPs 10.1.2.4, 10.2.1.4 sont hardcodées dans le Python code
+  # Si Azure assigne des IPs dynamiques différentes → connexions inter-tiers échoueront
+  # SOLUTION PRODUCTION : Passer via Terraform variables ou Azure Private DNS
   custom_data = base64encode(<<-CLOUDINIT
     #cloud-config
     package_update: true
@@ -78,6 +81,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
         import os, socket
 
         app = Flask(__name__)
+        # ⚠️ IP Hardcodée — voir commentaire ci-dessus
         APP_HOST = os.environ.get("APP_HOST", "10.1.2.4")
 
         @app.route("/")
@@ -170,8 +174,7 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
         from flask import Flask, jsonify
         import os, socket
 
-        app = Flask(__name__)
-        DB_HOST = os.environ.get("DB_HOST", "10.2.1.4")
+        app = Flask(__name__)        # ⚠️ IP Hardcodée — voir commentaire ci-dessus        DB_HOST = os.environ.get("DB_HOST", "10.2.1.4")
 
         @app.route("/api/health")
         def health():

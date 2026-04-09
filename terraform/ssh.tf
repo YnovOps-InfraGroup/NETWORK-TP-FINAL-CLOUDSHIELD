@@ -8,10 +8,9 @@
 #   tls_private_key.public_key_openssh → admin_ssh_key des VMs
 # ============================================================
 
-# ── Génération de la paire de clés SSH (RSA 4096) ────────────────────────────
+# ── Génération de la paire de clés SSH (Ed25519) — ANSSI R14 ────────────────────────────
 resource "tls_private_key" "vm_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+  algorithm = "ED25519"
 }
 
 # ── Référence au Key Vault existant ─────────────────────────────────────────
