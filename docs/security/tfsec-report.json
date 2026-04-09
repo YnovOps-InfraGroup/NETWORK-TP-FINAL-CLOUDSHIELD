@@ -1,0 +1,75 @@
+{
+	"results": [
+		{
+			"rule_id": "AVD-AZU-0026",
+			"long_id": "azure-database-secure-tls-policy",
+			"rule_description": "Databases should have the minimum TLS set for connections",
+			"rule_provider": "azure",
+			"rule_service": "database",
+			"impact": "Outdated TLS policies increase exposure to known issues",
+			"resolution": "Use the most modern TLS policies available",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.14/checks/azure/database/secure-tls-policy/",
+				"https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_server#minimum_tls_version",
+				"https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mysql_server#ssl_minimal_tls_version_enforced",
+				"https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_server#ssl_minimal_tls_version_enforced"
+			],
+			"description": "Database server does not require a secure TLS version.",
+			"severity": "MEDIUM",
+			"warning": false,
+			"status": 0,
+			"resource": "azurerm_mssql_server.sql[0]",
+			"location": {
+				"filename": "/home/gymy/YNOV/NETWORK-TP-FINAL-CLOUDSHIELD/terraform/paas.tf",
+				"start_line": 39,
+				"end_line": 53
+			}
+		},
+		{
+			"rule_id": "AVD-AZU-0049",
+			"long_id": "azure-network-retention-policy-set",
+			"rule_description": "Retention policy for flow logs should be enabled and set to greater than 90 days",
+			"rule_provider": "azure",
+			"rule_service": "network",
+			"impact": "Not enabling retention or having short expiry on flow logs could lead to compromise being undetected limiting time for analysis",
+			"resolution": "Ensure flow log retention is turned on with an expiry of \u003e90 days",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.14/checks/azure/network/retention-policy-set/",
+				"https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_watcher_flow_log#retention_policy"
+			],
+			"description": "Flow log has a log retention policy of less than 90 days.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "azurerm_network_watcher_flow_log.flow_vnet_hub[0]",
+			"location": {
+				"filename": "/home/gymy/YNOV/NETWORK-TP-FINAL-CLOUDSHIELD/terraform/observability.tf",
+				"start_line": 88,
+				"end_line": 88
+			}
+		},
+		{
+			"rule_id": "AVD-AZU-0049",
+			"long_id": "azure-network-retention-policy-set",
+			"rule_description": "Retention policy for flow logs should be enabled and set to greater than 90 days",
+			"rule_provider": "azure",
+			"rule_service": "network",
+			"impact": "Not enabling retention or having short expiry on flow logs could lead to compromise being undetected limiting time for analysis",
+			"resolution": "Ensure flow log retention is turned on with an expiry of \u003e90 days",
+			"links": [
+				"https://aquasecurity.github.io/tfsec/v1.28.14/checks/azure/network/retention-policy-set/",
+				"https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_watcher_flow_log#retention_policy"
+			],
+			"description": "Flow log has a log retention policy of less than 90 days.",
+			"severity": "LOW",
+			"warning": false,
+			"status": 0,
+			"resource": "azurerm_network_watcher_flow_log.flow_vnet_spoke_prod[0]",
+			"location": {
+				"filename": "/home/gymy/YNOV/NETWORK-TP-FINAL-CLOUDSHIELD/terraform/observability.tf",
+				"start_line": 116,
+				"end_line": 116
+			}
+		}
+	]
+}

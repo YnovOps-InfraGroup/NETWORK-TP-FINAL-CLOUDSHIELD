@@ -1,0 +1,985 @@
+terraform scan results:
+
+Passed checks: 83, Failed checks: 24, Skipped checks: 0
+
+Check: CKV_AZURE_118: "Ensure that Network Interfaces disable IP forwarding"
+	PASSED for resource: azurerm_network_interface.nic_web
+	File: /compute.tf:12-24
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-disable-ip-forwarding
+Check: CKV_AZURE_92: "Ensure that Virtual Machines use managed disks"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-that-virtual-machines-use-managed-disks
+Check: CKV_AZURE_178: "Ensure linux VM enables SSH with keys for secure communication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-178
+Check: CKV_AZURE_149: "Ensure that Virtual machine does not enable password authentication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-azure-virtual-machine-does-not-enable-password-authentication
+Check: CKV_AZURE_179: "Ensure VM agent is installed"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-179
+Check: CKV_AZURE_1: "Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-1
+Check: CKV_AZURE_118: "Ensure that Network Interfaces disable IP forwarding"
+	PASSED for resource: azurerm_network_interface.nic_app
+	File: /compute.tf:101-113
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-disable-ip-forwarding
+Check: CKV_AZURE_92: "Ensure that Virtual Machines use managed disks"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-that-virtual-machines-use-managed-disks
+Check: CKV_AZURE_178: "Ensure linux VM enables SSH with keys for secure communication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-178
+Check: CKV_AZURE_149: "Ensure that Virtual machine does not enable password authentication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-azure-virtual-machine-does-not-enable-password-authentication
+Check: CKV_AZURE_179: "Ensure VM agent is installed"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-179
+Check: CKV_AZURE_1: "Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-1
+Check: CKV_AZURE_118: "Ensure that Network Interfaces disable IP forwarding"
+	PASSED for resource: azurerm_network_interface.nic_db
+	File: /compute.tf:189-201
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-disable-ip-forwarding
+Check: CKV_AZURE_92: "Ensure that Virtual Machines use managed disks"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-that-virtual-machines-use-managed-disks
+Check: CKV_AZURE_178: "Ensure linux VM enables SSH with keys for secure communication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-178
+Check: CKV_AZURE_149: "Ensure that Virtual machine does not enable password authentication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-azure-virtual-machine-does-not-enable-password-authentication
+Check: CKV_AZURE_179: "Ensure VM agent is installed"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-179
+Check: CKV_AZURE_1: "Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-1
+Check: CKV_AZURE_118: "Ensure that Network Interfaces disable IP forwarding"
+	PASSED for resource: azurerm_network_interface.nic_onprem
+	File: /compute.tf:261-273
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-disable-ip-forwarding
+Check: CKV_AZURE_92: "Ensure that Virtual Machines use managed disks"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-that-virtual-machines-use-managed-disks
+Check: CKV_AZURE_178: "Ensure linux VM enables SSH with keys for secure communication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-178
+Check: CKV_AZURE_149: "Ensure that Virtual machine does not enable password authentication"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-azure-virtual-machine-does-not-enable-password-authentication
+Check: CKV_AZURE_179: "Ensure VM agent is installed"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-179
+Check: CKV_AZURE_1: "Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)"
+	PASSED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-1
+Check: CKV_AZURE_182: "Ensure that VNET has at least 2 connected DNS Endpoints"
+	PASSED for resource: azurerm_virtual_network.hub
+	File: /network.tf:12-18
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-182
+Check: CKV_AZURE_183: "Ensure that VNET uses local DNS addresses"
+	PASSED for resource: azurerm_virtual_network.hub
+	File: /network.tf:12-18
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-183
+Check: CKV_AZURE_182: "Ensure that VNET has at least 2 connected DNS Endpoints"
+	PASSED for resource: azurerm_virtual_network.spoke_prod
+	File: /network.tf:21-27
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-182
+Check: CKV_AZURE_183: "Ensure that VNET uses local DNS addresses"
+	PASSED for resource: azurerm_virtual_network.spoke_prod
+	File: /network.tf:21-27
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-183
+Check: CKV_AZURE_182: "Ensure that VNET has at least 2 connected DNS Endpoints"
+	PASSED for resource: azurerm_virtual_network.spoke_data
+	File: /network.tf:30-36
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-182
+Check: CKV_AZURE_183: "Ensure that VNET uses local DNS addresses"
+	PASSED for resource: azurerm_virtual_network.spoke_data
+	File: /network.tf:30-36
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-183
+Check: CKV_AZURE_182: "Ensure that VNET has at least 2 connected DNS Endpoints"
+	PASSED for resource: azurerm_virtual_network.onprem
+	File: /network.tf:39-45
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-182
+Check: CKV_AZURE_183: "Ensure that VNET uses local DNS addresses"
+	PASSED for resource: azurerm_virtual_network.onprem
+	File: /network.tf:39-45
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/azr-networking-183
+Check: CKV_AZURE_44: "Ensure Storage Account is using the latest version of TLS encryption"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-storage-policies/bc-azr-storage-2
+Check: CKV_AZURE_244: "Avoid the use of local users for Azure Storage unless necessary"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-244
+Check: CKV_AZURE_3: "Ensure that 'enable_https_traffic_only' is enabled"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-3
+Check: CKV_AZURE_36: "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/enable-trusted-microsoft-services-for-storage-account-access
+Check: CKV_AZURE_44: "Ensure Storage Account is using the latest version of TLS encryption"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-storage-policies/bc-azr-storage-2
+Check: CKV_AZURE_244: "Avoid the use of local users for Azure Storage unless necessary"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-244
+Check: CKV_AZURE_3: "Ensure that 'enable_https_traffic_only' is enabled"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-3
+Check: CKV_AZURE_36: "Ensure 'Trusted Microsoft Services' is enabled for Storage Account access"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/enable-trusted-microsoft-services-for-storage-account-access
+Check: CKV_AZURE_113: "Ensure that SQL server disables public network access"
+	PASSED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-sql-server-disables-public-network-access
+Check: CKV_AZURE_9: "Ensure that RDP access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_web
+	File: /security.tf:46-91
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-2
+Check: CKV_AZURE_77: "Ensure that UDP Services are restricted from the Internet "
+	PASSED for resource: azurerm_network_security_group.nsg_web
+	File: /security.tf:46-91
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-udp-services-are-restricted-from-the-internet
+Check: CKV_AZURE_160: "Ensure that HTTP (port 80) access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_web
+	File: /security.tf:46-91
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-azure-http-port-80-access-from-the-internet-is-restricted
+Check: CKV_AZURE_10: "Ensure that SSH access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_web
+	File: /security.tf:46-91
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-3
+Check: CKV_AZURE_9: "Ensure that RDP access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_app
+	File: /security.tf:104-136
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-2
+Check: CKV_AZURE_77: "Ensure that UDP Services are restricted from the Internet "
+	PASSED for resource: azurerm_network_security_group.nsg_app
+	File: /security.tf:104-136
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-udp-services-are-restricted-from-the-internet
+Check: CKV_AZURE_160: "Ensure that HTTP (port 80) access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_app
+	File: /security.tf:104-136
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-azure-http-port-80-access-from-the-internet-is-restricted
+Check: CKV_AZURE_10: "Ensure that SSH access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_app
+	File: /security.tf:104-136
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-3
+Check: CKV_AZURE_9: "Ensure that RDP access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_db
+	File: /security.tf:149-195
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-2
+Check: CKV_AZURE_77: "Ensure that UDP Services are restricted from the Internet "
+	PASSED for resource: azurerm_network_security_group.nsg_db
+	File: /security.tf:149-195
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-udp-services-are-restricted-from-the-internet
+Check: CKV_AZURE_160: "Ensure that HTTP (port 80) access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_db
+	File: /security.tf:149-195
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-azure-http-port-80-access-from-the-internet-is-restricted
+Check: CKV_AZURE_10: "Ensure that SSH access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_db
+	File: /security.tf:149-195
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-3
+Check: CKV_AZURE_9: "Ensure that RDP access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_waf
+	File: /security.tf:207-252
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-2
+Check: CKV_AZURE_77: "Ensure that UDP Services are restricted from the Internet "
+	PASSED for resource: azurerm_network_security_group.nsg_waf
+	File: /security.tf:207-252
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-udp-services-are-restricted-from-the-internet
+Check: CKV_AZURE_10: "Ensure that SSH access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_waf
+	File: /security.tf:207-252
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-3
+Check: CKV_AZURE_9: "Ensure that RDP access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_pe
+	File: /security.tf:264-307
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-2
+Check: CKV_AZURE_77: "Ensure that UDP Services are restricted from the Internet "
+	PASSED for resource: azurerm_network_security_group.nsg_pe
+	File: /security.tf:264-307
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-udp-services-are-restricted-from-the-internet
+Check: CKV_AZURE_160: "Ensure that HTTP (port 80) access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_pe
+	File: /security.tf:264-307
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-azure-http-port-80-access-from-the-internet-is-restricted
+Check: CKV_AZURE_10: "Ensure that SSH access is restricted from the internet"
+	PASSED for resource: azurerm_network_security_group.nsg_pe
+	File: /security.tf:264-307
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azr-networking-3
+Check: CKV_AZURE_119: "Ensure that Network Interfaces don't use public IPs"
+	PASSED for resource: azurerm_network_interface.nic_web
+	File: /compute.tf:12-24
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-dont-use-public-ips
+Check: CKV_AZURE_119: "Ensure that Network Interfaces don't use public IPs"
+	PASSED for resource: azurerm_network_interface.nic_app
+	File: /compute.tf:101-113
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-dont-use-public-ips
+Check: CKV_AZURE_119: "Ensure that Network Interfaces don't use public IPs"
+	PASSED for resource: azurerm_network_interface.nic_db
+	File: /compute.tf:189-201
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-dont-use-public-ips
+Check: CKV_AZURE_119: "Ensure that Network Interfaces don't use public IPs"
+	PASSED for resource: azurerm_network_interface.nic_onprem
+	File: /compute.tf:261-273
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-network-interfaces-dont-use-public-ips
+Check: CKV2_AZURE_47: "Ensure storage account is configured without blob anonymous access"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-47
+Check: CKV2_AZURE_47: "Ensure storage account is configured without blob anonymous access"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-47
+Check: CKV2_AZURE_38: "Ensure soft-delete is enabled on Azure storage account"
+	PASSED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-38
+Check: CKV2_AZURE_38: "Ensure soft-delete is enabled on Azure storage account"
+	PASSED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-38
+Check: CKV2_AZURE_25: "Ensure Azure SQL database Transparent Data Encryption (TDE) is enabled"
+	PASSED for resource: azurerm_mssql_database.fintechdb[0]
+	File: /paas.tf:67-75
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-25
+Check: CKV_AZURE_120: "Ensure that Application Gateway enables WAF"
+	PASSED for resource: azurerm_application_gateway.waf
+	File: /waf.tf:63-144
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-that-application-gateway-enables-waf
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.hub_gateway
+	File: /network.tf:68-73
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.onprem_gateway
+	File: /network.tf:128-133
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.hub_firewall
+	File: /network.tf:52-57
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.hub_bastion
+	File: /network.tf:60-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.prod_web
+	File: /network.tf:80-85
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.prod_app
+	File: /network.tf:88-93
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.data_db
+	File: /network.tf:108-113
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.prod_waf
+	File: /network.tf:96-101
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	PASSED for resource: azurerm_subnet.data_pe
+	File: /network.tf:116-121
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+Check: CKV2_AZURE_39: "Ensure Azure VM is not configured with public IP and serial console access"
+	PASSED for resource: azurerm_network_interface.nic_web
+	File: /compute.tf:12-24
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azure-2-39
+Check: CKV2_AZURE_39: "Ensure Azure VM is not configured with public IP and serial console access"
+	PASSED for resource: azurerm_network_interface.nic_app
+	File: /compute.tf:101-113
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azure-2-39
+Check: CKV2_AZURE_39: "Ensure Azure VM is not configured with public IP and serial console access"
+	PASSED for resource: azurerm_network_interface.nic_db
+	File: /compute.tf:189-201
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azure-2-39
+Check: CKV2_AZURE_39: "Ensure Azure VM is not configured with public IP and serial console access"
+	PASSED for resource: azurerm_network_interface.nic_onprem
+	File: /compute.tf:261-273
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/bc-azure-2-39
+Check: CKV_AZURE_50: "Ensure Virtual Machine Extensions are not Installed"
+	FAILED for resource: azurerm_linux_virtual_machine.vm_web
+	File: /compute.tf:32-94
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azr-general-14
+
+		Code lines for this resource are too many. Please use IDE of your choice to review the file.
+Check: CKV_AZURE_50: "Ensure Virtual Machine Extensions are not Installed"
+	FAILED for resource: azurerm_linux_virtual_machine.vm_app
+	File: /compute.tf:120-182
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azr-general-14
+
+		Code lines for this resource are too many. Please use IDE of your choice to review the file.
+Check: CKV_AZURE_50: "Ensure Virtual Machine Extensions are not Installed"
+	FAILED for resource: azurerm_linux_virtual_machine.vm_db
+	File: /compute.tf:208-254
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azr-general-14
+
+		208 | resource "azurerm_linux_virtual_machine" "vm_db" {
+		209 |   name                = "vm-db"
+		210 |   resource_group_name = azurerm_resource_group.main.name
+		211 |   location            = azurerm_resource_group.main.location
+		212 |   size                = var.vm_size
+		213 |   admin_username      = var.vm_admin_username
+		214 |
+		215 |   network_interface_ids = [azurerm_network_interface.nic_db.id]
+		216 |
+		217 |   admin_ssh_key {
+		218 |     username   = var.vm_admin_username
+		219 |     public_key = var.vm_ssh_public_key
+		220 |   }
+		221 |
+		222 |   os_disk {
+		223 |     name                 = "osdisk-vm-db"
+		224 |     caching              = "ReadWrite"
+		225 |     storage_account_type = "Standard_LRS"
+		226 |   }
+		227 |
+		228 |   source_image_reference {
+		229 |     publisher = "Canonical"
+		230 |     offer     = "ubuntu-24_04-lts"
+		231 |     sku       = "server"
+		232 |     version   = "latest"
+		233 |   }
+		234 |
+		235 |   # Cloud-init : PostgreSQL
+		236 |   custom_data = base64encode(<<-CLOUDINIT
+		237 |     #cloud-config
+		238 |     package_update: true
+		239 |     packages:
+		240 |       - postgresql
+		241 |       - postgresql-contrib
+		242 |     runcmd:
+		243 |       - systemctl enable postgresql
+		244 |       - systemctl start postgresql
+		245 |       - sudo -u postgres psql -c "CREATE USER appuser WITH PASSWORD 'ChangeMe123!';"
+		246 |       - sudo -u postgres psql -c "CREATE DATABASE fintechdb OWNER appuser;"
+		247 |       - echo "host all appuser 10.1.2.0/24 md5" >> /etc/postgresql/*/main/pg_hba.conf
+		248 |       - sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/*/main/postgresql.conf
+		249 |       - systemctl restart postgresql
+		250 |   CLOUDINIT
+		251 |   )
+		252 |
+		253 |   tags = var.tags
+		254 | }
+
+Check: CKV_AZURE_50: "Ensure Virtual Machine Extensions are not Installed"
+	FAILED for resource: azurerm_linux_virtual_machine.vm_onprem
+	File: /compute.tf:275-303
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azr-general-14
+
+		275 | resource "azurerm_linux_virtual_machine" "vm_onprem" {
+		276 |   name                = "vm-onprem"
+		277 |   resource_group_name = azurerm_resource_group.main.name
+		278 |   location            = azurerm_resource_group.main.location
+		279 |   size                = var.vm_size
+		280 |   admin_username      = var.vm_admin_username
+		281 |
+		282 |   network_interface_ids = [azurerm_network_interface.nic_onprem.id]
+		283 |
+		284 |   admin_ssh_key {
+		285 |     username   = var.vm_admin_username
+		286 |     public_key = var.vm_ssh_public_key
+		287 |   }
+		288 |
+		289 |   os_disk {
+		290 |     name                 = "osdisk-vm-onprem"
+		291 |     caching              = "ReadWrite"
+		292 |     storage_account_type = "Standard_LRS"
+		293 |   }
+		294 |
+		295 |   source_image_reference {
+		296 |     publisher = "Canonical"
+		297 |     offer     = "ubuntu-24_04-lts"
+		298 |     sku       = "server"
+		299 |     version   = "latest"
+		300 |   }
+		301 |
+		302 |   tags = var.tags
+		303 | }
+
+Check: CKV_AZURE_43: "Ensure Storage Accounts adhere to the naming rules"
+	FAILED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-storage-policies/ensure-storage-accounts-adhere-to-the-naming-rules
+
+		26 | resource "azurerm_storage_account" "logs" {
+		27 |   count = var.deploy_observability ? 1 : 0
+		28 |
+		29 |   name                     = local.storage_log_name
+		30 |   resource_group_name      = azurerm_resource_group.main.name
+		31 |   location                 = azurerm_resource_group.main.location
+		32 |   account_tier             = "Standard"
+		33 |   account_replication_type = "LRS"
+		34 |
+		35 |   https_traffic_only_enabled      = true
+		36 |   allow_nested_items_to_be_public = false
+		37 |   min_tls_version                 = "TLS1_2"
+		38 |   public_network_access_enabled   = false
+		39 |
+		40 |   # Checkov CKV2_AZURE_38 : soft-delete pour protection des logs
+		41 |   blob_properties {
+		42 |     delete_retention_policy {
+		43 |       days = 30
+		44 |     }
+		45 |     container_delete_retention_policy {
+		46 |       days = 30
+		47 |     }
+		48 |   }
+		49 |
+		50 |   # Checkov CKV2_AZURE_41 : politique d'expiration SAS
+		51 |   sas_policy {
+		52 |     expiration_period = "00.02:00:00"
+		53 |   }
+		54 |
+		55 |   tags = var.tags
+		56 | }
+
+Check: CKV_AZURE_12: "Ensure that Network Security Group Flow Log retention period is 'greater than 90 days'"
+	FAILED for resource: azurerm_network_watcher_flow_log.flow_vnet_hub[0]
+	File: /observability.tf:74-100
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-logging-policies/bc-azr-logging-1
+
+		74  | resource "azurerm_network_watcher_flow_log" "flow_vnet_hub" {
+		75  |   count = var.deploy_observability ? 1 : 0
+		76  |
+		77  |   network_watcher_name = data.azurerm_network_watcher.nw.name
+		78  |   resource_group_name  = data.azurerm_network_watcher.nw.resource_group_name
+		79  |   name                 = "fl-vnet-hub"
+		80  |
+		81  |   target_resource_id = azurerm_virtual_network.hub.id
+		82  |   storage_account_id = azurerm_storage_account.logs[0].id
+		83  |   enabled            = true
+		84  |   version            = 2
+		85  |
+		86  |   retention_policy {
+		87  |     enabled = true
+		88  |     days    = 30
+		89  |   }
+		90  |
+		91  |   traffic_analytics {
+		92  |     enabled               = true
+		93  |     workspace_id          = azurerm_log_analytics_workspace.law[0].workspace_id
+		94  |     workspace_region      = azurerm_log_analytics_workspace.law[0].location
+		95  |     workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+		96  |     interval_in_minutes   = 10
+		97  |   }
+		98  |
+		99  |   tags = var.tags
+		100 | }
+
+Check: CKV_AZURE_12: "Ensure that Network Security Group Flow Log retention period is 'greater than 90 days'"
+	FAILED for resource: azurerm_network_watcher_flow_log.flow_vnet_spoke_prod[0]
+	File: /observability.tf:102-128
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-logging-policies/bc-azr-logging-1
+
+		102 | resource "azurerm_network_watcher_flow_log" "flow_vnet_spoke_prod" {
+		103 |   count = var.deploy_observability ? 1 : 0
+		104 |
+		105 |   network_watcher_name = data.azurerm_network_watcher.nw.name
+		106 |   resource_group_name  = data.azurerm_network_watcher.nw.resource_group_name
+		107 |   name                 = "fl-vnet-spoke-prod"
+		108 |
+		109 |   target_resource_id = azurerm_virtual_network.spoke_prod.id
+		110 |   storage_account_id = azurerm_storage_account.logs[0].id
+		111 |   enabled            = true
+		112 |   version            = 2
+		113 |
+		114 |   retention_policy {
+		115 |     enabled = true
+		116 |     days    = 30
+		117 |   }
+		118 |
+		119 |   traffic_analytics {
+		120 |     enabled               = true
+		121 |     workspace_id          = azurerm_log_analytics_workspace.law[0].workspace_id
+		122 |     workspace_region      = azurerm_log_analytics_workspace.law[0].location
+		123 |     workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+		124 |     interval_in_minutes   = 10
+		125 |   }
+		126 |
+		127 |   tags = var.tags
+		128 | }
+
+Check: CKV_AZURE_43: "Ensure Storage Accounts adhere to the naming rules"
+	FAILED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-storage-policies/ensure-storage-accounts-adhere-to-the-naming-rules
+
+		11 | resource "azurerm_storage_account" "backup" {
+		12 |   count = var.deploy_paas ? 1 : 0
+		13 |
+		14 |   name                     = local.storage_name
+		15 |   resource_group_name      = azurerm_resource_group.main.name
+		16 |   location                 = azurerm_resource_group.main.location
+		17 |   account_tier             = "Standard"
+		18 |   account_replication_type = "LRS"
+		19 |
+		20 |   # Sécurité : zéro accès public (ANSSI R15 / Exigence 5)
+		21 |   public_network_access_enabled   = false
+		22 |   https_traffic_only_enabled      = true
+		23 |   allow_nested_items_to_be_public = false
+		24 |   min_tls_version                 = "TLS1_2"
+		25 |
+		26 |   blob_properties {
+		27 |     delete_retention_policy {
+		28 |       days = 30
+		29 |     }
+		30 |   }
+		31 |
+		32 |   tags = var.tags
+		33 | }
+
+Check: CKV_AZURE_52: "Ensure MSSQL is using the latest version of TLS encryption"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-mssql-is-using-the-latest-version-of-tls-encryption
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV_AZURE_229: "Ensure the Azure SQL Database Namespace is zone redundant"
+	FAILED for resource: azurerm_mssql_database.fintechdb[0]
+	File: /paas.tf:67-75
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-storage-policies/bc-azure-229
+
+		67 | resource "azurerm_mssql_database" "fintechdb" {
+		68 |   count = var.deploy_paas ? 1 : 0
+		69 |
+		70 |   name      = "fintechdb"
+		71 |   server_id = azurerm_mssql_server.sql[0].id
+		72 |   sku_name  = "Basic" # FinOps : SKU le moins cher (~€4/mois)
+		73 |
+		74 |   tags = var.tags
+		75 | }
+
+Check: CKV_AZURE_224: "Ensure that the Ledger feature is enabled on database that requires cryptographic proof and nonrepudiation of data integrity"
+	FAILED for resource: azurerm_mssql_database.fintechdb[0]
+	File: /paas.tf:67-75
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-logging-policies/bc-azure-224
+
+		67 | resource "azurerm_mssql_database" "fintechdb" {
+		68 |   count = var.deploy_paas ? 1 : 0
+		69 |
+		70 |   name      = "fintechdb"
+		71 |   server_id = azurerm_mssql_server.sql[0].id
+		72 |   sku_name  = "Basic" # FinOps : SKU le moins cher (~€4/mois)
+		73 |
+		74 |   tags = var.tags
+		75 | }
+
+Check: CKV_AZURE_160: "Ensure that HTTP (port 80) access is restricted from the internet"
+	FAILED for resource: azurerm_network_security_group.nsg_waf
+	File: /security.tf:207-252
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-networking-policies/ensure-azure-http-port-80-access-from-the-internet-is-restricted
+
+		207 | resource "azurerm_network_security_group" "nsg_waf" {
+		208 |   name                = "nsg-prod-waf"
+		209 |   location            = azurerm_resource_group.main.location
+		210 |   resource_group_name = azurerm_resource_group.main.name
+		211 |
+		212 |   # Obligatoire AppGW v2 : ports de gestion 65200-65535
+		213 |   security_rule {
+		214 |     name                       = "Allow-GatewayManager"
+		215 |     priority                   = 100
+		216 |     direction                  = "Inbound"
+		217 |     access                     = "Allow"
+		218 |     protocol                   = "Tcp"
+		219 |     source_port_range          = "*"
+		220 |     destination_port_range     = "65200-65535"
+		221 |     source_address_prefix      = "GatewayManager"
+		222 |     destination_address_prefix = "*"
+		223 |   }
+		224 |
+		225 |   # Trafic HTTPS entrant depuis Internet (clients web)
+		226 |   security_rule {
+		227 |     name                       = "Allow-HTTPS-Internet"
+		228 |     priority                   = 110
+		229 |     direction                  = "Inbound"
+		230 |     access                     = "Allow"
+		231 |     protocol                   = "Tcp"
+		232 |     source_port_range          = "*"
+		233 |     destination_port_ranges    = ["80", "443"]
+		234 |     source_address_prefix      = "Internet"
+		235 |     destination_address_prefix = "*"
+		236 |   }
+		237 |
+		238 |   # Health probes Azure Load Balancer
+		239 |   security_rule {
+		240 |     name                       = "Allow-AzureLoadBalancer"
+		241 |     priority                   = 120
+		242 |     direction                  = "Inbound"
+		243 |     access                     = "Allow"
+		244 |     protocol                   = "*"
+		245 |     source_port_range          = "*"
+		246 |     destination_port_range     = "*"
+		247 |     source_address_prefix      = "AzureLoadBalancer"
+		248 |     destination_address_prefix = "*"
+		249 |   }
+		250 |
+		251 |   tags = var.tags
+		252 | }
+
+Check: CKV2_AZURE_2: "Ensure that Vulnerability Assessment (VA) is enabled on a SQL server by setting a Storage Account"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/ensure-that-vulnerability-assessment-va-is-enabled-on-a-sql-server-by-setting-a-storage-account
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV2_AZURE_33: "Ensure storage account is configured with private endpoint"
+	FAILED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-33
+
+		26 | resource "azurerm_storage_account" "logs" {
+		27 |   count = var.deploy_observability ? 1 : 0
+		28 |
+		29 |   name                     = local.storage_log_name
+		30 |   resource_group_name      = azurerm_resource_group.main.name
+		31 |   location                 = azurerm_resource_group.main.location
+		32 |   account_tier             = "Standard"
+		33 |   account_replication_type = "LRS"
+		34 |
+		35 |   https_traffic_only_enabled      = true
+		36 |   allow_nested_items_to_be_public = false
+		37 |   min_tls_version                 = "TLS1_2"
+		38 |   public_network_access_enabled   = false
+		39 |
+		40 |   # Checkov CKV2_AZURE_38 : soft-delete pour protection des logs
+		41 |   blob_properties {
+		42 |     delete_retention_policy {
+		43 |       days = 30
+		44 |     }
+		45 |     container_delete_retention_policy {
+		46 |       days = 30
+		47 |     }
+		48 |   }
+		49 |
+		50 |   # Checkov CKV2_AZURE_41 : politique d'expiration SAS
+		51 |   sas_policy {
+		52 |     expiration_period = "00.02:00:00"
+		53 |   }
+		54 |
+		55 |   tags = var.tags
+		56 | }
+
+Check: CKV2_AZURE_33: "Ensure storage account is configured with private endpoint"
+	FAILED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-33
+
+		11 | resource "azurerm_storage_account" "backup" {
+		12 |   count = var.deploy_paas ? 1 : 0
+		13 |
+		14 |   name                     = local.storage_name
+		15 |   resource_group_name      = azurerm_resource_group.main.name
+		16 |   location                 = azurerm_resource_group.main.location
+		17 |   account_tier             = "Standard"
+		18 |   account_replication_type = "LRS"
+		19 |
+		20 |   # Sécurité : zéro accès public (ANSSI R15 / Exigence 5)
+		21 |   public_network_access_enabled   = false
+		22 |   https_traffic_only_enabled      = true
+		23 |   allow_nested_items_to_be_public = false
+		24 |   min_tls_version                 = "TLS1_2"
+		25 |
+		26 |   blob_properties {
+		27 |     delete_retention_policy {
+		28 |       days = 30
+		29 |     }
+		30 |   }
+		31 |
+		32 |   tags = var.tags
+		33 | }
+
+Check: CKV_AZURE_24: "Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-logging-policies/bc-azr-logging-3
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV2_AZURE_41: "Ensure storage account is configured with SAS expiration policy"
+	FAILED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-41
+
+		26 | resource "azurerm_storage_account" "logs" {
+		27 |   count = var.deploy_observability ? 1 : 0
+		28 |
+		29 |   name                     = local.storage_log_name
+		30 |   resource_group_name      = azurerm_resource_group.main.name
+		31 |   location                 = azurerm_resource_group.main.location
+		32 |   account_tier             = "Standard"
+		33 |   account_replication_type = "LRS"
+		34 |
+		35 |   https_traffic_only_enabled      = true
+		36 |   allow_nested_items_to_be_public = false
+		37 |   min_tls_version                 = "TLS1_2"
+		38 |   public_network_access_enabled   = false
+		39 |
+		40 |   # Checkov CKV2_AZURE_38 : soft-delete pour protection des logs
+		41 |   blob_properties {
+		42 |     delete_retention_policy {
+		43 |       days = 30
+		44 |     }
+		45 |     container_delete_retention_policy {
+		46 |       days = 30
+		47 |     }
+		48 |   }
+		49 |
+		50 |   # Checkov CKV2_AZURE_41 : politique d'expiration SAS
+		51 |   sas_policy {
+		52 |     expiration_period = "00.02:00:00"
+		53 |   }
+		54 |
+		55 |   tags = var.tags
+		56 | }
+
+Check: CKV2_AZURE_41: "Ensure storage account is configured with SAS expiration policy"
+	FAILED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-41
+
+		11 | resource "azurerm_storage_account" "backup" {
+		12 |   count = var.deploy_paas ? 1 : 0
+		13 |
+		14 |   name                     = local.storage_name
+		15 |   resource_group_name      = azurerm_resource_group.main.name
+		16 |   location                 = azurerm_resource_group.main.location
+		17 |   account_tier             = "Standard"
+		18 |   account_replication_type = "LRS"
+		19 |
+		20 |   # Sécurité : zéro accès public (ANSSI R15 / Exigence 5)
+		21 |   public_network_access_enabled   = false
+		22 |   https_traffic_only_enabled      = true
+		23 |   allow_nested_items_to_be_public = false
+		24 |   min_tls_version                 = "TLS1_2"
+		25 |
+		26 |   blob_properties {
+		27 |     delete_retention_policy {
+		28 |       days = 30
+		29 |     }
+		30 |   }
+		31 |
+		32 |   tags = var.tags
+		33 | }
+
+Check: CKV2_AZURE_27: "Ensure Azure AD authentication is enabled for Azure SQL (MSSQL)"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/azr-general-85
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV2_AZURE_45: "Ensure Microsoft SQL server is configured with private endpoint"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-45
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV2_AZURE_40: "Ensure storage account is not configured with Shared Key authorization"
+	FAILED for resource: azurerm_storage_account.logs[0]
+	File: /observability.tf:26-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-40
+
+		26 | resource "azurerm_storage_account" "logs" {
+		27 |   count = var.deploy_observability ? 1 : 0
+		28 |
+		29 |   name                     = local.storage_log_name
+		30 |   resource_group_name      = azurerm_resource_group.main.name
+		31 |   location                 = azurerm_resource_group.main.location
+		32 |   account_tier             = "Standard"
+		33 |   account_replication_type = "LRS"
+		34 |
+		35 |   https_traffic_only_enabled      = true
+		36 |   allow_nested_items_to_be_public = false
+		37 |   min_tls_version                 = "TLS1_2"
+		38 |   public_network_access_enabled   = false
+		39 |
+		40 |   # Checkov CKV2_AZURE_38 : soft-delete pour protection des logs
+		41 |   blob_properties {
+		42 |     delete_retention_policy {
+		43 |       days = 30
+		44 |     }
+		45 |     container_delete_retention_policy {
+		46 |       days = 30
+		47 |     }
+		48 |   }
+		49 |
+		50 |   # Checkov CKV2_AZURE_41 : politique d'expiration SAS
+		51 |   sas_policy {
+		52 |     expiration_period = "00.02:00:00"
+		53 |   }
+		54 |
+		55 |   tags = var.tags
+		56 | }
+
+Check: CKV2_AZURE_40: "Ensure storage account is not configured with Shared Key authorization"
+	FAILED for resource: azurerm_storage_account.backup[0]
+	File: /paas.tf:11-33
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-iam-policies/bc-azure-2-40
+
+		11 | resource "azurerm_storage_account" "backup" {
+		12 |   count = var.deploy_paas ? 1 : 0
+		13 |
+		14 |   name                     = local.storage_name
+		15 |   resource_group_name      = azurerm_resource_group.main.name
+		16 |   location                 = azurerm_resource_group.main.location
+		17 |   account_tier             = "Standard"
+		18 |   account_replication_type = "LRS"
+		19 |
+		20 |   # Sécurité : zéro accès public (ANSSI R15 / Exigence 5)
+		21 |   public_network_access_enabled   = false
+		22 |   https_traffic_only_enabled      = true
+		23 |   allow_nested_items_to_be_public = false
+		24 |   min_tls_version                 = "TLS1_2"
+		25 |
+		26 |   blob_properties {
+		27 |     delete_retention_policy {
+		28 |       days = 30
+		29 |     }
+		30 |   }
+		31 |
+		32 |   tags = var.tags
+		33 | }
+
+Check: CKV_AZURE_23: "Ensure that 'Auditing' is set to 'On' for SQL servers"
+	FAILED for resource: azurerm_mssql_server.sql[0]
+	File: /paas.tf:39-53
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-logging-policies/bc-azr-logging-2
+
+		39 | resource "azurerm_mssql_server" "sql" {
+		40 |   count = var.deploy_paas ? 1 : 0
+		41 |
+		42 |   name                         = local.sql_server_name
+		43 |   resource_group_name          = azurerm_resource_group.main.name
+		44 |   location                     = azurerm_resource_group.main.location
+		45 |   version                      = "12.0"
+		46 |   administrator_login          = var.sql_admin_login
+		47 |   administrator_login_password = var.sql_admin_password
+		48 |
+		49 |   # Zéro inbound public (Exigence 5)
+		50 |   public_network_access_enabled = false
+		51 |
+		52 |   tags = var.tags
+		53 | }
+
+Check: CKV2_AZURE_31: "Ensure VNET subnet is configured with a Network Security Group (NSG)"
+	FAILED for resource: azurerm_subnet.onprem_srv
+	File: /network.tf:136-141
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/azure-policies/azure-general-policies/bc-azure-2-31
+
+		136 | resource "azurerm_subnet" "onprem_srv" {
+		137 |   name                 = "snet-onprem-srv"
+		138 |   resource_group_name  = azurerm_resource_group.main.name
+		139 |   virtual_network_name = azurerm_virtual_network.onprem.name
+		140 |   address_prefixes     = [var.subnet_onprem_srv]
+		141 | }

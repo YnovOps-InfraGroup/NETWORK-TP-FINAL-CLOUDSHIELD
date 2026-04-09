@@ -1,0 +1,180 @@
+// ============================================================
+// KQL-CLOUDSHIELD-SIMPLIFIED.kql
+// Requêtes Log Analytics SIMPLIFIÉES pour TP-CloudShield
+// Infrastructure : Hub & Spoke, WAF, Firewall, VPN, Bastion
+// Workspace : law-cloudshield (ou votre nom)
+//
+// 📋 À IMPORTER DANS : Azure Portal → Log Analytics → Logs
+//    (copier/coller chaque requête séparément)
+//
+// 🎯 Infrastructure CloudShield :
+//    - vnet-hub (10.0.0.0/16) : WAF, Firewall, VPN, Bastion
+//    - vnet-spoke-prod (10.1.0.0/16) : Web, App, WAF
+//    - vnet-spoke-data (10.2.0.0/16) : DB (PCI-DSS)
+//    - vnet-onprem (10.10.0.0/16) : simulation site distant
+// ============================================================
+
+
+// ============================================================
+// 🟢 [REQ-01] SANTÉ DES VMs — Performance 24h
+// ============================================================
+// À JOUER EN PREMIER : Vue globale CPU/RAM/Disque
+// Résumé : État de santé des 4 VMs (vm-web, vm-app, vm-db, vm-jumpbox)
+
+Perf
+| where Computer in ("vm-web", "vm-app", "vm-db", "vm-jumpbox")
+| where TimeGenerated > ago(24h)
+| where ObjectName == "Processor Information" or ObjectName == "Memory"
+| where CounterName == "% Processor Time" or CounterName == "% Used Memory"
+| summarize
+    CPU_Max    = max(iif(CounterName == "% Processor Time", CounterValue, 0)),
+    CPU_Avg    = round(avg(iif(CounterName == "% Processor Time", CounterValue, 0)), 2),
+    Memory_Max = max(iif(CounterName == "% Used Memory", CounterValue, 0)),
+    Memory_Avg = round(avg(iif(CounterName == "% Used Memory", CounterValue, 0)), 2)
+    by Computer
+| project Computer, CPU_Avg, CPU_Max, Memory_Avg, Memory_Max
+| sort by CPU_Max desc
+
+
+// ============================================================
+// 🔴 [REQ-02] SÉCURITÉ SSH — War Room (Tentatives échouées)
+// ============================================================
+// À JOUER : Détection d'attaques SSH brute-force
+// Résumé : Tentatives SSH infructueuses par machine
+
+Syslog
+| where Computer in ("vm-web", "vm-app", "vm-db", "vm-jumpbox")
+| where Facility == "authpriv"
+| where SyslogMessage contains "Failed password" or SyslogMessage contains "Invalid user"
+| summarize FailedAttempts = count() by Computer, SourceIP
+| top 20 by FailedAttempts desc
+| project Computer, SourceIP, FailedAttempts
+
+
+// ============================================================
+// 🟡 [REQ-03] NSG FLOW LOGS — Flux bloqués (dernières 24h)
+// ============================================================
+// À JOUER : Efficacité des groupes de sécurité réseau
+// Résumé : Trafic bloqué par NSG et destination port
+
+NTANetAnalytics
+| where TimeGenerated > ago(24h)
+| where FlowStatus == "Denied"
+| summarize BlockedFlows = count() by destPort_s, NSGName
+| order by BlockedFlows desc
+| limit 20
+
+
+// ============================================================
+// 🔵 [REQ-04] FIREWALL AZURE — Requêtes bloquées (dernières 24h)
+// ============================================================
+// À JOUER : Analyse des refus applicatifs du Firewall
+// Résumé : URLs / domaines refusés et FQDN filtering
+
+AzureDiagnostics
+| where Category == "AzureFirewallApplicationRule"
+| where msg_s contains "Deny"
+| where TimeGenerated > ago(24h)
+| parse msg_s with * "Url: " url ". Action: Deny" *
+| summarize DenyCount = count() by tostring(url)
+| order by DenyCount desc
+| limit 10
+
+
+// ============================================================
+// 🟣 [REQ-05] NSG FLOW LOGS — Flux autorisés vers DB (sécurité)
+// ============================================================
+// À JOUER : Vérifier la micro-segmentation BD (port 5432)
+// Résumé : Seules les VMs app→db en PostgreSQL doivent passer
+
+NTANetAnalytics
+| where TimeGenerated > ago(24h)
+| where FlowStatus == "Allowed"
+| where destPort_s == "5432"  // PostgreSQL
+| summarize AllowedFlows = count() by sourceIp_s, destIp_s, destPort_s
+| project sourceIp_s, destIp_s, destPort_s, AllowedFlows
+
+
+// ============================================================
+// 🟠 [REQ-06] BASTION — Connexions administrateur (audit)
+// ============================================================
+// À JOUER : Traçabilité des accès Bastion → VMs via tunneling
+// Résumé : Qui s'est connecté, quand, sur quelle VM
+
+Syslog
+| where Computer in ("vm-web", "vm-app", "vm-db", "vm-jumpbox")
+| where Facility == "authpriv"
+| where SyslogMessage contains "Accepted publickey" or SyslogMessage contains "session opened"
+| summarize SuccessfulLogins = count() by Computer, SourceIP
+| project Computer, SourceIP, SuccessfulLogins
+| sort by SuccessfulLogins desc
+
+
+// ============================================================
+// 🟢 [REQ-07] ACTIVITÉ AZURE (ARM) — Modifications d'infrastructure
+// ============================================================
+// À JOUER : Déploiements, déls, modifs NSG/Firewall (conformité)
+// Résumé : Qui a modifié les règles réseau
+
+AzureActivity
+| where ResourceGroup =~ "rg-cloudshield-prod"
+| where OperationNameValue endswith "/write" or OperationNameValue endswith "/delete"
+| where ActivityStatusValue == "Success"
+| where TimeGenerated > ago(7d)
+| summarize OperationCount = count() by Caller, OperationNameValue
+| order by OperationCount desc
+| limit 15
+
+
+// ============================================================
+// 🔴 [REQ-08] VPN GATEWAY — État connexions site-à-site
+// ============================================================
+// À JOUER : Santé tunnel VPN OnPrem ↔️ Azure Hub
+// Résumé : Connexions actives, timeouts, erreurs BGP
+
+AzureDiagnostics
+| where ResourceType == "VPNGATEWAYS"
+| where Category == "GatewayDiagnosticLog"
+| where TimeGenerated > ago(24h)
+| summarize
+    Connections = dcountif(sourceIp_s, sourceIp_s),
+    Errors = dcountif(message, message contains "error"),
+    PacketLoss = dcountif(message, message contains "timeout")
+| project Connections, Errors, PacketLoss
+
+
+// ============================================================
+// 📊 [REQ-09] DASHBOARD — Résumé sécurité (dernières 24h)
+// ============================================================
+// À JOUER : Vue consolidée pour War Room
+// Résumé : synthèse 4 domaines : SSH, NSG, FW, ARM
+
+union
+  (Syslog | where TimeGenerated > ago(24h)
+          | where SyslogMessage contains "Failed password"
+          | summarize Count = count() | extend Category = "❌ SSH Failed Auth"),
+  (AzureActivity | where TimeGenerated > ago(24h)
+                 | where ActivityStatusValue == "Failed"
+                 | summarize Count = count() | extend Category = "❌ ARM Operations Failed"),
+  (NTANetAnalytics | where TimeGenerated > ago(24h)
+                             | where FlowStatus == "Denied"
+                             | summarize Count = count() | extend Category = "⛔ NSG Blocked Flows"),
+  (AzureDiagnostics | where TimeGenerated > ago(24h)
+                    | where msg_s contains "Deny"
+                    | summarize Count = count() | extend Category = "🔥 Firewall Denied Requests")
+| project Category, Count
+| order by Count desc
+
+
+// ============================================================
+// 💡 TIPS D'IMPORTATION
+// ============================================================
+// 1. Aller dans : https://portal.azure.com
+// 2. Rechercher "Log Analytics"
+// 3. Sélectionner votre workspace (law-cloudshield)
+// 4. Cliquer sur "Logs" (gauche)
+// 5. Copier/coller une requête → Appuyer sur Maj+Entrée
+// 6. Exporter les résultats en Excel :
+//    • Cliquer "Export" (haut à droite)
+//    • Format "Excel" ou "CSV"
+// ============================================================
