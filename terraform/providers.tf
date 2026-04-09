@@ -1,5 +1,5 @@
 # ============================================================
-# PROVIDER & BACKEND — Cloud Shield Landing Zone
+# PROVIDER & BACKEND - Cloud Shield Landing Zone
 # Projet : Migration FinTech Global vers Azure
 # ============================================================
 

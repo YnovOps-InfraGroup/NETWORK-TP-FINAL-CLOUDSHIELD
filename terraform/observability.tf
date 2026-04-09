@@ -1,12 +1,12 @@
 # ============================================================
-# OBSERVABILITÉ — Log Analytics, Flow Logs, AMA, DCR, Alertes
+# OBSERVABILITÉ - Log Analytics, Flow Logs, AMA, DCR, Alertes
 # ANSSI R36/R37 : Journalisation centralisée + politique de logs
 # ANSSI R40 : Procédure de gestion des incidents
 # ============================================================
 
-# ═══════════════════════════════════════════════════════════════
-# LOG ANALYTICS WORKSPACE — SIEM Centralisé
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# LOG ANALYTICS WORKSPACE - SIEM Centralisé
+# ==============================================================================
 
 resource "azurerm_log_analytics_workspace" "law" {
   count = var.deploy_observability ? 1 : 0
@@ -19,9 +19,9 @@ resource "azurerm_log_analytics_workspace" "law" {
   tags                = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# STORAGE ACCOUNT — Archivage long terme des logs
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# STORAGE ACCOUNT - Archivage long terme des logs
+# ==============================================================================
 
 resource "azurerm_storage_account" "logs" {
   count = var.deploy_observability ? 1 : 0
@@ -55,9 +55,9 @@ resource "azurerm_storage_account" "logs" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NETWORK WATCHER — Prérequis pour Flow Logs
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# NETWORK WATCHER - Prérequis pour Flow Logs
+# ==============================================================================
 
 # Utilise le Network Watcher existant (Azure en crée 1 automatiquement par région/sub)
 data "azurerm_network_watcher" "nw" {
@@ -65,9 +65,9 @@ data "azurerm_network_watcher" "nw" {
   resource_group_name = "NetworkWatcherRG"
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG FLOW LOGS — Capture du trafic réseau
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# NSG FLOW LOGS - Capture du trafic réseau
+# ==============================================================================
 
 # VNet Flow Logs (remplace NSG Flow Logs dépréciés depuis juin 2025)
 # Ref: https://learn.microsoft.com/azure/network-watcher/vnet-flow-logs-overview
@@ -127,9 +127,9 @@ resource "azurerm_network_watcher_flow_log" "flow_vnet_spoke_prod" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# DIAGNOSTIC SETTINGS — Firewall, Bastion → Log Analytics
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# DIAGNOSTIC SETTINGS - Firewall, Bastion Log Analytics
+# ==============================================================================
 
 resource "azurerm_monitor_diagnostic_setting" "diag_fw" {
   count = var.deploy_observability && var.deploy_firewall ? 1 : 0
@@ -155,9 +155,9 @@ resource "azurerm_monitor_diagnostic_setting" "diag_bastion" {
   enabled_log { category = "BastionAuditLogs" }
 }
 
-# ═══════════════════════════════════════════════════════════════
-# AZURE MONITOR AGENT (AMA) — Collecte logs VMs
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# AZURE MONITOR AGENT (AMA) - Collecte logs VMs
+# ==============================================================================
 
 resource "azurerm_virtual_machine_extension" "ama_web" {
   count = var.deploy_observability ? 1 : 0
@@ -195,9 +195,9 @@ resource "azurerm_virtual_machine_extension" "ama_db" {
   tags                       = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# DATA COLLECTION RULE — Syslog + Performance Linux
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# DATA COLLECTION RULE - Syslog + Performance Linux
+# ==============================================================================
 
 resource "azurerm_monitor_data_collection_rule" "dcr_linux" {
   count = var.deploy_observability ? 1 : 0
@@ -249,7 +249,7 @@ resource "azurerm_monitor_data_collection_rule" "dcr_linux" {
   tags = var.tags
 }
 
-# ── Associations DCR → VMs ────────────────────────────────────────────────────
+# Associations DCR VMs ────────────────────────────────────────────────────
 
 resource "azurerm_monitor_data_collection_rule_association" "dcr_web" {
   count = var.deploy_observability ? 1 : 0
@@ -281,11 +281,11 @@ resource "azurerm_monitor_data_collection_rule_association" "dcr_db" {
   depends_on = [azurerm_virtual_machine_extension.ama_db]
 }
 
-# ═══════════════════════════════════════════════════════════════
-# ALERTES — Action Group + Rules
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# ALERTES - Action Group + Rules
+# ==============================================================================
 
-# ── Action Group SecOps ───────────────────────────────────────────────────────
+# Action Group SecOps ───────────────────────────────────────────────────────
 resource "azurerm_monitor_action_group" "secops" {
   count = var.deploy_observability ? 1 : 0
 
@@ -302,7 +302,7 @@ resource "azurerm_monitor_action_group" "secops" {
   tags = var.tags
 }
 
-# ── Alerte : modification règle NSG (War Room) ───────────────────────────────
+# Alerte : modification règle NSG (War Room) ───────────────────────────────
 resource "azurerm_monitor_activity_log_alert" "nsg_rule_change" {
   count = var.deploy_observability ? 1 : 0
 
@@ -310,7 +310,7 @@ resource "azurerm_monitor_activity_log_alert" "nsg_rule_change" {
   resource_group_name = azurerm_resource_group.main.name
   location            = "global"
   scopes              = [data.azurerm_subscription.current.id]
-  description         = "Alerte : règle NSG modifiée — risque d'ouverture non autorisée"
+  description         = "Alerte : règle NSG modifiée - risque d'ouverture non autorisée"
 
   criteria {
     operation_name = "Microsoft.Network/networkSecurityGroups/securityRules/write"
@@ -324,7 +324,7 @@ resource "azurerm_monitor_activity_log_alert" "nsg_rule_change" {
   tags = var.tags
 }
 
-# ── Alerte : suppression de ressource réseau ──────────────────────────────────
+# Alerte : suppression de ressource réseau ──────────────────────────────────
 resource "azurerm_monitor_activity_log_alert" "network_delete" {
   count = var.deploy_observability ? 1 : 0
 
@@ -346,7 +346,7 @@ resource "azurerm_monitor_activity_log_alert" "network_delete" {
   tags = var.tags
 }
 
-# ── Alerte : modification Firewall Policy ─────────────────────────────────────
+# Alerte : modification Firewall Policy ─────────────────────────────────────
 resource "azurerm_monitor_activity_log_alert" "fw_policy_change" {
   count = var.deploy_observability && var.deploy_firewall ? 1 : 0
 
@@ -354,7 +354,7 @@ resource "azurerm_monitor_activity_log_alert" "fw_policy_change" {
   resource_group_name = azurerm_resource_group.main.name
   location            = "global"
   scopes              = [data.azurerm_subscription.current.id]
-  description         = "Alerte : règle Firewall modifiée — vérification requise"
+  description         = "Alerte : règle Firewall modifiée - vérification requise"
 
   criteria {
     operation_name = "Microsoft.Network/firewallPolicies/ruleCollectionGroups/write"
@@ -368,7 +368,7 @@ resource "azurerm_monitor_activity_log_alert" "fw_policy_change" {
   tags = var.tags
 }
 
-# ── Alerte : Azure Service Health ─────────────────────────────────────────────
+# Alerte : Azure Service Health ─────────────────────────────────────────────
 resource "azurerm_monitor_activity_log_alert" "service_health" {
   count = var.deploy_observability ? 1 : 0
 
@@ -393,12 +393,12 @@ resource "azurerm_monitor_activity_log_alert" "service_health" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# RSYSLOG → AMA SYMLINKS — fix(ama): les symlinks ne sont pas
+# ==============================================================================
+# RSYSLOG AMA SYMLINKS - fix(ama): les symlinks ne sont pas
 # créés automatiquement par l'extension AMA sur Ubuntu 24.04.
 # Sans ces symlinks, rsyslog ne forward pas vers le socket AMA
 # et la table Syslog reste vide dans Log Analytics.
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 locals {
   rsyslog_ama_script = <<-SCRIPT

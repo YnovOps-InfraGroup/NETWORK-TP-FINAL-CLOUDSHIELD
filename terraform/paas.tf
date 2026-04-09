@@ -1,12 +1,12 @@
 # ============================================================
-# PaaS — Storage, SQL, Private Endpoints, DNS Privées
+# PaaS - Storage, SQL, Private Endpoints, DNS Privées
 # ANSSI R15 : Protection des accès aux services sensibles
 # Exigence 5 : Zéro endpoint public, accès privé uniquement
 # ============================================================
 
-# ═══════════════════════════════════════════════════════════════
-# STORAGE ACCOUNT — Sauvegardes (accès public OFF)
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# STORAGE ACCOUNT - Sauvegardes (accès public OFF)
+# ==============================================================================
 
 resource "azurerm_storage_account" "backup" {
   count = var.deploy_paas ? 1 : 0
@@ -17,7 +17,7 @@ resource "azurerm_storage_account" "backup" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  # Sécurité : zéro accès public (ANSSI R15 / Exigence 5)
+  # Sécurité : zero accès public (ANSSI R15 / Exigence 5)
   public_network_access_enabled   = false
   https_traffic_only_enabled      = true
   allow_nested_items_to_be_public = false
@@ -32,9 +32,9 @@ resource "azurerm_storage_account" "backup" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# AZURE SQL SERVER — Base de données managée (accès public OFF)
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# AZURE SQL SERVER - Base de données managée (accès public OFF)
+# ==============================================================================
 
 resource "azurerm_mssql_server" "sql" {
   count = var.deploy_paas ? 1 : 0
@@ -52,7 +52,7 @@ resource "azurerm_mssql_server" "sql" {
   tags = var.tags
 }
 
-# Checkov CKV_AZURE_23/24 : Auditing SQL Server → Log Analytics
+# Checkov CKV_AZURE_23/24 : Auditing SQL Server Log Analytics
 resource "azurerm_mssql_server_extended_auditing_policy" "sql_audit" {
   count = var.deploy_paas && var.deploy_observability ? 1 : 0
 
@@ -74,11 +74,11 @@ resource "azurerm_mssql_database" "fintechdb" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# PRIVATE DNS ZONES — Résolution interne vers Private Endpoints
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# PRIVATE DNS ZONES - Résolution interne vers Private Endpoints
+# ==============================================================================
 
-# DNS Zone — Blob Storage
+# DNS Zone - Blob Storage
 resource "azurerm_private_dns_zone" "blob" {
   count = var.deploy_paas ? 1 : 0
 
@@ -87,7 +87,7 @@ resource "azurerm_private_dns_zone" "blob" {
   tags                = var.tags
 }
 
-# DNS Zone — Azure SQL
+# DNS Zone - Azure SQL
 resource "azurerm_private_dns_zone" "sql" {
   count = var.deploy_paas ? 1 : 0
 
@@ -96,7 +96,7 @@ resource "azurerm_private_dns_zone" "sql" {
   tags                = var.tags
 }
 
-# ── Liens DNS → VNets (résolution depuis Spoke-Data + Hub) ───────────────────
+# Liens DNS VNets (résolution depuis Spoke-Data + Hub) ───────────────────
 
 resource "azurerm_private_dns_zone_virtual_network_link" "blob_spoke_data" {
   count = var.deploy_paas ? 1 : 0
@@ -142,11 +142,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql_hub" {
   tags                  = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# PRIVATE ENDPOINTS — Accès privé aux services PaaS
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# PRIVATE ENDPOINTS - Accès privé aux services PaaS
+# ==============================================================================
 
-# ── PE Blob Storage ───────────────────────────────────────────────────────────
+# PE Blob Storage ───────────────────────────────────────────────────────────
 resource "azurerm_private_endpoint" "pe_blob" {
   count = var.deploy_paas ? 1 : 0
 
@@ -170,7 +170,7 @@ resource "azurerm_private_endpoint" "pe_blob" {
   tags = var.tags
 }
 
-# ── PE Azure SQL ──────────────────────────────────────────────────────────────
+# PE Azure SQL ──────────────────────────────────────────────────────────────
 resource "azurerm_private_endpoint" "pe_sql" {
   count = var.deploy_paas ? 1 : 0
 

@@ -1,14 +1,14 @@
 # ============================================================
-# OUTPUTS — Cloud Shield Landing Zone
+# OUTPUTS - Cloud Shield Landing Zone
 # ============================================================
 
-# ── Resource Group ────────────────────────────────────────────────────────────
+# Resource Group ────────────────────────────────────────────────────────────
 output "resource_group_name" {
   description = "Nom du Resource Group principal"
   value       = azurerm_resource_group.main.name
 }
 
-# ── VNets ─────────────────────────────────────────────────────────────────────
+# VNets ─────────────────────────────────────────────────────────────────────
 output "vnets" {
   description = "CIDRs des VNets déployés"
   value = {
@@ -19,7 +19,7 @@ output "vnets" {
   }
 }
 
-# ── Subnets ───────────────────────────────────────────────────────────────────
+# Subnets ───────────────────────────────────────────────────────────────────
 output "subnets" {
   description = "CIDRs de tous les subnets"
   value = {
@@ -35,9 +35,9 @@ output "subnets" {
   }
 }
 
-# ── IPs privées VMs ───────────────────────────────────────────────────────────
+# IPs privées VMs ───────────────────────────────────────────────────────────
 output "vm_private_ips" {
-  description = "IPs privées des VMs (aucune IP publique — ANSSI R22)"
+  description = "IPs privées des VMs (aucune IP publique - ANSSI R22)"
   value = {
     vm_web    = azurerm_network_interface.nic_web.private_ip_address
     vm_app    = azurerm_network_interface.nic_app.private_ip_address
@@ -46,7 +46,7 @@ output "vm_private_ips" {
   }
 }
 
-# ── Firewall ──────────────────────────────────────────────────────────────────
+# Firewall ──────────────────────────────────────────────────────────────────
 output "firewall_private_ip" {
   description = "IP privée Azure Firewall (next-hop des UDR)"
   value       = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "N/A (firewall non déployé)"
@@ -57,19 +57,19 @@ output "firewall_public_ip" {
   value       = var.deploy_firewall ? azurerm_public_ip.fw_pip[0].ip_address : "N/A"
 }
 
-# ── Bastion ───────────────────────────────────────────────────────────────────
+# Bastion ───────────────────────────────────────────────────────────────────
 output "bastion_name" {
   description = "Nom Azure Bastion (pour commande az network bastion ssh)"
   value       = var.deploy_bastion ? azurerm_bastion_host.bastion[0].name : "N/A"
 }
 
-# ── WAF ───────────────────────────────────────────────────────────────────────
+# WAF ───────────────────────────────────────────────────────────────────────
 output "waf_public_ip" {
   description = "IP publique Application Gateway WAF (accès web)"
   value       = var.deploy_waf ? azurerm_public_ip.waf_pip[0].ip_address : "N/A"
 }
 
-# ── PaaS ──────────────────────────────────────────────────────────────────────
+# PaaS ──────────────────────────────────────────────────────────────────────
 output "private_endpoint_ips" {
   description = "IPs privées des Private Endpoints PaaS"
   value = var.deploy_paas ? {
@@ -78,7 +78,7 @@ output "private_endpoint_ips" {
   } : {}
 }
 
-# ── Commandes utiles (Bastion SSH) ────────────────────────────────────────────
+# Commandes utiles (Bastion SSH) ────────────────────────────────────────────
 output "bastion_ssh_vm_web" {
   description = "Commande SSH via Bastion vers vm-web"
   sensitive   = true
@@ -91,26 +91,26 @@ output "bastion_ssh_vm_db" {
   value       = var.deploy_bastion ? "az network bastion ssh --name ${azurerm_bastion_host.bastion[0].name} --resource-group ${azurerm_resource_group.main.name} --target-resource-id ${azurerm_linux_virtual_machine.vm_db.id} --auth-type ssh-key --username ${var.vm_admin_username} --ssh-key ~/.ssh/id_ed25519" : "N/A"
 }
 
-# ── WAF test ──────────────────────────────────────────────────────────────────
+# WAF test ──────────────────────────────────────────────────────────────────
 output "waf_curl_test" {
   description = "Commande curl pour tester le WAF depuis l'extérieur"
   value       = var.deploy_waf ? "curl -v http://${azurerm_public_ip.waf_pip[0].ip_address}/" : "N/A"
 }
 
-# ── WAF SQL injection test ────────────────────────────────────────────────────
+# WAF SQL injection test ────────────────────────────────────────────────────
 output "waf_sqli_test" {
   description = "Test d'injection SQL (doit être bloqué par le WAF OWASP 3.2)"
   value       = var.deploy_waf ? "curl -v 'http://${azurerm_public_ip.waf_pip[0].ip_address}/?id=1%20OR%201=1'" : "N/A"
 }
 
-# ── SSH Key Vault (fix root cause #3) ────────────────────────────────────────
+# SSH Key Vault (fix root cause #3) ────────────────────────────────────────
 output "ssh_private_key_kv_secret" {
-  description = "Commande pour récupérer la clé SSH privée depuis Key Vault (ANSSI R14)"
+  description = "Commande pour récupérer la cle SSH privée depuis Key Vault (ANSSI R14)"
   value       = "az keyvault secret show --vault-name ${var.key_vault_name} --name ${azurerm_key_vault_secret.vm_ssh_private_key.name} --query value -o tsv > ~/.ssh/cloudshield && chmod 600 ~/.ssh/cloudshield"
 }
 
 output "bastion_tunnel_command" {
-  description = "Commande tunnel Bastion native (fix root cause #1 — SKU Standard requis)"
+  description = "Commande tunnel Bastion native (fix root cause #1 - SKU Standard requis)"
   sensitive   = true
   value       = var.deploy_bastion ? "az network bastion tunnel --name ${azurerm_bastion_host.bastion[0].name} --resource-group ${azurerm_resource_group.main.name} --target-resource-id ${azurerm_linux_virtual_machine.vm_web.id} --resource-port 22 --port 9997 & ssh -i ~/.ssh/cloudshield -o StrictHostKeyChecking=no ${var.vm_admin_username}@127.0.0.1 -p 9997" : "N/A"
 }

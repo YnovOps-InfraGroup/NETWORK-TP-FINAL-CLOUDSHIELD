@@ -1,8 +1,8 @@
 # ============================================================
-# VARIABLES — Cloud Shield Landing Zone
+# VARIABLES - Cloud Shield Landing Zone
 # ============================================================
 
-# ── Identité Azure ────────────────────────────────────────────────────────────
+# Identité Azure ────────────────────────────────────────────────────────────
 variable "subscription_id" {
   description = "Azure Subscription ID"
   type        = string
@@ -15,7 +15,7 @@ variable "tenant_id" {
   sensitive   = true
 }
 
-# ── Région & Naming ──────────────────────────────────────────────────────────
+# Région & Naming ──────────────────────────────────────────────────────────
 variable "location" {
   description = "Région Azure de déploiement"
   type        = string
@@ -37,7 +37,7 @@ variable "tags" {
   sensitive   = true
 }
 
-# ── CIDRs VNets ──────────────────────────────────────────────────────────────
+# CIDRs VNets ──────────────────────────────────────────────────────────────
 variable "vnet_hub_cidr" {
   description = "CIDR du VNet Hub"
   type        = string
@@ -58,7 +58,7 @@ variable "vnet_onprem_cidr" {
   type        = string
 }
 
-# ── CIDRs Subnets Hub ────────────────────────────────────────────────────────
+# CIDRs Subnets Hub ────────────────────────────────────────────────────────
 variable "subnet_hub_firewall" {
   description = "CIDR AzureFirewallSubnet (/26 minimum obligatoire)"
   type        = string
@@ -74,14 +74,14 @@ variable "subnet_hub_gateway" {
   type        = string
 }
 
-# ── CIDRs Subnets Spoke-Prod ─────────────────────────────────────────────────
+# CIDRs Subnets Spoke-Prod ─────────────────────────────────────────────────
 variable "subnet_prod_web" {
-  description = "CIDR subnet Web (Tier 1 — Présentation)"
+  description = "CIDR subnet Web (Tier 1 - Presentation)"
   type        = string
 }
 
 variable "subnet_prod_app" {
-  description = "CIDR subnet App (Tier 2 — Traitement)"
+  description = "CIDR subnet App (Tier 2 - Traitement)"
   type        = string
 }
 
@@ -90,9 +90,9 @@ variable "subnet_prod_waf" {
   type        = string
 }
 
-# ── CIDRs Subnets Spoke-Data ─────────────────────────────────────────────────
+# CIDRs Subnets Spoke-Data ─────────────────────────────────────────────────
 variable "subnet_data_db" {
-  description = "CIDR subnet DB (Tier 3 — Stockage, CDE PCI-DSS)"
+  description = "CIDR subnet DB (Tier 3 - Stockage, CDE PCI-DSS)"
   type        = string
 }
 
@@ -101,7 +101,7 @@ variable "subnet_data_pe" {
   type        = string
 }
 
-# ── CIDRs Subnets OnPrem ─────────────────────────────────────────────────────
+# CIDRs Subnets OnPrem ─────────────────────────────────────────────────────
 variable "subnet_onprem_gateway" {
   description = "CIDR GatewaySubnet OnPrem (/27 minimum)"
   type        = string
@@ -112,7 +112,7 @@ variable "subnet_onprem_srv" {
   type        = string
 }
 
-# ── VMs ───────────────────────────────────────────────────────────────────────
+# VMs ───────────────────────────────────────────────────────────────────────
 variable "vm_admin_username" {
   description = "Utilisateur admin des VMs"
   type        = string
@@ -141,7 +141,7 @@ variable "auto_shutdown_time" {
   type        = string
 }
 
-# ── VPN / Hybridation ────────────────────────────────────────────────────────
+# VPN / Hybridation ────────────────────────────────────────────────────────
 variable "vpn_shared_key" {
   description = "Pre-Shared Key pour le tunnel IPsec (>32 caractères)"
   type        = string
@@ -158,7 +158,7 @@ variable "onprem_bgp_asn" {
   type        = number
 }
 
-# ── Feature Flags (FinOps — déploiement progressif) ──────────────────────────
+# Feature Flags (FinOps - déploiement progressif) ──────────────────────────
 variable "deploy_vpn_gateways" {
   description = "Déploie les VPN Gateways (coûteuses ~0.38 €/h chacune)"
   type        = bool
@@ -189,7 +189,7 @@ variable "deploy_observability" {
   type        = bool
 }
 
-# ── Observabilité ─────────────────────────────────────────────────────────────
+# Observabilité ─────────────────────────────────────────────────────────────
 variable "alert_email" {
   description = "Email de l'équipe SecOps pour les alertes"
   type        = string
@@ -200,10 +200,10 @@ variable "law_retention_days" {
   type        = number
 }
 
-# ── PaaS ──────────────────────────────────────────────────────────────────────
-# ── PostgreSQL VM ────────────────────────────────────────────────────────────
+# PaaS ──────────────────────────────────────────────────────────────────────
+# PostgreSQL VM ────────────────────────────────────────────────────────────
 variable "db_password" {
-  description = "Mot de passe PostgreSQL (compte appuser sur vm-db) — Key Vault en prod"
+  description = "Mot de passe PostgreSQL (compte appuser sur vm-db) - Key Vault en prod"
   type        = string
   sensitive   = true
 }

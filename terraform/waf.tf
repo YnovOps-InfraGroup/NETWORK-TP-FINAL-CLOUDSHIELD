@@ -1,11 +1,11 @@
 # ============================================================
-# WAF — Application Gateway v2 (WAF_v2, OWASP 3.2)
+# WAF - Application Gateway v2 (WAF_v2, OWASP 3.2)
 # ANSSI R22 : Application web non exposée directement
 # Exigence 4a : Trafic intercepté, déchiffré, analysé (anti SQLi)
 # ⚠ Coût : ~0,25 €/h (autoscale min=0 = coût minimal au repos)
 # ============================================================
 
-# ── WAF Policy (OWASP 3.2 + Bot Protection, mode Prevention) ─────────────────
+# WAF Policy (OWASP 3.2 + Bot Protection, mode Prevention) ─────────────────
 resource "azurerm_web_application_firewall_policy" "waf_policy" {
   count = var.deploy_waf ? 1 : 0
 
@@ -37,7 +37,7 @@ resource "azurerm_web_application_firewall_policy" "waf_policy" {
   tags = var.tags
 }
 
-# ── IP publique Application Gateway ──────────────────────────────────────────
+# IP publique Application Gateway ──────────────────────────────────────────
 resource "azurerm_public_ip" "waf_pip" {
   count = var.deploy_waf ? 1 : 0
 
@@ -49,7 +49,7 @@ resource "azurerm_public_ip" "waf_pip" {
   tags                = var.tags
 }
 
-# ── Application Gateway WAF_v2 ────────────────────────────────────────────────
+# Application Gateway WAF_v2 ────────────────────────────────────────────────
 locals {
   appgw_backend_pool_name  = "bepool-vm-web"
   appgw_backend_http_name  = "http-settings-web"
@@ -72,7 +72,7 @@ resource "azurerm_application_gateway" "waf" {
     tier = "WAF_v2"
   }
 
-  # FinOps : min_capacity=0 → coût minimal au repos (PoC)
+  # FinOps : min_capacity=0 coût minimal au repos (PoC)
   autoscale_configuration {
     min_capacity = 0
     max_capacity = 2

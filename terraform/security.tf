@@ -1,12 +1,12 @@
 # ============================================================
-# SÉCURITÉ — NSGs + ASGs — Micro-segmentation Zero Trust
+# SÉCURITÉ - NSGs + ASGs - Micro-segmentation Zero Trust
 # ANSSI R19 : Cloisonnement strict entre tiers
-# Exigence 3c : Pas d'IP statiques → utilisation des ASG
+# Exigence 3c : Pas d'IP statiques utilisation des ASG
 # ============================================================
 
-# ═══════════════════════════════════════════════════════════════
-# APPLICATION SECURITY GROUPS — Labels logiques Zero Trust
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# APPLICATION SECURITY GROUPS - Labels logiques Zero Trust
+# ==============================================================================
 
 resource "azurerm_application_security_group" "asg_web" {
   name                = "asg-web"
@@ -37,18 +37,18 @@ resource "azurerm_application_security_group" "asg_bastion" {
   tags                = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — SUBNET WEB (Tier 1 — Présentation)
-# Autorise : WAF → Web (HTTP/80), Bastion → SSH
+# ==============================================================================
+# NSG - SUBNET WEB (Tier 1 - Presentation)
+# Autorise : WAF Web (HTTP/80), Bastion SSH
 # Refuse : tout le reste (deny-all explicit)
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_web" {
   name                = "nsg-prod-web"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  # WAF (Application Gateway) → Serveurs Web
+  # WAF (Application Gateway) Serveurs Web
   security_rule {
     name                                       = "Allow-HTTP-from-WAF"
     priority                                   = 100
@@ -74,9 +74,9 @@ resource "azurerm_network_security_group" "nsg_web" {
     destination_address_prefix = "*"
   }
 
-  # fix(nsg): Bastion → VM SSH (port 22) — root cause #2
+  # fix(nsg): Bastion VM SSH (port 22) - root cause #2
   # Sans cette règle, le tunnel TCP Bastion s'ouvre mais SSH timeout (banner exchange)
-  # ANSSI R28 : seul Bastion peut joindre les VMs en SSH — pas depuis Internet
+  # ANSSI R28 : seul Bastion peut joindre les VMs en SSH - pas depuis Internet
   # ⚠ Bastion Standard force toujours le port 22 (pas de redirection possible)
   security_rule {
     name                       = "Allow-SSH-from-Bastion"
@@ -111,18 +111,18 @@ resource "azurerm_subnet_network_security_group_association" "nsg_web_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg_web.id
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — SUBNET APP (Tier 2 — Traitement)
-# Autorise : asg-web → asg-app (TCP/8080)
+# ==============================================================================
+# NSG - SUBNET APP (Tier 2 - Traitement)
+# Autorise : asg-web asg-app (TCP/8080)
 # Refuse : tout le reste
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_app" {
   name                = "nsg-prod-app"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  # Web → App (API interne, TCP 8080) — utilise ASG (pas d'IP statique)
+  # Web App (API interne, TCP 8080) - utilise ASG (pas d'IP statique)
   security_rule {
     name                                       = "Allow-TCP8080-from-Web"
     priority                                   = 100
@@ -156,19 +156,19 @@ resource "azurerm_subnet_network_security_group_association" "nsg_app_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg_app.id
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — SUBNET DB (Tier 3 — Stockage, CDE PCI-DSS)
-# Autorise : asg-app → asg-db (TCP/5432 PostgreSQL)
+# ==============================================================================
+# NSG - SUBNET DB (Tier 3 - Stockage, CDE PCI-DSS)
+# Autorise : asg-app asg-db (TCP/5432 PostgreSQL)
 # Refuse : tout inbound + Internet outbound
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_db" {
   name                = "nsg-data-db"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
-  # App → DB (PostgreSQL 5432) — cross-spoke via Firewall
-  # Note : ASG cross-VNet non supporté → utilisation du CIDR subnet
+  # App DB (PostgreSQL 5432) - cross-spoke via Firewall
+  # Note : ASG cross-VNet non supporté utilisation du CIDR subnet
   security_rule {
     name                                       = "Allow-PostgreSQL-from-App"
     priority                                   = 100
@@ -215,10 +215,10 @@ resource "azurerm_subnet_network_security_group_association" "nsg_db_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg_db.id
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — SUBNET WAF (Application Gateway)
+# ==============================================================================
+# NSG - SUBNET WAF (Application Gateway)
 # Règles spécifiques Microsoft obligatoires pour AppGW v2
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_waf" {
   name                = "nsg-prod-waf"
@@ -272,10 +272,10 @@ resource "azurerm_subnet_network_security_group_association" "nsg_waf_assoc" {
   network_security_group_id = azurerm_network_security_group.nsg_waf.id
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — SUBNET PE (Private Endpoints)
+# ==============================================================================
+# NSG - SUBNET PE (Private Endpoints)
 # Accès HTTPS depuis le VNet uniquement
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_pe" {
   name                = "nsg-data-pe"

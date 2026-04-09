@@ -1,5 +1,5 @@
 # ============================================================
-# LOCALS — Variables locales pour nommage cohérent et suffixe unique
+# LOCALS - Variables locales pour nommage cohérent et suffixe unique
 # ============================================================
 
 locals {

@@ -1,13 +1,11 @@
-# ============================================================
-# COMPUTE — VMs Linux (Web, App, DB, OnPrem)
-# ANSSI R14 : Auth SSH par clé Ed25519, zéro IP publique
+# ==============================================================================
+# COMPUTE - VMs Linux (Web, App, DB, OnPrem)
+# ANSSI R14 : Auth SSH par cle Ed25519, zero IP publique
 # ANSSI R9 : Comptes nominatifs, pas de root
-# ============================================================
+# ==============================================================================
 
-# ═══════════════════════════════════════════════════════════════
-# VM-WEB — Tier 1 Présentation (Flask app)
-# Subnet : snet-prod-web | ASG : asg-web
-# ═══════════════════════════════════════════════════════════════
+# VM-WEB - Tier 1 Presentation (Flask app)
+# Subnet: snet-prod-web | ASG: asg-web
 
 resource "azurerm_network_interface" "nic_web" {
   name                = "nic-vm-web"
@@ -23,7 +21,7 @@ resource "azurerm_network_interface" "nic_web" {
   tags = var.tags
 }
 
-# Association NIC → ASG (Exigence 3c : pas d'IP statiques dans les règles)
+# Association NIC ASG (Exigence 3c : pas d'IP statiques dans les règles)
 resource "azurerm_network_interface_application_security_group_association" "nic_web_asg" {
   network_interface_id          = azurerm_network_interface.nic_web.id
   application_security_group_id = azurerm_application_security_group.asg_web.id
@@ -45,7 +43,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 - cle auto-générée
   }
 
   os_disk {
@@ -80,7 +78,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
         import os, socket
 
         app = Flask(__name__)
-        # ✅ IP injectée par Terraform (adresse réelle de vm-app)
+        # IP injectée par Terraform (adresse réelle de vm-app)
         APP_HOST = "${azurerm_network_interface.nic_app.private_ip_address}"
 
         @app.route("/")
@@ -101,10 +99,10 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# VM-APP — Tier 2 Traitement (API Flask)
+# ==============================================================================
+# VM-APP - Tier 2 Traitement (API Flask)
 # Subnet : snet-prod-app | ASG : asg-app
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_interface" "nic_app" {
   name                = "nic-vm-app"
@@ -141,7 +139,7 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 - cle auto-générée
   }
 
   os_disk {
@@ -158,7 +156,7 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
   }
 
   # Cloud-init : API backend (port 8080)
-  # ✅ IPs passées dynamiquement via Terraform (pas hardcodées)
+  # IPs passées dynamiquement via Terraform
   # DB_HOST sera l'IP réelle assignée à vm-db par Azure
   custom_data = base64encode(<<-CLOUDINIT
     #cloud-config
@@ -176,7 +174,7 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
         import os, socket
 
         app = Flask(__name__)
-        # ✅ IP injectée par Terraform (adresse réelle de vm-db)
+        # IP injectée par Terraform (adresse réelle de vm-db)
         DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 
         @app.route("/api/health")
@@ -197,10 +195,10 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# VM-DB — Tier 3 Stockage (PostgreSQL, CDE PCI-DSS)
+# ==============================================================================
+# VM-DB - Tier 3 Stockage (PostgreSQL, CDE PCI-DSS)
 # Subnet : snet-data-db | ASG : asg-db
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_interface" "nic_db" {
   name                = "nic-vm-db"
@@ -237,7 +235,7 @@ resource "azurerm_linux_virtual_machine" "vm_db" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 - cle auto-générée
   }
 
   os_disk {
@@ -274,10 +272,10 @@ resource "azurerm_linux_virtual_machine" "vm_db" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# VM-ONPREM — Simulation site de Lyon
+# ==============================================================================
+# VM-ONPREM - Simulation site de Lyon
 # Subnet : snet-onprem-srv
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_interface" "nic_onprem" {
   name                = "nic-vm-onprem"
@@ -309,7 +307,7 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 - cle auto-générée
   }
 
   os_disk {
@@ -328,9 +326,9 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# AUTO-SHUTDOWN — FinOps : arrêt automatique quotidien 18h-8h (12h OFF/24h)
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# AUTO-SHUTDOWN - FinOps : arrêt automatique quotidien 18h-8h (12h OFF/24h)
+# ==============================================================================
 
 resource "azurerm_dev_test_global_vm_shutdown_schedule" "shutdown_web" {
   virtual_machine_id    = azurerm_linux_virtual_machine.vm_web.id

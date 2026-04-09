@@ -1,5 +1,5 @@
 # ============================================================
-# RESOURCE GROUPS — Cloud Shield
+# RESOURCE GROUPS - Cloud Shield
 # Toutes les ressources dans un seul RG (PoC)
 # ============================================================
 

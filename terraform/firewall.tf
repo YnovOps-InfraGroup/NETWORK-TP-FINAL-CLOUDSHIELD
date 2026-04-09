@@ -1,10 +1,10 @@
 # ============================================================
-# AZURE FIREWALL — Inspection centralisée de tout le trafic
+# AZURE FIREWALL - Inspection centralisée de tout le trafic
 # ANSSI R22/R23/R24 : Filtrage sortant + proxy + contrôle flux
 # Exigence 4b : Tout trafic egress inspecté par FW centralisé
 # ============================================================
 
-# ── IP Publique Azure Firewall ────────────────────────────────────────────────
+# IP Publique Azure Firewall ────────────────────────────────────────────────
 resource "azurerm_public_ip" "fw_pip" {
   count = var.deploy_firewall ? 1 : 0
 
@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "fw_pip" {
   tags                = var.tags
 }
 
-# ── Firewall Policy (Standard + Threat Intelligence) ─────────────────────────
+# Firewall Policy (Standard + Threat Intelligence) ─────────────────────────
 resource "azurerm_firewall_policy" "fw_policy" {
   count = var.deploy_firewall ? 1 : 0
 
@@ -37,7 +37,7 @@ resource "azurerm_firewall_policy" "fw_policy" {
   tags = var.tags
 }
 
-# ── Azure Firewall (Standard) ─────────────────────────────────────────────────
+# Azure Firewall (Standard) ─────────────────────────────────────────────────
 resource "azurerm_firewall" "fw" {
   count = var.deploy_firewall ? 1 : 0
 
@@ -57,9 +57,9 @@ resource "azurerm_firewall" "fw" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# RÈGLES FIREWALL — Deny-all implicite + autorisations ciblées
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# RÈGLES FIREWALL - Deny-all implicite + autorisations ciblées
+# ==============================================================================
 
 resource "azurerm_firewall_policy_rule_collection_group" "rules" {
   count = var.deploy_firewall ? 1 : 0
@@ -83,18 +83,18 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
       destination_ports     = ["53"]
     }
 
-    # NTP (synchronisation horaire — ANSSI R36)
-    # Ciblé sur l'IP NTP Azure interne (168.63.129.16) au lieu de * (ANSSI R23 — filtrage sortant)
+    # NTP (synchronisation horaire - ANSSI R36)
+    # Ciblé sur l'IP NTP Azure interne (168.63.129.16) au lieu de * (ANSSI R23 - filtrage sortant)
     # Toutes les VMs Azure utilisent 168.63.129.16 pour NTP par défaut
     rule {
       name                  = "Allow-NTP"
       protocols             = ["UDP"]
       source_addresses      = [var.vnet_spoke_prod_cidr, var.vnet_spoke_data_cidr]
-      destination_addresses = ["168.63.129.16"] # Azure NTP interne — remplace * trop permissif
+      destination_addresses = ["168.63.129.16"] # Azure NTP interne - remplace * trop permissif
       destination_ports     = ["123"]
     }
 
-    # App → DB (PostgreSQL 5432) — cross-spoke via Firewall
+    # App DB (PostgreSQL 5432) - cross-spoke via Firewall
     rule {
       name                  = "Allow-App-to-DB-PostgreSQL"
       protocols             = ["TCP"]
@@ -103,7 +103,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
       destination_ports     = ["5432"]
     }
 
-    # Web → App (API 8080) — intra-spoke via Firewall
+    # Web App (API 8080) - intra-spoke via Firewall
     rule {
       name                  = "Allow-Web-to-App-API"
       protocols             = ["TCP"]
@@ -112,7 +112,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
       destination_ports     = ["8080"]
     }
 
-    # ICMP interne pour diagnostic (Bastion → VMs)
+    # ICMP interne pour diagnostic (Bastion VMs)
     rule {
       name                  = "Allow-ICMP-Internal"
       protocols             = ["ICMP"]
@@ -122,7 +122,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
     }
   }
 
-  # ── Application Rules (L7 — FQDN) ─────────────────────────────────────────
+  # ── Application Rules (L7 - FQDN) ─────────────────────────────────────────
   application_rule_collection {
     name     = "arc-internet-allow"
     priority = 300
@@ -156,7 +156,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
       }
       source_addresses = [var.vnet_spoke_prod_cidr, var.vnet_spoke_data_cidr]
       destination_fqdns = [
-        # Control plane AMA — fix(ama): FQDNs manquants qui bloquaient le téléchargement DCR
+        # Control plane AMA - fix(ama): FQDNs manquants qui bloquaient le téléchargement DCR
         "*.handler.control.monitor.azure.com",
         "global.handler.control.monitor.azure.com",
         "francecentral.handler.control.monitor.azure.com",

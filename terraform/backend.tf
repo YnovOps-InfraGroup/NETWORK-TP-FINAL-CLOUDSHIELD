@@ -1,5 +1,5 @@
 # ============================================================
-# BACKEND — Centralisation du State Terraform dans Azure
+# BACKEND - Centralisation du State Terraform dans Azure
 # ============================================================
 
 terraform {

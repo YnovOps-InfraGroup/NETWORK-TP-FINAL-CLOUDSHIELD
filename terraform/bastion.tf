@@ -1,10 +1,10 @@
 # ============================================================
-# AZURE BASTION — Administration sécurisée sans IP publique
+# AZURE BASTION - Administration sécurisée sans IP publique
 # ANSSI R14/R28 : Authentification forte + flux admin protégés
 # Exigence : Aucun port SSH/RDP exposé sur Internet
 # ============================================================
 
-# ── IP Publique Azure Bastion ─────────────────────────────────────────────────
+# IP Publique Azure Bastion ─────────────────────────────────────────────────
 resource "azurerm_public_ip" "bastion_pip" {
   count = var.deploy_bastion ? 1 : 0
 
@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "bastion_pip" {
   tags                = var.tags
 }
 
-# ── Azure Bastion (Standard) ──────────────────────────────────────────────────
+# Azure Bastion (Standard) ──────────────────────────────────────────────────
 # fix(bastion): SKU Standard requis pour az network bastion tunnel (native client)
 # Root cause #1 : Basic ne supporte pas le tunneling natif CLI
 # ANSSI R28 : Accès admin exclusivement via Bastion, aucun SSH direct depuis Internet
@@ -40,10 +40,10 @@ resource "azurerm_bastion_host" "bastion" {
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# NSG — AzureBastionSubnet (Phase 4 TP — règles exactes Microsoft)
+# ==============================================================================
+# NSG - AzureBastionSubnet (Phase 4 TP - règles exactes Microsoft)
 # Ref : https://learn.microsoft.com/azure/bastion/bastion-nsg
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
 
 resource "azurerm_network_security_group" "nsg_bastion" {
   count = var.deploy_bastion ? 1 : 0

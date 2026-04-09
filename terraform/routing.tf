@@ -1,14 +1,11 @@
-# ============================================================
-# ROUTAGE — Route Tables (UDR) — Forced Tunneling
+# ==============================================================================
+# ROUTAGE - Route Tables (UDR) - Forced Tunneling
 # ANSSI R22/R23 : Tout trafic sortant via Azure Firewall
-# Le trafic inter-spokes passe aussi par le Firewall (inspection)
-# ============================================================
+# ==============================================================================
 
-# ── Route Table Spoke-Prod ────────────────────────────────────────────────────
-# Appliquée sur snet-prod-web et snet-prod-app
-# ⚠ UDR créée SEULEMENT si deploy_firewall=true
-# Raison : Sans firewall, les UDR créent une race condition au cloud-init (blackhole)
-# Solution : terraform apply avec deploy_firewall=false → cloud-init OK → deploy_firewall=true (2e apply)
+# Route Table Spoke-Prod
+# Applique a snet-prod-web et snet-prod-app
+# NOTE: Creee SEULEMENT si deploy_firewall=true pour eviter race condition cloud-init
 resource "azurerm_route_table" "rt_spoke_prod" {
   count                         = var.deploy_firewall ? 1 : 0
   name                          = "rt-spoke-prod-to-fw"
@@ -16,22 +13,20 @@ resource "azurerm_route_table" "rt_spoke_prod" {
   resource_group_name           = azurerm_resource_group.main.name
   bgp_route_propagation_enabled = false # Empêcher VPN GW d'injecter des routes qui bypassent le FW
 
-  # Route par défaut → Azure Firewall (egress Internet)
+  # Route par defaut vers Azure Firewall (egress Internet)
   route {
     name           = "default-to-firewall"
     address_prefix = "0.0.0.0/0"
     next_hop_type  = "VirtualAppliance"
-    # ⚠ LAB ONLY — 10.0.1.4 est l'IP fallback quand deploy_firewall=false
-    # Le trafic sera blackholé intentionnellement (subnets isolés en lab, aucun egress)
+    # Adresse IP du Firewall si deploy=true, fallback 10.0.1.4 si deploy=false (lab mode)
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
-  # Route Spoke-Data → Firewall (forcer l'inspection cross-spoke)
+  # Route Spoke-Data → Firewall
   route {
-    name           = "spoke-data-via-firewall"
-    address_prefix = var.vnet_spoke_data_cidr
-    next_hop_type  = "VirtualAppliance"
-    # ⚠ LAB ONLY — voir commentaire ci-dessus
+    name                   = "spoke-data-via-firewall"
+    address_prefix         = var.vnet_spoke_data_cidr
+    next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
@@ -48,31 +43,28 @@ resource "azurerm_route_table" "rt_spoke_data" {
   resource_group_name           = azurerm_resource_group.main.name
   bgp_route_propagation_enabled = false
 
-  # Route par défaut → Azure Firewall
+  # Route par defaut vers Azure Firewall
   route {
-    name           = "default-to-firewall"
-    address_prefix = "0.0.0.0/0"
-    next_hop_type  = "VirtualAppliance"
-    # ⚠ LAB ONLY — 10.0.1.4 est l'IP fallback quand deploy_firewall=false
-    # Le trafic sera blackholé intentionnellement (subnets isolés en lab, aucun egress)
+    name                   = "default-to-firewall"
+    address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
-  # Route Spoke-Prod → Firewall (inspection cross-spoke)
+  # Route vers Spoke-Prod pour inspection cross-spoke
   route {
-    name           = "spoke-prod-via-firewall"
-    address_prefix = var.vnet_spoke_prod_cidr
-    next_hop_type  = "VirtualAppliance"
-    # ⚠ LAB ONLY — voir commentaire ci-dessus
+    name                   = "spoke-prod-via-firewall"
+    address_prefix         = var.vnet_spoke_prod_cidr
+    next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = var.deploy_firewall ? azurerm_firewall.fw[0].ip_configuration[0].private_ip_address : "10.0.1.4"
   }
 
   tags = var.tags
 }
 
-# ═══════════════════════════════════════════════════════════════
-# ASSOCIATIONS UDR → SUBNETS
-# ═══════════════════════════════════════════════════════════════
+# ==============================================================================
+# ASSOCIATIONS UDR - SUBNETS
+# ==============================================================================
 
 resource "azurerm_subnet_route_table_association" "prod_web_rt" {
   count          = var.deploy_firewall ? 1 : 0
