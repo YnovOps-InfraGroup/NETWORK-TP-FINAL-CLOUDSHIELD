@@ -23,7 +23,7 @@ Infrastructure Azure Zero Trust (Hub & Spoke) déployée via Terraform. 16 fichi
 
 ---
 
-## ⚠️ ORDRE DE DÉPLOIEMENT — Important
+## ORDRE DE DÉPLOIEMENT — Important
 
 ### Phase 1 : Réseau + VMs (sans firewall + sans Bastion)
 
@@ -73,9 +73,9 @@ terraform apply -auto-approve
 
 À ce stade, l'architecture est **complètement déployée** et les VMs sont :
 
-- ✅ Accessibles via Azure Bastion (port 22)
-- ✅ Isolées du trafic Internet direct (Firewall block-by-default)
-- ✅ Cloud-init déjà exécuté (no re-run)
+-  Accessibles via Azure Bastion (port 22)
+-  Isolées du trafic Internet direct (Firewall block-by-default)
+-  Cloud-init déjà exécuté (no re-run)
 
 ---
 
@@ -105,10 +105,10 @@ DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 ```
 
 **Avantage** :
-- ✅ Fonctionne quelle que soit l'IP assignée par Azure
-- ✅ Pas de hardcoding static (10.1.2.4, 10.2.1.4)
-- ✅ Production-ready
-- ✅ Terraform gère les dépendances (crée NICs d'abord, puis résout les IPs)
+-  Fonctionne quelle que soit l'IP assignée par Azure
+-  Pas de hardcoding static (10.1.2.4, 10.2.1.4)
+-  Production-ready
+-  Terraform gère les dépendances (crée NICs d'abord, puis résout les IPs)
 
 ---
 
