@@ -24,7 +24,7 @@ resource "azurerm_public_ip" "bastion_pip" {
 resource "azurerm_bastion_host" "bastion" {
   count = var.deploy_bastion ? 1 : 0
 
-  name                = "bastion-${var.project_name}"
+  name                = "bastion-${var.project_name}-hub"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   # Standard requis pour : tunneling natif CLI, native client, file copy

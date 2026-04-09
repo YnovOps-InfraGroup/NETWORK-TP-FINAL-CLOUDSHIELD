@@ -8,7 +8,7 @@
 resource "azurerm_public_ip" "fw_pip" {
   count = var.deploy_firewall ? 1 : 0
 
-  name                = "pip-fw-${var.project_name}"
+  name                = "pip-firewall-${var.project_name}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
@@ -20,7 +20,7 @@ resource "azurerm_public_ip" "fw_pip" {
 resource "azurerm_firewall_policy" "fw_policy" {
   count = var.deploy_firewall ? 1 : 0
 
-  name                = "fwpol-${var.project_name}"
+  name                = "fp-${var.project_name}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   sku                 = "Standard"
@@ -41,7 +41,7 @@ resource "azurerm_firewall_policy" "fw_policy" {
 resource "azurerm_firewall" "fw" {
   count = var.deploy_firewall ? 1 : 0
 
-  name                = "fw-${var.project_name}"
+  name                = "fw-${var.project_name}-hub"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   sku_name            = "AZFW_VNet"
@@ -156,6 +156,11 @@ resource "azurerm_firewall_policy_rule_collection_group" "rules" {
       }
       source_addresses = [var.vnet_spoke_prod_cidr, var.vnet_spoke_data_cidr]
       destination_fqdns = [
+        # Control plane AMA — fix(ama): FQDNs manquants qui bloquaient le téléchargement DCR
+        "*.handler.control.monitor.azure.com",
+        "global.handler.control.monitor.azure.com",
+        "francecentral.handler.control.monitor.azure.com",
+        # Ingestion logs & métriques
         "*.ods.opinsights.azure.com",
         "*.oms.opinsights.azure.com",
         "*.monitoring.azure.com",
