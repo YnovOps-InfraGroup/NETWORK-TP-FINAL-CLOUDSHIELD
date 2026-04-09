@@ -1,0 +1,22 @@
+
+  PREUVE-02a — R22 : Forced Tunneling via Azure Firewall             ║
+  Source : vm-web (10.1.1.4) → Internet                             ║
+
+VM: vm-web | IP: 10.1.1.4
+Date: Thu Apr  9 08:11:19 UTC 2026
+
+--- Test 1 : curl http://google.com ---
+< HTTP/1.1 470 status code 470
+Action: Deny. Reason: No rule matched. Proceeding with default action.
+
+--- Test 2 : curl https://google.com ---
+* OpenSSL SSL_connect: SSL_ERROR_SYSCALL (TLS bloqué par Firewall)
+* Connection closed
+
+--- Route par défaut ---
+default via 10.1.1.1 dev eth0 proto dhcp src 10.1.1.4 metric 100
+
+
+ CONFORMITÉ R22 (ANSSI) — Trafic Internet bloqué par Azure Firewall
+   HTTP → 470 Deny | HTTPS → TLS interrompu
+   UDR force tout le trafic 0.0.0.0/0 → VirtualAppliance 10.0.1.4

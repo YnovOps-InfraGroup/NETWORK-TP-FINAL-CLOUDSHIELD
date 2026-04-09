@@ -1,0 +1,23 @@
+
+  PREUVE-06b — R19 Zero Trust : vm-web ✗ vm-db                      ║
+  Source : vm-web (10.1.1.4) → vm-db (10.2.1.4)                   ║
+
+VM source: vm-web | IP: 10.1.1.4
+Date: Thu Apr  9 08:11:56 UTC 2026
+
+--- Test 1 : PING vm-db (10.2.1.4) ---
+PING 10.2.1.4 (10.2.1.4) 56(84) bytes of data.
+
+--- 10.2.1.4 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2026ms
+
+--- Test 2 : nc -zv 10.2.1.4 5432 (PostgreSQL) ---
+nc: connect to 10.2.1.4 port 5432 (tcp) timed out: Operation now in progress
+
+--- Test 3 : nc -zv 10.2.1.4 22 (SSH) ---
+nc: connect to 10.2.1.4 port 22 (tcp) timed out: Operation now in progress
+
+
+ CONFORMITÉ R19 (ANSSI) — Zero Trust / Micro-segmentation
+   vm-web NE PEUT PAS accéder à vm-db (100% packet loss)
+   NSG + ASG bloquent le flux Web→DB (deny-all actif)

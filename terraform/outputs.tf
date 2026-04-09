@@ -102,3 +102,15 @@ output "waf_sqli_test" {
   description = "Test d'injection SQL (doit être bloqué par le WAF OWASP 3.2)"
   value       = var.deploy_waf ? "curl -v 'http://${azurerm_public_ip.waf_pip[0].ip_address}/?id=1%20OR%201=1'" : "N/A"
 }
+
+# ── SSH Key Vault (fix root cause #3) ────────────────────────────────────────
+output "ssh_private_key_kv_secret" {
+  description = "Commande pour récupérer la clé SSH privée depuis Key Vault (ANSSI R14)"
+  value       = "az keyvault secret show --vault-name ${var.key_vault_name} --name ${azurerm_key_vault_secret.vm_ssh_private_key.name} --query value -o tsv > ~/.ssh/cloudshield && chmod 600 ~/.ssh/cloudshield"
+}
+
+output "bastion_tunnel_command" {
+  description = "Commande tunnel Bastion native (fix root cause #1 — SKU Standard requis)"
+  sensitive   = true
+  value       = var.deploy_bastion ? "az network bastion tunnel --name ${azurerm_bastion_host.bastion[0].name} --resource-group ${azurerm_resource_group.main.name} --target-resource-id ${azurerm_linux_virtual_machine.vm_web.id} --resource-port 22 --port 9997 & ssh -i ~/.ssh/cloudshield -o StrictHostKeyChecking=no ${var.vm_admin_username}@127.0.0.1 -p 9997" : "N/A"
+}

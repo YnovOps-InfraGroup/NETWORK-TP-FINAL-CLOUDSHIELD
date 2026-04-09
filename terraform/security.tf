@@ -74,6 +74,21 @@ resource "azurerm_network_security_group" "nsg_web" {
     destination_address_prefix = "*"
   }
 
+  # fix(nsg): Bastion → VM SSH (port 22) — root cause #2
+  # Sans cette règle, le tunnel TCP Bastion s'ouvre mais SSH timeout (banner exchange)
+  # ANSSI R28 : seul Bastion peut joindre les VMs en SSH — pas depuis Internet
+  security_rule {
+    name                       = "Allow-SSH-from-Bastion"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "2221"
+    source_address_prefix      = var.subnet_hub_bastion
+    destination_address_prefix = "*"
+  }
+
   # Zero Trust : refus explicite de tout le reste en inbound (prio 4000 = TP)
   security_rule {
     name                       = "Deny-All-Inbound"

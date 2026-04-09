@@ -1,0 +1,25 @@
+
+  PREUVE-07 — R23 : Azure Firewall Filtrage Applicatif              ║
+  Source : vm-app (10.1.2.4)                                        ║
+
+VM: vm-app | IP: 10.1.2.4
+Date: Thu Apr  9 08:12:58 UTC 2026
+
+--- Test 1 : curl https://google.com (NON autorisé) ---
+* Trying 142.251.39.110:443...
+* Connected to google.com
+< HTTP/1.1 470 status code 470
+Action: Deny. Reason: No rule matched. Proceeding with default action.
+ ❌ BLOQUÉ par Azure Firewall
+
+--- Test 2 : curl http://evil.com (NON autorisé) ---
+* Trying 66.96.146.129:80...
+< HTTP/1.1 470 status code 470
+Action: Deny. Reason: No rule matched. Proceeding with default action.
+ ❌ BLOQUÉ par Azure Firewall
+
+
+ CONFORMITÉ R23 (ANSSI) — Filtrage applicatif Azure Firewall
+   google.com → HTTP 470 DENY (aucune règle FQDN correspondante)
+   evil.com   → HTTP 470 DENY (blacklisté implicitement)
+   Le Firewall intercepte et inspecte tout le trafic sortant

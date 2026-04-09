@@ -1,0 +1,18 @@
+
+  PREUVE-02b — R22 : Routes effectives vm-web (nic-vm-web)           ║
+  Source : az network nic show-effective-route-table                 ║
+
+NIC : nic-vm-web (attached to vm-web - 10.1.1.4)
+
+Prefix       NextHopType       Source    State    NextHopIP
+-----------  ----------------  --------  -------  -----------
+10.1.0.0/16  VnetLocal         Default   Active
+10.0.0.0/16  VNetPeering       Default   Active
+10.2.0.0/16  VirtualAppliance  User      Active   10.0.1.4
+0.0.0.0/0    Internet          Default   INVALID  ← ÉCRASÉE par UDR
+0.0.0.0/0    VirtualAppliance  User      Active   10.0.1.4  ← UDR actif
+
+
+ CONFORMITÉ R22 (ANSSI) — Route 0.0.0.0/0 → VirtualAppliance 10.0.1.4
+   La route Internet par défaut est INVALID (écrasée par UDR)
+   Tout le trafic sortant est forcé via Azure Firewall (10.0.1.4)

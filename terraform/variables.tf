@@ -119,10 +119,16 @@ variable "vm_admin_username" {
   sensitive   = true
 }
 
-variable "vm_ssh_public_key" {
-  description = "Clé SSH publique Ed25519 pour l'authentification aux VMs"
+variable "key_vault_name" {
+  description = "Nom du Key Vault existant pour stocker les secrets SSH (ANSSI R14)"
   type        = string
-  sensitive   = true
+  default     = "kv-core-security"
+}
+
+variable "key_vault_resource_group" {
+  description = "Resource Group du Key Vault"
+  type        = string
+  default     = "RG-CORE-SECURITY"
 }
 
 variable "vm_size" {

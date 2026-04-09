@@ -16,7 +16,10 @@ resource "azurerm_public_ip" "bastion_pip" {
   tags                = var.tags
 }
 
-# ── Azure Bastion (Basic — FinOps) ────────────────────────────────────────────
+# ── Azure Bastion (Standard) ──────────────────────────────────────────────────
+# fix(bastion): SKU Standard requis pour az network bastion tunnel (native client)
+# Root cause #1 : Basic ne supporte pas le tunneling natif CLI
+# ANSSI R28 : Accès admin exclusivement via Bastion, aucun SSH direct depuis Internet
 
 resource "azurerm_bastion_host" "bastion" {
   count = var.deploy_bastion ? 1 : 0
@@ -24,7 +27,9 @@ resource "azurerm_bastion_host" "bastion" {
   name                = "bastion-${var.project_name}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  sku                 = "Basic"
+  # Standard requis pour : tunneling natif CLI, native client, file copy
+  sku               = "Standard"
+  tunneling_enabled = true
 
   ip_configuration {
     name                 = "bastion-ipconfig"

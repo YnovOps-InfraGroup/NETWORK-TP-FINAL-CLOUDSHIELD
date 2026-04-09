@@ -40,7 +40,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = var.vm_ssh_public_key
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
   }
 
   os_disk {
@@ -128,7 +128,7 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = var.vm_ssh_public_key
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
   }
 
   os_disk {
@@ -216,7 +216,7 @@ resource "azurerm_linux_virtual_machine" "vm_db" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = var.vm_ssh_public_key
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
   }
 
   os_disk {
@@ -283,7 +283,7 @@ resource "azurerm_linux_virtual_machine" "vm_onprem" {
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = var.vm_ssh_public_key
+    public_key = tls_private_key.vm_ssh.public_key_openssh # fix(ssh): root cause #3 — clé auto-générée
   }
 
   os_disk {
