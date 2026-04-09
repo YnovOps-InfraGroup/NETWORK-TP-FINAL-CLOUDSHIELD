@@ -40,7 +40,7 @@ Prouver techniquement l'implémentation de **10 règles spécifiques du Guide d'
 
 ---
 
-### Tests à exécuter
+### Tests exécuté
 
 ```bash
 # 1. Connexion via Bastion à vm-web
@@ -50,15 +50,13 @@ az network bastion ssh --name bastion-cloudshield \
   --target-resource-id $VM_WEB_ID \
   --auth-type ssh-key --username azureuser --ssh-key ~/.ssh/id_ed25519
 
-# 2. Test accès Internet direct (DOIT ÉCHOUER)
+# 2. Test accès Internet direct
 curl -s --connect-timeout 5 http://google.com
 # Résultat attendu : timeout / connection refused
 
-# 3. Capture portail :
-# NIC vm-web → Effective Routes → 0.0.0.0/0 → VirtualAppliance → 10.0.1.4
 ```
 
-**Preuve terminale (az vm run-command) :**
+**Preuve terminale :**
 
 > Voir [`screenshots/PREUVE-02a-curl-timeout.txt`](screenshots/PREUVE-02a-curl-timeout.txt) — `curl http://google.com` → HTTP 470 Deny, firewall bloque la sortie Internet.
 
@@ -86,12 +84,9 @@ curl -s --connect-timeout 5 http://google.com
 ### Test à exécuter
 
 ```bash
-# Portail Azure :
-# VM vm-db → Networking → NIC → vérifier "Public IP address: None"
-# VM vm-db → Overview → vérifier "Authentication type: SSH public key"
 
-# Tentative SSH direct (DOIT ÉCHOUER — pas d'IP publique)
-ssh azureuser@<vm-db-private-ip>
+# Tentative SSH direct
+ssh azureuser@10.2.1.4
 # Résultat : timeout (pas d'IP publique, pas de route)
 ```
 
@@ -111,9 +106,6 @@ ssh azureuser@<vm-db-private-ip>
 ### Test à exécuter
 
 ```bash
-# Portail Azure :
-# VPN Gateway vpngw-hub-cloudshield → Connections → cn-vpn-hub-to-onprem → Status: Connected
-
 # Azure CLI :
 az network vpn-connection show \
   --name cn-vpn-hub-to-onprem \
@@ -151,7 +143,7 @@ az network vnet-gateway list-learned-routes \
 | **Méthode de preuve**   | **Capture portail** : Log Analytics → Logs → requête KQL montrant des données Syslog + Flow Logs                            |
 | **Résultat attendu**    | Données Syslog, Perf et NetworkSecurityGroupFlowEvent présentes dans le workspace                                           |
 
-### Tests à exécuter
+### Tests exécuté
 
 ```kql
 // Requête 1 : Vérifier que Syslog est collecté depuis les VMs
@@ -177,6 +169,12 @@ AzureDiagnostics
 
 ![R36 — Data Collection Rule Linux (Azure Monitor)](screenshots/PREUVE-05-R36-logs-monitor-DCR.png)
 
+![Law-cloudshield](screenshots/PREUVE-05b-law-workspace.png)
+
+![R36 — Log centralise](screenshots/PREUVE-05-R36-journalisation-centralisee.png)
+
+![Securty log](screenshots/PREUVE-05C-SecurityLogs.png)
+
 ---
 
 ## Preuve 6 — Règle ANSSI R19 (Zero Trust) : Micro-segmentation — Isolation Web↔DB
@@ -188,7 +186,7 @@ AzureDiagnostics
 | **Méthode de preuve**   | **Test de connectivité** depuis vm-web vers vm-db (doit échouer)                                                                                               |
 | **Résultat attendu**    | ping vm-db → timeout. SSH vm-db → connection refused. Mouvement latéral impossible.                                                                            |
 
-### Tests à exécuter (démonstration soutenance)
+### Tests exécuté
 
 ```bash
 # Connexion via Bastion à vm-web
@@ -198,15 +196,15 @@ az network bastion ssh --name bastion-cloudshield \
   --target-resource-id $VM_WEB_ID \
   --auth-type ssh-key --username azureuser --ssh-key ~/.ssh/id_ed25519
 
-# Test 1 : Ping vm-db (DOIT ÉCHOUER)
+# Test 1 : Ping vm-db
 ping -c 3 10.2.1.4
 # Résultat : 100% packet loss
 
-# Test 2 : SSH vm-db (DOIT ÉCHOUER)
+# Test 2 : SSH vm-db
 ssh -o ConnectTimeout=5 azureuser@10.2.1.4
 # Résultat : Connection timed out
 
-# Test 3 : PostgreSQL depuis vm-web (DOIT ÉCHOUER)
+# Test 3 : PostgreSQL depuis vm-web
 nc -zv 10.2.1.4 5432
 # Résultat : Connection timed out
 
@@ -220,6 +218,8 @@ nc -zv 10.2.1.4 5432
 
 ![R19 Zero Trust — Deny-all NSG inbound (prio 4000, aucune IP publique)](screenshots/PREUVE-06-R19-zerotrust-deny-all.png)
 
+> Voir aussi [`screenshots/PREUVE-06b-web-cant-reach-db.txt`](screenshots/PREUVE-06b-web-cant-reach-db.txt) — sortie CLI
+
 ---
 
 ## Preuve 7 — Règle ANSSI R23 : Filtrage sortant via Firewall
@@ -231,16 +231,16 @@ nc -zv 10.2.1.4 5432
 | **Méthode de preuve**   | **Test de connectivité** depuis vm-app : `apt update` fonctionne, `curl google.com` échoue                                                  |
 | **Résultat attendu**    | Mises à jour OS OK, navigation libre bloquée                                                                                                |
 
-### Tests à exécuter
+### Tests exécuté
 
 ```bash
 # Connexion via Bastion à vm-app
 
-# Test 1 : apt update (DOIT RÉUSSIR — FQDN autorisé)
+# Test 1 : apt update
 sudo apt update
 # Résultat : packages mis à jour (via archive.ubuntu.com autorisé dans FW)
 
-# Test 2 : curl google.com (DOIT ÉCHOUER — FQDN non autorisé)
+# Test 2 : curl google.com
 curl -s --connect-timeout 5 http://google.com
 # Résultat : timeout
 
@@ -254,7 +254,7 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 ```
 
-**Preuve terminale (az vm run-command) :**
+**Preuve terminale :**
 
 > Voir [`screenshots/PREUVE-07-firewall-filtering.txt`](screenshots/PREUVE-07-firewall-filtering.txt) — `curl http://google.com` et `curl http://evil.com` → HTTP 470 Deny, filtrage FQDN Firewall confirmé.
 
@@ -291,10 +291,6 @@ az network bastion ssh --name bastion-cloudshield \
 whoami
 # azureuser
 
-# Capture portail :
-
-# NSG nsg-prod-web → Inbound rules → aucune règle Allow SSH depuis Internet
-# Bastion → Activity Logs → session SSH auditable
 ```
 
 **Capture portail — Session Bastion SSH active :**
@@ -304,6 +300,10 @@ whoami
 **Capture portail — NSG sans SSH depuis Internet :**
 
 ![R28 — nsg-prod-web : Deny-All-Inbound prio 4000, aucun port 22 depuis Internet](screenshots/PREUVE-08b-nsg-no-ssh-internet.png)
+
+**Capture portail — NSG activity logs -> sessions SSH auditable :**
+
+![R28 — Azure Bastion session SSH audit](screenshots/PREUVE-08-Bastion-activity-log-audit-ssh.png)
 
 ---
 
@@ -316,24 +316,20 @@ whoami
 | **Méthode de preuve**   | **Test DNS** depuis vm-db : `nslookup` sur le Storage Account résout en IP privée (10.2.2.x), pas en IP publique                                   |
 | **Résultat attendu**    | Résolution DNS → IP privée du Private Endpoint                                                                                                     |
 
-### Tests à exécuter
+### Tests exécuté
 
 ```bash
 
 # Connexion via Bastion à vm-db
 
-# Test 1 : Résolution DNS Storage Account (DOIT résoudre en IP privée)
+# Test 1 : Résolution DNS Storage Account
 nslookup stcloudshield4b580ad2.blob.core.windows.net
 # Résultat : Address: 10.2.2.4 (IP du Private Endpoint, PAS l'IP publique Azure)
 
-# Test 2 : Résolution DNS Azure SQL (DOIT résoudre en IP privée)
+# Test 2 : Résolution DNS Azure SQL
 nslookup sql-cloudshield-4b580ad2.database.windows.net
 # Résultat : Address: 10.2.2.5 (IP du Private Endpoint)
 
-
-# Test 3 : Depuis Internet (portail Azure) :
-# Storage Account → Networking → "Public network access: Disabled"
-# SQL Server → Networking → "Public network access: Disabled"
 ```
 
 ![R15 — Private Endpoint Storage : nslookup résout en IP privée](screenshots/PREUVE-09-R15-pe-storage.png)
@@ -351,7 +347,7 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 | **Méthode de preuve**   | **Capture portail** : Monitor → Alerts → Rules → montrer les 4 règles d'alerte actives. DCR → montrer les sources de données configurées.                                                                                             |
 | **Résultat attendu**    | Alerte automatique déclenchée lors de toute modification de règle NSG                                                                                                                                                                 |
 
-### Tests à exécuter
+### Tests exécuté
 
 ```bash
 # Capture portail :
@@ -371,6 +367,11 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # → vérifier réception email à secops@fintechglobal.local
 ```
 
+![R37 — Alert Rules actives dans Azure Monitor](screenshots/PREUVE-10-R37-alertes-rules.png)
+
+![R37 — Notification email reçue par le groupe AG-SecOps](screenshots/PREUVE-10-R37-alertes-mail.png)
+
+
 ### Requête KQL — Vérification exhaustive des sources de logs
 
 ```kql
@@ -387,8 +388,7 @@ search *
 // AzureNetworkAnalytics_CL → Flow Logs NSG
 ```
 
-![R37 — Alert Rules actives dans Azure Monitor](screenshots/PREUVE-10-R37-alertes-rules.png)
-![R37 — Notification email reçue par le groupe AG-SecOps](screenshots/PREUVE-10-R37-alertes-mail.png)
+
 
 ---
 
@@ -438,7 +438,7 @@ curl -v "http://<appgw-pip>/?q=' OR 1=1 --"
 
 ---
 
-## Démonstration Soutenance — Scénario d'Étanchéité
+## Scénario d'Étanchéité
 
 **Scénario** : Un attaquant a compromis vm-web. Démontrer que :
 
