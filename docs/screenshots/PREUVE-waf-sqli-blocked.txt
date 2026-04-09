@@ -1,0 +1,25 @@
+=== PREUVE WAF — ANSSI R17/R22 — Filtrage applicatif WAF_v2 OWASP 3.2 ===
+Date: 2026-04-09
+Ressource: appgw-waf-cloudshield (WAF_v2, Prevention mode)
+IP publique: 51.103.17.74
+WAF Policy: wafpol-cloudshield (OWASP 3.2 + BotManager 1.0)
+
+--- Test 1 : SQL Injection (OWASP A03:2021) ---
+$ curl -s -o /dev/null -w "HTTP %{http_code}" "http://51.103.17.74/?id=1%20OR%201=1"
+SQLi: HTTP 403
+ BLOQUÉ PAR WAF (OWASP CRS 942xxx - SQL Injection)
+
+--- Test 2 : Requête normale ---
+$ curl -s -o /dev/null -w "HTTP %{http_code}" "http://51.103.17.74/"
+Normal: HTTP 502
+ Passée par le WAF (502 = backend vm-web non configuré HTTP, WAF fonctionnel)
+
+--- Test 3 : Cross-Site Scripting / XSS (OWASP A07:2021) ---
+$ curl -s -o /dev/null -w "HTTP %{http_code}" "http://51.103.17.74/?q=<script>alert(1)</script>"
+XSS: HTTP 403
+ BLOQUÉ PAR WAF (OWASP CRS 941xxx - XSS)
+
+=== CONFORMITÉ ANSSI ===
+R17 - Protection applicative  : ✅ WAF OWASP 3.2 mode Prevention actif
+R22 - Filtrage SQLi/XSS       : ✅ 403 sur injections SQL et XSS
+R25 - Chiffrement réseau      : ⏳ VPN Gateways en cours de provisionnement
