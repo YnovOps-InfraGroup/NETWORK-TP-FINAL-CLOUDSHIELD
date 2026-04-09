@@ -67,6 +67,10 @@ curl -s --connect-timeout 5 http://google.com
 
 > Voir aussi [`screenshots/PREUVE-02b-effective-routes.txt`](screenshots/PREUVE-02b-effective-routes.txt) — sortie CLI `az network nic show-effective-route-table`.
 
+**Capture portail — IP publique Azure Firewall (egress centralisé) :**
+
+![R22 — fw-cloudshield-hub IP publique 51.103.110.220 — tout le trafic sortant passe par ce point](screenshots/PREUVE-02c-firewall-public-ip.png)
+
 ---
 
 ## Preuve 3 — Règle ANSSI R14 : Authentification forte
@@ -242,6 +246,14 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 **Preuve terminale (az vm run-command) :**
 
 > Voir [`screenshots/PREUVE-07-firewall-filtering.txt`](screenshots/PREUVE-07-firewall-filtering.txt) — `curl http://google.com` et `curl http://evil.com` → HTTP 470 Deny, filtrage FQDN Firewall confirmé.
+
+**Capture portail — Firewall Policy règles réseau :**
+
+![R23 — fp-cloudshield : règle Allow-App-to-DB-PostgreSQL TCP 10.1.2.0/24 → 10.2.1.0/24:5432](screenshots/PREUVE-07-firewall-policy-rules.png)
+
+**Capture portail — Firewall Policy VNet sécurisé :**
+
+![R23 — fp-cloudshield : vnet-hub-cloudshield/AzureFirewallSubnet — état Managé, fw-cloudshield-hub actif](screenshots/PREUVE-07-firewall-vnet-secure.png)
 
 ---
 
