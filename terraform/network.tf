@@ -48,7 +48,7 @@ resource "azurerm_virtual_network" "onprem" {
 # SUBNETS - HUB
 # ==============================================================================
 
-# ⚠ Nom EXACT obligatoire : "AzureFirewallSubnet" - /26 minimum
+# Nom EXACT obligatoire : "AzureFirewallSubnet" - /26 minimum
 resource "azurerm_subnet" "hub_firewall" {
   name                 = "AzureFirewallSubnet"
   resource_group_name  = azurerm_resource_group.main.name
@@ -56,7 +56,7 @@ resource "azurerm_subnet" "hub_firewall" {
   address_prefixes     = [var.subnet_hub_firewall]
 }
 
-# ⚠ Nom EXACT obligatoire : "AzureBastionSubnet" - /26 minimum
+# Nom EXACT obligatoire : "AzureBastionSubnet" - /26 minimum
 resource "azurerm_subnet" "hub_bastion" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.main.name
@@ -64,7 +64,7 @@ resource "azurerm_subnet" "hub_bastion" {
   address_prefixes     = [var.subnet_hub_bastion]
 }
 
-# ⚠ Nom EXACT obligatoire : "GatewaySubnet" - /27 minimum
+# Nom EXACT obligatoire : "GatewaySubnet" - /27 minimum
 resource "azurerm_subnet" "hub_gateway" {
   name                 = "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.main.name
@@ -124,7 +124,7 @@ resource "azurerm_subnet" "data_pe" {
 # SUBNETS - ONPREM SIMULATION
 # ==============================================================================
 
-# ⚠ Nom EXACT obligatoire : "GatewaySubnet"
+# Nom EXACT obligatoire : "GatewaySubnet"
 resource "azurerm_subnet" "onprem_gateway" {
   name                 = "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.main.name

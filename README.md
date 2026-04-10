@@ -91,7 +91,7 @@ Internet
 
 | Ressource            | Nom                                                                                                       | Notes                           |
 | -------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| Resource Groups (4)  | `rg-cloudshield-hub`, `rg-cloudshield-prod`, `rg-cloudshield-data`, `rg-cloudshield-onprem`               | Un par VNet                     |
+| Resource Groups (1)  | `rg-cloudshield-prod`                                                                                     | PoC - pérennité nécessite 4 RGs séparés (hub, prod, data, onprem) |
 | Virtual Networks (4) | `vnet-hub`, `vnet-spoke-prod`, `vnet-spoke-data`, `vnet-onprem-sim`                                       | Hub & Spoke                     |
 | Peerings (4)         | Hub↔Prod, Hub↔Data                                                                                        | Bidirectionnels + allow_gateway |
 | Subnets (11)         | AzureFirewallSubnet, GatewaySubnet, AzureBastionSubnet, snet-waf, snet-web, snet-app, snet-db, snet-pe, … | Micro-segmentés                 |
@@ -111,9 +111,9 @@ Internet
 
 | Ressource | Nom              | SKU          | Notes                 |
 | --------- | ---------------- | ------------ | --------------------- |
-| VM Web    | `vm-web-prod-01` | Standard_B2s | Ubuntu 22.04, asg-web |
-| VM App    | `vm-app-prod-01` | Standard_B2s | Ubuntu 22.04, asg-app |
-| VM DB     | `vm-db-prod-01`  | Standard_B2s | Ubuntu 22.04, asg-db  |
+| VM Web    | `vm-web-prod-01` | Standard_B1s | Ubuntu 22.04, asg-web |
+| VM App    | `vm-app-prod-01` | Standard_B1s | Ubuntu 22.04, asg-app |
+| VM DB     | `vm-db-prod-01`  | Standard_B1s | Ubuntu 22.04, asg-db  |
 
 ### PaaS & Connexions
 

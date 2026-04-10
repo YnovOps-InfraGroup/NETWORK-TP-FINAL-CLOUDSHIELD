@@ -59,7 +59,7 @@ resource "azurerm_storage_account" "logs" {
 # NETWORK WATCHER - Prérequis pour Flow Logs
 # ==============================================================================
 
-# Utilise le Network Watcher existant (Azure en crée 1 automatiquement par région/sub)
+# Utilisation du Network Watcher existant (Azure en crée 1 automatiquement par région/sub)
 data "azurerm_network_watcher" "nw" {
   name                = "NetworkWatcher_francecentral"
   resource_group_name = "NetworkWatcherRG"

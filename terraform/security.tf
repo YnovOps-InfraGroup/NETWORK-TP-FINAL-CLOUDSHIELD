@@ -195,8 +195,6 @@ resource "azurerm_network_security_group" "nsg_db" {
     destination_application_security_group_ids = [azurerm_application_security_group.asg_db.id]
   }
 
-  # Bastion SSH (port 22) - root cause fix #2c
-  # Enable remote management via Azure Bastion
   security_rule {
     name                       = "Allow-SSH-from-Bastion"
     priority                   = 200

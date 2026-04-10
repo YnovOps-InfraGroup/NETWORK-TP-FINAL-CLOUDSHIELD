@@ -85,14 +85,14 @@ Voir `variables.tf` pour liste complète. Les plus importantes :
 
 | Variable          | Défaut           | ANSSI                         |
 | ----------------- | ---------------- | ----------------------------- |
-| `deploy_firewall` | `false`          | ✅ Passer à `true` en Phase 3 |
-| `deploy_bastion`  | `false`          | ✅ Passer à `true` en Phase 3 |
-| `deploy_waf`      | `true`           | ✅ Application Gateway WAF    |
-| `vm_size`         | `Standard_B1s`   | ⚠️ FinOps (test only)         |
+| `deploy_firewall` | `false`          |  Passer à `true` en Phase 3 |
+| `deploy_bastion`  | `false`          |  Passer à `true` en Phase 3 |
+| `deploy_waf`      | `true`           |  Application Gateway WAF    |
+| `vm_size`         | `Standard_B1s`   |  FinOps (test only)         |
 | `project_name`    | `cloudshield`    | —                             |
 | `location`        | `francec entral` | —                             |
 
-### ✅ IPs dynamiques (Terraform interpolation)
+### IPs dynamiques (Terraform interpolation)
 
 **Solution implémentée** : Les IPs des VMs sont passées via Terraform string interpolation dans le custom_data :
 

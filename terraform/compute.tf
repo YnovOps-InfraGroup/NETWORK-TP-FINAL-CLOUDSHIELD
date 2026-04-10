@@ -60,7 +60,7 @@ resource "azurerm_linux_virtual_machine" "vm_web" {
   }
 
   # Cloud-init : Flask application web
-  # ✅ IPs passées dynamiquement via Terraform (pas hardcodées)
+  # IPs passées dynamiquement via Terraform
   # APP_HOST sera l'IP réelle assignée à vm-app par Azure
   custom_data = base64encode(<<-CLOUDINIT
     #cloud-config
