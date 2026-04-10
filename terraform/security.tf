@@ -135,6 +135,20 @@ resource "azurerm_network_security_group" "nsg_app" {
     destination_application_security_group_ids = [azurerm_application_security_group.asg_app.id]
   }
 
+  # Bastion SSH (port 22) - root cause fix #2b
+  # Enable remote management via Azure Bastion
+  security_rule {
+    name                       = "Allow-SSH-from-Bastion"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.subnet_hub_bastion
+    destination_address_prefix = "*"
+  }
+
   # Zero Trust : deny-all inbound (prio 4000 = TP)
   security_rule {
     name                       = "Deny-All-Inbound"
@@ -179,6 +193,20 @@ resource "azurerm_network_security_group" "nsg_db" {
     destination_port_range                     = "5432"
     source_address_prefix                      = var.subnet_prod_app
     destination_application_security_group_ids = [azurerm_application_security_group.asg_db.id]
+  }
+
+  # Bastion SSH (port 22) - root cause fix #2c
+  # Enable remote management via Azure Bastion
+  security_rule {
+    name                       = "Allow-SSH-from-Bastion"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.subnet_hub_bastion
+    destination_address_prefix = "*"
   }
 
   # Deny-all inbound (prio 4000 = TP)
