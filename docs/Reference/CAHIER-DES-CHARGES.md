@@ -65,9 +65,9 @@ Construire une **architecture Cloud Azure complète**, sécurisée, conforme au 
 | OS-1 | Segmentation réseau stricte                | ANSSI R19           | 4 VNets isolés, aucun flux non autorisé                         |
 | OS-2 | Zero Trust — deny-all par défaut           | ANSSI R19, R22      | Micro-segmentation NSG/ASG, tout trafic interdit sauf whitelist |
 | OS-3 | Inspection centralisée du trafic           | ANSSI R23           | Azure Firewall sur tout le trafic N/S et E/W                    |
-| OS-4 | Chiffrement des communications inter-sites | ANSSI R25, R29      | IPsec IKEv2, AES-256-GCM, PFS                                   |
-| OS-5 | Administration sécurisée sans exposition   | ANSSI R14, R22, R28 | Azure Bastion, clés SSH, aucune IP publique sur les VMs         |
-| OS-6 | Sanctuarisation du PaaS                    | ANSSI R15, R22      | Private Endpoints, aucun endpoint public                        |
+| OS-4 | Chiffrement des communications inter-sites | ANSSI R25, R21      | IPsec IKEv2, AES-256-GCM, PFS                                   |
+| OS-5 | Administration sécurisée sans exposition   | ANSSI R13, R22, R28 | Azure Bastion, clés SSH, aucune IP publique sur les VMs         |
+| OS-6 | Sanctuarisation du PaaS                    | ANSSI R9, R23       | Private Endpoints, aucun endpoint public                        |
 | OS-7 | Journalisation centralisée complète        | ANSSI R36, R37, R40 | Log Analytics + NSG Flow Logs + AMA + alertes                   |
 | OS-8 | Protection contre les attaques web         | OWASP Top 10        | WAF OWASP 3.2, mode Prévention                                  |
 
@@ -111,8 +111,8 @@ Construire une **architecture Cloud Azure complète**, sécurisée, conforme au 
 
 | Contrainte             | Détail                                            |
 | ---------------------- | ------------------------------------------------- |
-| **Subscription Azure** | `SUBSCRIPTION_ID_REMOVED`            |
-| **Tenant**             | `TENANT_ID_REMOVED`            |
+| **Subscription Azure** | `SUBSCRIPTION_ID_REMOVED`                         |
+| **Tenant**             | `TENANT_ID_REMOVED`                               |
 | **Région**             | France Central                                    |
 | **Aucune dépendance**  | Interdit d'utiliser des ressources du RG-Ynov-VPN |
 | **Budget**             | Crédits Azure étudiants (~200 €)                  |
