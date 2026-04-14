@@ -405,12 +405,12 @@ terraform init → terraform validate → terraform plan → terraform apply
 | #   | Règle ANSSI                       | Configuration Azure                               | Méthode de preuve                             |
 | --- | --------------------------------- | ------------------------------------------------- | --------------------------------------------- |
 | 1   | R19 — Segmentation réseau         | 4 VNets séparés (Hub, Prod, Data, OnPrem)         | Capture portail : VNets + Subnets             |
-| 2   | R22 — Pas d'accès Internet direct | UDR 0.0.0.0/0 → FW sur tous les spokes            | Effective Routes vm-web + test `curl` échoue  |
-| 3   | R14 — Authentification forte      | Clés SSH Ed25519 + Azure Bastion                  | Capture : NIC vm-db sans IP publique          |
+| 2   | R22 — Passerelle sécurisée        | UDR 0.0.0.0/0 → FW sur tous les spokes            | Effective Routes vm-web + test `curl` échoue  |
+| 3   | R13 — Authentification forte      | Clés SSH Ed25519 + Azure Bastion                  | Capture : NIC vm-db sans IP publique          |
 | 4   | R25 — Chiffrement inter-sites     | VPN IPsec IKEv2 + BGP (AS 65001/65002)            | Capture : Connection Status = Connected       |
 | 5   | R36 — Journalisation              | Log Analytics + NSG Flow Logs + AMA               | Capture : LAW avec données Syslog             |
 | 6   | R19 (ZT) — Micro-segmentation     | NSG deny-all + ASG (web→app→db)                   | Test : vm-web ne peut pas ping vm-db          |
-| 7   | R23 — Filtrage sortant            | Azure Firewall rules (FQDN only)                  | Test : `curl google.com` bloqué depuis vm-app |
+| 7   | R27 — Interdiction accès Internet | Azure Firewall rules (FQDN only)                  | Test : `curl google.com` bloqué depuis vm-app |
 | 8   | R28 — Admin sécurisée             | Azure Bastion (SSH tunnel, pas de port 22 public) | Capture : Bastion session active              |
-| 9   | R15 — Protection PaaS             | Private Endpoints + DNS Privées                   | Test : `nslookup` → IP privée 10.2.2.x        |
-| 10  | R37 — Politique de journalisation | DCR Syslog + perf + alertes automatiques          | Capture : Alert Rule "Denied flows > 500"     |
+| 9   | R9 — Ressources sensibles (PE)    | Private Endpoints + DNS Privées                   | Test : `nslookup` → IP privée 10.2.2.x        |
+| 10  | R40 — Gestion incidents           | DCR Syslog + perf + alertes automatiques          | Capture : Alert Rule "Denied flows > 500"     |
