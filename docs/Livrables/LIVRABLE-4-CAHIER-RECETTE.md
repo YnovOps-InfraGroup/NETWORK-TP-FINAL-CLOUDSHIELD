@@ -72,11 +72,11 @@ curl -s --connect-timeout 5 http://google.com
 
 ---
 
-## Preuve 3 — Règle ANSSI R14 : Authentification forte
+## Preuve 3 — Règle ANSSI R13 : Authentification forte
 
 | Élément                 | Détail                                                                                                                                    |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R14 — Mettre en place des mécanismes d'authentification forte                                                                             |
+| **Règle ANSSI**         | R13 — Privilégier lorsque c'est possible une authentification forte                                                                       |
 | **Configuration Azure** | VMs déployées avec clés SSH Ed25519 uniquement (pas de mot de passe). Aucune IP publique sur les VMs. Accès uniquement via Azure Bastion. |
 | **Méthode de preuve**   | **Capture portail** : Vue NIC de vm-db → montrer "Public IP address: None". Vue VM → montrer "Password authentication: Disabled"          |
 | **Résultat attendu**    | Zéro IP publique, authentification par clé SSH uniquement                                                                                 |
@@ -90,7 +90,7 @@ ssh azureuser@10.2.1.4
 # Résultat : timeout (pas d'IP publique, pas de route)
 ```
 
-![R14 — Aucune IP publique sur les VMs (Azure Portal)](../screenshots/PREUVE-03-R14-auth-sans-ip-public.png)
+![R13 — Aucune IP publique sur les VMs (Azure Portal)](../screenshots/PREUVE-03-R14-auth-sans-ip-public.png)
 
 ---
 
@@ -222,11 +222,11 @@ nc -zv 10.2.1.4 5432
 
 ---
 
-## Preuve 7 — Règle ANSSI R23 : Filtrage sortant via Firewall
+## Preuve 7 — Règle ANSSI R27 : Interdiction d'accès Internet depuis les serveurs
 
 | Élément                 | Détail                                                                                                                                      |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R23 — Utiliser un proxy et des passerelles de sécurité pour l'accès Internet                                                                |
+| **Règle ANSSI**         | R27 — Interdire l'accès à Internet depuis les postes ou serveurs utilisés pour l'administration du système d'information                    |
 | **Configuration Azure** | Azure Firewall avec règles FQDN : seuls Ubuntu updates, Azure Monitor et PyPI autorisés. Tout autre trafic sortant bloqué (deny implicite). |
 | **Méthode de preuve**   | **Test de connectivité** depuis vm-app : `apt update` fonctionne, `curl google.com` échoue                                                  |
 | **Résultat attendu**    | Mises à jour OS OK, navigation libre bloquée                                                                                                |
@@ -260,11 +260,11 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 **Capture portail — Firewall Policy règles réseau :**
 
-![R23 — fp-cloudshield : règle Allow-App-to-DB-PostgreSQL TCP 10.1.2.0/24 → 10.2.1.0/24:5432](../screenshots/PREUVE-07-firewall-policy-rules.png)
+![R27 — fp-cloudshield : règle Allow-App-to-DB-PostgreSQL TCP 10.1.2.0/24 → 10.2.1.0/24:5432](../screenshots/PREUVE-07-firewall-policy-rules.png)
 
 **Capture portail — Firewall Policy VNet sécurisé :**
 
-![R23 — fp-cloudshield : vnet-hub-cloudshield/AzureFirewallSubnet — état Managé, fw-cloudshield-hub actif](../screenshots/PREUVE-07-firewall-vnet-secure.png)
+![R27 — fp-cloudshield : vnet-hub-cloudshield/AzureFirewallSubnet — état Managé, fw-cloudshield-hub actif](../screenshots/PREUVE-07-firewall-vnet-secure.png)
 
 ---
 
@@ -272,7 +272,7 @@ curl -s --connect-timeout 5 http://malware-test.example.com
 
 | Élément                 | Détail                                                                                                                             |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R28 — Protéger les flux d'administration                                                                                           |
+| **Règle ANSSI**         | R28 — Utiliser un réseau dédié et cloisonné pour l'administration du système d'information                                         |
 | **Configuration Azure** | Azure Bastion dans le Hub. SSH/RDP uniquement via tunnel Bastion (portail ou CLI). Aucun port 22 ouvert sur les NSG vers Internet. |
 | **Méthode de preuve**   | **Capture portail** : Session Bastion active + NSG nsg-prod-web montrant aucune règle SSH depuis Internet                          |
 | **Résultat attendu**    | Session Bastion SSH fonctionnelle, port 22 non exposé                                                                              |
@@ -307,11 +307,11 @@ whoami
 
 ---
 
-## Preuve 9 — Règle ANSSI R15 : Sanctuarisation PaaS (Private Endpoints)
+## Preuve 9 — Règle ANSSI R9 : Protection des ressources sensibles (Private Endpoints)
 
 | Élément                 | Détail                                                                                                                                             |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R15 — Protéger les accès aux ressources et services numériques sensibles                                                                           |
+| **Règle ANSSI**         | R9 — Attribuer les bons droits sur les ressources sensibles du système d'information                                                               |
 | **Configuration Azure** | Storage Account et Azure SQL avec `public_network_access_enabled = false`. Private Endpoints dans snet-data-pe. Private DNS Zones liées aux VNets. |
 | **Méthode de preuve**   | **Test DNS** depuis vm-db : `nslookup` sur le Storage Account résout en IP privée (10.2.2.x), pas en IP publique                                   |
 | **Résultat attendu**    | Résolution DNS → IP privée du Private Endpoint                                                                                                     |
@@ -332,17 +332,17 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 
 ```
 
-![R15 — Private Endpoint Storage : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-storage.png)
-![R15 — Private Endpoint SQL : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-sql.png)
-![R15 — Private Endpoint Blob dans snet-data-pe](../screenshots/PREUVE-09-R15-pe-blob.png)
+![R9 — Private Endpoint Storage : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-storage.png)
+![R9 — Private Endpoint SQL : nslookup résout en IP privée](../screenshots/PREUVE-09-R15-pe-sql.png)
+![R9 — Private Endpoint Blob dans snet-data-pe](../screenshots/PREUVE-09-R15-pe-blob.png)
 
 ---
 
-## Preuve 10 — Règle ANSSI R37 : Politique de journalisation et alerting
+## Preuve 10 — Règle ANSSI R40 : Gestion des incidents — Détection et alerting
 
 | Élément                 | Détail                                                                                                                                                                                                                                |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R37 — Définir et appliquer une politique de journalisation                                                                                                                                                                            |
+| **Règle ANSSI**         | R40 — Définir une procédure de gestion des incidents de sécurité                                                                                                                                                                      |
 | **Configuration Azure** | Data Collection Rule (DCR) collectant Syslog (auth, daemon, kern) + compteurs de performance (CPU, mémoire, disque, réseau). Action Group AG-SecOps avec email. Alert Rules sur modifications NSG, Firewall Policy et Service Health. |
 | **Méthode de preuve**   | **Capture portail** : Monitor → Alerts → Rules → montrer les 4 règles d'alerte actives. DCR → montrer les sources de données configurées.                                                                                             |
 | **Résultat attendu**    | Alerte automatique déclenchée lors de toute modification de règle NSG                                                                                                                                                                 |
@@ -367,13 +367,11 @@ nslookup sql-cloudshield-4b580ad2.database.windows.net
 # → vérifier réception email à secops@fintechglobal.local
 ```
 
-
 ![Monitor Alerts-Alertes Rules](../screenshots/PREUVE-10-AlerteRules.png)
 
-![R37 — Alert Rules actives dans Azure Monitor](../screenshots/PREUVE-10-R37-alertes-rules.png)
+![R40 — Alert Rules actives dans Azure Monitor](../screenshots/PREUVE-10-R37-alertes-rules.png)
 
-![R37 — Notification email reçue par le groupe AG-SecOps](../screenshots/PREUVE-10-R37-alertes-mail.png)
-
+![R40 — Notification email reçue par le groupe AG-SecOps](../screenshots/PREUVE-10-R37-alertes-mail.png)
 
 ### Requête KQL — Vérification exhaustive des sources de logs
 
@@ -391,15 +389,13 @@ search *
 // AzureNetworkAnalytics_CL → Flow Logs NSG
 ```
 
-
-
 ---
 
 ## Preuve 11 _(Bonus)_ — WAF Application Gateway : Protection OWASP 3.2
 
 | Élément                 | Détail                                                                                                                                       |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Règle ANSSI**         | R24 — Filtrage des flux applicatifs (WAF mode Prévention)                                                                                    |
+| **Règle ANSSI**         | R23 — Cloisonner les services visibles depuis Internet du reste du système d'information (WAF mode Prévention)                               |
 | **Configuration Azure** | Application Gateway v2 `appgw-waf-cloudshield` + WAF Policy `wafpol-cloudshield` OWASP 3.2, mode **Prevention**. 7 managed rule sets actifs. |
 | **Méthode de preuve**   | Injection SQLi `' OR 1=1 --` → HTTP 403 bloqué. Portail Azure : WAF Policy status = Enabled/Prevention.                                      |
 | **Résultat attendu**    | Attaque SQLi bloquée, règle OWASP SQL Injection active                                                                                       |
@@ -429,15 +425,15 @@ curl -v "http://<appgw-pip>/?q=' OR 1=1 --"
 | #   | Règle ANSSI | Titre                         | Type de preuve                        | Criticité |
 | --- | ----------- | ----------------------------- | ------------------------------------- | --------- |
 | 1   | R19         | Segmentation réseau           | Capture portail (4 VNets)             | 🔴        |
-| 2   | R22         | Pas d'accès Internet direct   | Test `curl` + Effective Routes        | 🔴        |
-| 3   | R14         | Authentification forte        | Capture VM (no public IP, SSH key)    | 🔴        |
+| 2   | R22         | Passerelle sécurisée Internet | Test `curl` + Effective Routes        | 🔴        |
+| 3   | R13         | Authentification forte        | Capture VM (no public IP, SSH key)    | 🔴        |
 | 4   | R25         | Chiffrement IPsec IKEv2 + BGP | Capture VPN Connection Status ✅      | 🔴        |
 | 5   | R36         | Journalisation centralisée    | Requête KQL (Syslog, Flow Logs)       | 🔴        |
 | 6   | R19 (ZT)    | Micro-segmentation Web→DB     | Test ping/SSH (isolation prouvée)     | 🔴        |
-| 7   | R23         | Filtrage sortant Firewall     | Test `curl google.com` échoue         | 🔴        |
+| 7   | R27         | Interdiction accès Internet   | Test `curl google.com` échoue         | 🔴        |
 | 8   | R28         | Admin via Bastion             | Session Bastion + NSG sans SSH public | 🟠        |
-| 9   | R15         | PaaS Private Endpoints        | Test `nslookup` → IP privée           | 🟠        |
-| 10  | R37         | Politique de journalisation   | Capture Alert Rules + DCR             | 🟠        |
+| 9   | R9          | Ressources sensibles (PE)     | Test `nslookup` → IP privée           | 🟠        |
+| 10  | R40         | Gestion incidents / alerting  | Capture Alert Rules + DCR             | 🟠        |
 
 ---
 
