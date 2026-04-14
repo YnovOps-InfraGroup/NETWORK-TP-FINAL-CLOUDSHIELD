@@ -7,10 +7,10 @@ Infrastructure Azure Zero Trust (Hub & Spoke) déployée via Terraform. 16 fichi
 - **network.tf** : VNets, Subnets, Peering, NSG basics
 - **security.tf** : ASG, NSG rules (micro-segmentation)
 - **compute.tf** : VMs Linux (Web, App, DB, OnPrem)
-- **firewall.tf** : Azure Firewall + Policies (ANSSI R22/R23)
+- **firewall.tf** : Azure Firewall + Policies (ANSSI R22/R27)
 - **routing.tf** : UDR, Forced Tunneling (conditionnel)
-- **bastion.tf** : Azure Bastion (ANSSI R14)
-- **ssh.tf** : Clés SSH Ed25519 (ANSSI R14) + Key Vault
+- **bastion.tf** : Azure Bastion (ANSSI R13, R28)
+- **ssh.tf** : Clés SSH Ed25519 (ANSSI R13) + Key Vault
 - **vpn.tf** : VPN P2S + BGP
 - **observability.tf** : Log Analytics + Data Collection Rules + Alertes
 - **paas.tf** : Storage Account + Azure SQL (private endpoints)
@@ -73,9 +73,9 @@ terraform apply -auto-approve
 
 À ce stade, l'architecture est **complètement déployée** et les VMs sont :
 
--  Accessibles via Azure Bastion (port 22)
--  Isolées du trafic Internet direct (Firewall block-by-default)
--  Cloud-init déjà exécuté (no re-run)
+- Accessibles via Azure Bastion (port 22)
+- Isolées du trafic Internet direct (Firewall block-by-default)
+- Cloud-init déjà exécuté (no re-run)
 
 ---
 
@@ -83,14 +83,14 @@ terraform apply -auto-approve
 
 Voir `variables.tf` pour liste complète. Les plus importantes :
 
-| Variable          | Défaut           | ANSSI                         |
-| ----------------- | ---------------- | ----------------------------- |
-| `deploy_firewall` | `false`          |  Passer à `true` en Phase 3 |
-| `deploy_bastion`  | `false`          |  Passer à `true` en Phase 3 |
-| `deploy_waf`      | `true`           |  Application Gateway WAF    |
-| `vm_size`         | `Standard_B1s`   |  FinOps (test only)         |
-| `project_name`    | `cloudshield`    | —                             |
-| `location`        | `francec entral` | —                             |
+| Variable          | Défaut           | ANSSI                      |
+| ----------------- | ---------------- | -------------------------- |
+| `deploy_firewall` | `false`          | Passer à `true` en Phase 3 |
+| `deploy_bastion`  | `false`          | Passer à `true` en Phase 3 |
+| `deploy_waf`      | `true`           | Application Gateway WAF    |
+| `vm_size`         | `Standard_B1s`   | FinOps (test only)         |
+| `project_name`    | `cloudshield`    | —                          |
+| `location`        | `francec entral` | —                          |
 
 ### IPs dynamiques (Terraform interpolation)
 
@@ -105,10 +105,11 @@ DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 ```
 
 **Avantage** :
--  Fonctionne quelle que soit l'IP assignée par Azure
--  Pas de hardcoding static (10.1.2.4, 10.2.1.4)
--  Production-ready
--  Terraform gère les dépendances (crée NICs d'abord, puis résout les IPs)
+
+- Fonctionne quelle que soit l'IP assignée par Azure
+- Pas de hardcoding static (10.1.2.4, 10.2.1.4)
+- Production-ready
+- Terraform gère les dépendances (crée NICs d'abord, puis résout les IPs)
 
 ---
 
@@ -117,15 +118,15 @@ DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 | Règle | Élément                  | Status | Fichier                         |
 | ----- | ------------------------ | ------ | ------------------------------- |
 | R9    | Comptes nominatifs       | ✅     | compute.tf (no root)            |
-| R14   | Auth SSH Ed25519         | ✅     | ssh.tf (clé Ed25519)            |
-| R14   | Bastion sans IP pub      | ✅     | bastion.tf                      |
+| R13   | Auth SSH Ed25519         | ✅     | ssh.tf (clé Ed25519)            |
+| R13   | Bastion sans IP pub      | ✅     | bastion.tf                      |
 | R19   | Deny-All NSG             | ✅     | security.tf (prio 4000)         |
 | R22   | Egress Internet firewall | ✅     | firewall.tf (policy)            |
-| R23   | Inspection inter-VNets   | ✅     | firewall.tf + routing.tf        |
-| R25   | Logging centralisé       | ✅     | observability.tf (LAW)          |
+| R27   | Interdiction Internet    | ✅     | firewall.tf + routing.tf        |
+| R25   | Chiffrement inter-sites  | ✅     | vpn.tf                          |
 | R28   | Bastion SSH rules        | ✅     | security.tf (port 22, prio 200) |
 | R36   | Logs immutable           | ✅     | observability.tf (DCR + LAW)    |
-| R37   | Alertes RT               | ✅     | observability.tf (Alert Rules)  |
+| R40   | Alertes RT               | ✅     | observability.tf (Alert Rules)  |
 
 ---
 
@@ -135,7 +136,7 @@ DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 
 **Avant** : `algorithm = "RSA"` + `rsa_bits = 4096`
 **Après** : `algorithm = "ED25519"`
-**Raison** : ANSSI R14 recommande Ed25519
+**Raison** : ANSSI R13 recommande Ed25519
 
 ### Fix #2 : security.tf — NSG port 2221 → 22
 
@@ -152,12 +153,14 @@ DB_HOST = "${azurerm_network_interface.nic_db.private_ip_address}"
 ### Fix #4 : compute.tf — IPs hardcodées (FIX ✅)
 
 **Avant** : IPs statiques hardcodées en Python cloud-init
+
 ```python
 APP_HOST = os.environ.get("APP_HOST", "10.1.2.4")  # ← Hardcodée
 DB_HOST  = os.environ.get("DB_HOST", "10.2.1.4")   # ← Hardcodée
 ```
 
 **Après** : Terraform string interpolation (IPs dynamiques)
+
 ```python
 APP_HOST = "${azurerm_network_interface.nic_app.private_ip_address}"  # ✅ Terraform resolves
 DB_HOST  = "${azurerm_network_interface.nic_db.private_ip_address}"   # ✅ Terraform resolves
